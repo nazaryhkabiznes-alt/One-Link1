@@ -103,6 +103,14 @@
         .btn-red:active { box-shadow: 0 2px 5px rgba(255, 59, 48, 0.2); }
         .btn-delete { background: var(--red-grad); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; font-weight: bold;}
         
+        .contact-actions-row { display: flex; gap: 4px; margin-top: 5px; }
+        .action-mini-btn { flex: 1; padding: 6px; font-size: 11px; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; transition: background 0.2s; }
+        .btn-mini-del { background: rgba(255, 59, 48, 0.1); color: var(--red); }
+        .btn-mini-del:active { background: rgba(255, 59, 48, 0.2); }
+        .btn-mini-block { background: rgba(0, 0, 0, 0.05); color: #333; }
+        .btn-mini-block:active { background: rgba(0, 0, 0, 0.1); }
+        .blocked-badge { background: #555; color: white; padding: 2px 6px; font-size: 10px; border-radius: 4px; margin-left: auto; }
+
         #tab-chat { 
             position: fixed; inset: 55px 0 65px 0; 
             display: flex; flex-direction: column; 
@@ -115,7 +123,7 @@
         #tab-chat.slide-active {
             transform: translateY(0);
         }
-        #chat-ui { display: flex; flex-direction: column; height: 100%; width: 100%; }
+#chat-ui { display: flex; flex-direction: column; height: 100%; width: 100%; }
         
         .chat-header {
             background: white; padding: 10px 15px; display: flex; align-items: center; gap: 12px;
@@ -127,7 +135,7 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; font-size: 18px; color: var(--blue); font-weight: bold; transition: background 0.2s;
         }
-.chat-back-btn:active { background: rgba(0, 119, 255, 0.2); }
+        .chat-back-btn:active { background: rgba(0, 119, 255, 0.2); }
 
         #chat-win { 
             flex: 1; overflow-y: auto; 
@@ -179,9 +187,14 @@
         .feed-reaction-badge { background: var(--input-bg); padding: 4px 10px; border-radius: 14px; font-size: 13px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
 
         .feed-comments-section { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 10px; margin-top: 12px; }
-        .feed-comment-item { background: rgba(0,0,0,0.03); padding: 8px 12px; border-radius: 10px; margin-bottom: 6px; font-size: 13.5px; line-height: 1.4; }
-        .feed-comment-input-block { display: flex; gap: 8px; margin-top: 10px; }
-        .feed-comment-input-block input { flex: 1; margin: 0; padding: 10px 14px; font-size: 14px; border-radius: 10px; background: rgba(0,0,0,0.04); }
+        .toggle-comments-btn { background: rgba(0, 119, 255, 0.08); color: var(--blue); border: none; width: 100%; padding: 8px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer; margin-bottom: 8px; text-align: center; transition: background 0.2s; }
+        .toggle-comments-btn:active { background: rgba(0, 119, 255, 0.15); }
+.comments-chat-window { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; margin-bottom: 8px; padding-right: 4px; }
+        .feed-comment-item { background: rgba(0,0,0,0.04); padding: 8px 12px; border-radius: 14px; font-size: 13px; line-height: 1.4; max-width: 85%; align-self: flex-start; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .feed-comment-item.my-comm { background: var(--blue-grad); color: white; align-self: flex-end; }
+        .feed-comment-input-block { display: flex; gap: 8px; margin-top: 4px; }
+        .feed-comment-input-block input { flex: 1; margin: 0; padding: 10px 14px; font-size: 14px; border-radius: 12px; background: rgba(0,0,0,0.04); border: 1px solid transparent; }
+        .feed-comment-input-block input:focus { background: white; border-color: var(--blue); }
 
         .emoji-picker {
             position: absolute; bottom: 65px; left: 15px; background-color: #ffffff;
@@ -194,7 +207,7 @@
 
         .modal {
             display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.85);
-justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(10px);
+            justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(10px);
         }
         .modal-content {
             background-color: #ffffff; padding: 24px; border-radius: 28px; text-align: center;
@@ -226,15 +239,13 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
         }
         .settings-btn.logout { color: var(--red); background-color: rgba(255,59,48,0.06); }
 
-        /* Стили Ленты постов */
         .feed-header-actions { display: flex; gap: 10px; margin-bottom: 15px; }
         .feed-card { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left; border: 1px solid rgba(0,0,0,0.02); }
         .feed-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
         .feed-card-user { font-weight: bold; font-size: 15px; color: #111; }
-        .feed-card-time { font-size: 11px; color: var(--gray); margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.feed-card-time { font-size: 11px; color: var(--gray); margin-left: auto; display: flex; align-items: center; gap: 8px; }
         .feed-card-media { width: 100%; border-radius: 14px; margin-top: 8px; display: block; max-height: 350px; object-fit: contain; background: #000; cursor: pointer; }
 
-        /* Всплывающее уведомление сверху */
         .push-notification {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.95);
@@ -248,11 +259,12 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
         .push-info { flex: 1; overflow: hidden; }
         .push-title { font-weight: bold; font-size: 14px; margin-bottom: 2px; color: var(--blue); }
         .push-text { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
+
+        #msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
         #msg-menu.open { bottom: 0; }
         .menu-btn { width: 100%; padding: 14px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
 
-        .contact-item { display: flex; align-items: center; gap: 12px; padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.2s; }
+        .contact-item { display: flex; align-items: center; gap: 12px; padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.2s; position: relative; }
         .contact-item:active { background: rgba(0,0,0,0.03); }
 
         footer { position: fixed; bottom: 0; width: 100%; background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
@@ -276,8 +288,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
         }
         .dev-modal.show { opacity: 1; pointer-events: auto; }
         .dev-card { background: white; padding: 25px; border-radius: 24px; width: 80%; max-width: 280px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-
-        .typing-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; }
+.typing-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; }
         .typing-dots span {
             width: 4px; height: 4px; background-color: var(--blue); border-radius: 50%;
             animation: tgBounce 1.4s infinite ease-in-out both;
@@ -294,7 +305,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
         .full-loader.show { opacity: 1; pointer-events: auto; }
         
         .auth-modes { display: flex; gap: 10px; margin-bottom: 15px; }
-.mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .mode-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
     </style>
 </head>
@@ -316,7 +327,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
         </div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.2.6</div>
+    <div id="version-tag" class="app-version">v1.2.7</div>
     <div id="overlay" onclick="closeMsgMenu(); closeMediaModal(); closeSettings();"></div>
 
     <div id="settings-modal" class="settings-modal" onclick="closeSettings()">
@@ -345,7 +356,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
         <div class="auth-card">
             <div id="auth-loader" class="full-loader">
                 <div class="spinner spinner-blue" style="width:40px; height:40px; border-width: 4px;"></div>
-                <b id="loader-text" style="color: var(--blue); font-size: 15px;">Проверка...</b>
+<b id="loader-text" style="color: var(--blue); font-size: 15px;">Проверка...</b>
             </div>
             <h1 style="color:var(--blue); margin: 0 0 15px 0; font-size: 28px; letter-spacing: -0.5px;">One Link</h1>
             
@@ -366,7 +377,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
     <div id="msg-menu">
         <button class="menu-btn" style="background: #f0f2f5; color: black;" onclick="triggerEdit()">✏️ Редактировать</button>
         <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
-<button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
+        <button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
     </div>
 
     <div class="modal" id="media-modal">
@@ -383,7 +394,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
             
             <div id="tab-feed" class="page hidden">
                 <div class="feed-header-actions">
-                    <button class="btn btn-green" onclick="triggerFeedUpload()">+ Добавить пост</button>
+                    <button class="btn btn-green" id="feedUploadBtn" onclick="triggerFeedUpload()">+ Добавить пост</button>
                     <button class="btn" id="feedRefreshBtn" onclick="loadFeed()">🔄 Обновить</button>
                 </div>
                 <input type="file" id="feed-file-input" accept="image/*,video/*" style="display: none;" onchange="publishFeedPost(event)">
@@ -423,7 +434,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
             <div id="tab-msgs" class="page hidden">
                 <div class="block">
                     <h3>Входящие заявки</h3>
-                    <div id="req-list"><p style="color:gray; text-align:center;">Пусто</p></div>
+<div id="req-list"><p style="color:gray; text-align:center;">Пусто</p></div>
                 </div>
             </div>
         </div>
@@ -450,7 +461,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
                 </div>
 
                 <div class="chat-input-panel">
-<div class="emoji-picker" id="emoji-picker">
+                    <div class="emoji-picker" id="emoji-picker">
                         <span onclick="addEmoji('😀')">😀</span>
                         <span onclick="addEmoji('😂')">😂</span>
                         <span onclick="addEmoji('🔥')">🔥</span>
@@ -492,7 +503,7 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
                 Профиль
             </div>
             <div class="nav-item" onclick="nav('search', this)">
-                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 Поиск
             </div>
             <div class="nav-item" onclick="nav('msgs', this)">
@@ -520,7 +531,9 @@ justify-content: center; align-items: center; z-index: 3000; backdrop-filter: bl
     let knownUsersCache = {}; 
     let localDeletedMessages = JSON.parse(localStorage.getItem('ol_deleted_msgs') || '[]');
     let clickPushData = null;
-const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
+    let commentsVisibilityState = {};
+
+    const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
 
     const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
@@ -577,7 +590,7 @@ const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
         const picker = document.getElementById('emoji-picker');
         picker.style.display = picker.style.display === 'grid' ? 'none' : 'grid';
     }
-    function addEmoji(emoji) {
+function addEmoji(emoji) {
         const input = document.getElementById('m-input');
         input.value += emoji;
         document.getElementById('emoji-picker').style.display = 'none';
@@ -608,7 +621,7 @@ const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
             link.download = 'onelink_media_' + Date.now() + (customType === 'video' ? '.mp4' : '.png');
             link.click();
             alert('Файл сохранен!');
-closeMediaModal();
+            closeMediaModal();
         };
         actionsContainer.appendChild(saveBtn);
 
@@ -652,12 +665,11 @@ closeMediaModal();
         document.getElementById('modal-media-container').innerHTML = '';
     }
 
-    /* Логика Ленты Постов */
     function triggerFeedUpload() {
         document.getElementById('feed-file-input').click();
     }
 
-    // Оптимизация и сжатие картинок на лету перед отправкой в Supabase
+    /* СУПЕР-ЖЕСТКОЕ СЖАТИЕ: Ограничиваем разрешение до 500px, чтобы база данных никогда не висла */
     function compressImage(file) {
         return new Promise((resolve) => {
             if (!file.type.startsWith('image/')) {
@@ -671,10 +683,10 @@ closeMediaModal();
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    const MAX_WIDTH = 800;
                     
+                    const MAX_WIDTH = 500; 
                     if (width > MAX_WIDTH) {
-                        height = Math.round((height * MAX_WIDTH) / width);
+height = Math.round((height * MAX_WIDTH) / width);
                         width = MAX_WIDTH;
                     }
                     
@@ -683,7 +695,7 @@ closeMediaModal();
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.45);
                     resolve(dataUrl);
                 };
                 img.src = event.target.result;
@@ -692,41 +704,153 @@ closeMediaModal();
         });
     }
 
+    /* Функция-обертка для предотвращения бесконечного ожидания ответа от Supabase */
+    function fetchWithTimeout(promise, ms = 12000) {
+        return new Promise((resolve, reject) => {
+            const timer = setTimeout(() => reject(new Error("таймаут")), ms);
+            promise.then(res => { clearTimeout(timer); resolve(res); }).catch(err => { clearTimeout(timer); reject(err); });
+        });
+    }
+
     async function publishFeedPost(event) {
         const file = event.target.files[0];
         if (!file) return;
-        
-        const todayStr = new Date().toISOString().split('T')[0];
-        const { data: todayPosts } = await supabaseClient.from('messages')
-            .select('id')
-            .eq('sender', myCurrentId)
-            .eq('type', 'feed_post')
-            .gte('created_at', todayStr + 'T00:00:00.000Z');
 
-        if (todayPosts && todayPosts.length >= 5) {
-            alert('Вы исчерпали дневной лимит публикаций! (Максимум 5 постов в день)');
-            return;
-        }
-
-        const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
+        const uploadBtn = document.getElementById('feedUploadBtn');
+        const origText = uploadBtn.innerText;
         
-        if (file.type.startsWith('image/')) {
-const compressedData = await compressImage(file);
-            await supabaseClient.from('messages').insert([
-                { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: compressedData, type: 'feed_post', reactions: {}, feed_comments: [] }
-            ]);
-            alert('Пост опубликован!');
-            loadFeed();
-        } else {
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                await supabaseClient.from('messages').insert([
-                    { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: e.target.result, type: 'feed_post', reactions: {}, feed_comments: [] }
-                ]);
-                alert('Видео-пост опубликован!');
+        uploadBtn.disabled = true;
+        uploadBtn.innerText = "⏳ Публикация...";
+
+        try {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const { data: todayPosts } = await supabaseClient.from('messages')
+                .select('id')
+                .eq('sender', myCurrentId)
+                .eq('type', 'feed_post')
+                .gte('created_at', todayStr + 'T00:00:00.000Z');
+
+            if (todayPosts && todayPosts.length >= 5) {
+                alert('Вы исчерпали дневной лимит публикаций! (Максимум 5 постов в день)');
+                uploadBtn.disabled = false;
+                uploadBtn.innerText = origText;
+                return;
+            }
+
+            const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
+            
+            if (file.type.startsWith('image/')) {
+                const compressedData = await compressImage(file);
+                if (!compressedData) {
+                    alert("Не удалось сжать картинку.");
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerText = origText;
+                    return;
+                }
+                
+                // Оборачиваем запрос в fetchWithTimeout, чтобы предотвратить бесконечное ожидание
+                await fetchWithTimeout(
+                    supabaseClient.from('messages').insert([
+                        { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: compressedData, type: 'feed_post', reactions: {}, feed_comments: [] }
+                    ])
+                );
+                
+                alert('Пост успешно опубликован в ленту!');
                 loadFeed();
-            };
-            reader.readAsDataURL(file);
+            } else if (file.type.startsWith('video/')) {
+                if (file.size > 2.5 * 1024 * 1024) {
+                    alert("Видео слишком тяжелое! Выберите файл весом до 2.5 МБ, иначе база данных зависнет.");
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerText = origText;
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        await fetchWithTimeout(
+                            supabaseClient.from('messages').insert([
+                                { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: e.target.result, type: 'feed_post', reactions: {}, feed_comments: [] }
+                            ])
+                        );
+                        alert('Видео-пост опубликован!');
+                        loadFeed();
+                    } catch(err) {
+alert("Сервер отклонил видео. Оно слишком длинное или тяжелое.");
+                    } finally {
+                        uploadBtn.disabled = false;
+                        uploadBtn.innerText = origText;
+                    }
+                };
+                reader.readAsDataURL(file);
+                return; // Выходим, так как лоадер выключится в асинхронном блоке onload
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Ошибка сети или таймаут загрузки! Картинка/видео весит слишком много для текстовой ячейки Supabase.");
+        } finally {
+            uploadBtn.disabled = false;
+            uploadBtn.innerText = origText;
+            event.target.value = ""; 
+        }
+    }
+
+    /* ФУНКЦИИ УДАЛЕНИЯ И БЛОКИРОВКИ КЛИЕНТОВ КЛИЕНТОМ ЛОКАЛЬНО */
+    function removeContact(id) {
+        if (confirm("Вы уверены, что хотите удалить этого друга? Диалог останется, но он исчезнет из контактов.")) {
+            let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+            delete contacts[id];
+            localStorage.setItem('ol_contacts_' + myCurrentId, JSON.stringify(contacts));
+            renderSavedContacts();
+            if(activeChatPeerId === id) backToDialogs();
+        }
+    }
+
+    function blockContact(id) {
+        let mins = prompt("На сколько минут заблокировать пользователя? (Введите цифру, он не сможет вам писать)", "15");
+        if (!mins || isNaN(mins)) return;
+
+        let until = Date.now() + (parseInt(mins) * 60 * 1000);
+        let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
+        blocks[id] = until;
+        localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
+        
+        alert(`Пользователь заблокирован на ${mins} мин.`);
+        renderSavedContacts();
+        if(activeChatPeerId === id) backToDialogs();
+    }
+
+    function isContactBlocked(peerId) {
+        let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
+        if (!blocks[peerId]) return false;
+        if (Date.now() > blocks[peerId]) {
+            delete blocks[peerId]; // Срок действия бана прошел
+            localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
+            return false;
+        }
+        return true;
+    }
+
+    function isAmIBlockedBy(peerId) {
+        // Проверка: заблокировал ли тебя этот человек (на случай, если данные о блоках синхронизируются или хранятся локально)
+        let remoteBlocks = JSON.parse(localStorage.getItem('ol_blocks_' + peerId) || '{}');
+        if (remoteBlocks[myCurrentId] && Date.now() < remoteBlocks[myCurrentId]) return true;
+        return false;
+    }
+
+    function toggleCommentsChat(postId) {
+        commentsVisibilityState[postId] = !commentsVisibilityState[postId];
+        const win = document.getElementById(`comments-area-${postId}`);
+        const btn = document.getElementById(`comments-btn-${postId}`);
+        
+        if (commentsVisibilityState[postId]) {
+            win.classList.remove('hidden');
+            btn.innerText = "🔼 Свернуть обсуждение";
+            const chatWin = document.getElementById(`comments-win-${postId}`);
+            if(chatWin) chatWin.scrollTop = chatWin.scrollHeight;
+        } else {
+            win.classList.add('hidden');
+            btn.innerText = `💬 Развернуть обсуждение (${win.getAttribute('data-count') || 0})`;
         }
     }
 
@@ -735,7 +859,7 @@ const compressedData = await compressImage(file);
         btn.innerText = "Синхронизация...";
         
         const container = document.getElementById('feed-posts-container');
-        container.innerHTML = '<p style="color:white; text-align:center; padding: 20px;">Загрузка постов...</p>';
+        const currentScroll = document.getElementById('main-container').scrollTop;
 
         const { data, error } = await supabaseClient.from('messages')
             .select('*')
@@ -743,44 +867,37 @@ const compressedData = await compressImage(file);
             .order('created_at', { ascending: false });
 
         btn.innerText = "🔄 Обновить";
-
-        if (error || !data || data.length === 0) {
+if (error || !data || data.length === 0) {
             container.innerHTML = '<p style="color:gray; text-align:center; padding: 20px;">Лента пуста.</p>';
             return;
         }
 
         container.innerHTML = '';
         data.forEach(post => {
+            // Если автор поста заблокирован тобой, не показываем его публикации в ленте
+            if (isContactBlocked(post.sender)) return;
+
             const card = document.createElement('div');
             card.className = 'feed-card';
             
             const timeFormatted = new Date(post.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + " " + new Date(post.created_at).toLocaleDateString();
-            
             let avaStyle = post.text ? `background-image:url(${post.text})` : '';
             
             let isVideo = post.media && post.media.startsWith('data:video');
-            let mediaElement = '';
-            
-            if (post.media) {
-                if (isVideo) {
-                    mediaElement = `<video src="${post.media}" class="feed-card-media" controls playsinline onclick="openMediaModal(null, false, '${post.media}', 'video')"></video>`;
-                } else {
-                    mediaElement = `<img src="${post.media}" class="feed-card-media" loading="lazy" alt="Post" onclick="openMediaModal(null, false, '${post.media}', 'image')">`;
-                }
-            }
+            let mediaElement = post.media ? (isVideo 
+                ? `<video src="${post.media}" class="feed-card-media" controls playsinline onclick="openMediaModal(null, false, '${post.media}', 'video')"></video>`
+                : `<img src="${post.media}" class="feed-card-media" loading="lazy" alt="Post" onclick="openMediaModal(null, false, '${post.media}', 'image')">`) : '';
 
             const deleteBtnHtml = post.sender === myCurrentId 
                 ? `<button class="btn-delete" onclick="deleteFeedPost('${post.id}')">Удалить</button>` 
                 : '';
 
-            // Отрисовка Эмодзи-кнопок выбора
             let emojiPickerHtml = '<div class="emoji-picker-panel">';
             AVAILABLE_FEED_EMOJIS.forEach(emoji => {
                 emojiPickerHtml += `<button class="emoji-picker-btn" onclick="addFeedReaction('${post.id}', '${emoji}')">${emoji}</button>`;
             });
             emojiPickerHtml += '</div>';
 
-            // Отрисовка счетчиков реакций
             let reactionsHtml = '<div class="feed-reactions-list">';
             const postReactions = post.reactions || {};
             for (let emoji in postReactions) {
@@ -790,23 +907,36 @@ const compressedData = await compressImage(file);
             }
             reactionsHtml += '</div>';
 
-            // Отрисовка комментариев
-            let commentsHtml = '<div class="feed-comments-section">';
             const commentsList = post.feed_comments || [];
+            const isVisible = !!commentsVisibilityState[post.id];
+            
+            let commentsHtml = `<div class="feed-comments-section">
+                <button class="toggle-comments-btn" id="comments-btn-${post.id}" onclick="toggleCommentsChat('${post.id}')">
+                    ${isVisible ? "🔼 Свернуть обсуждение" : `💬 Развернуть обсуждение (${commentsList.length})`}
+                </button>
+                
+                <div id="comments-area-${post.id}" class="${isVisible ? '' : 'hidden'}" data-count="${commentsList.length}">
+                    <div class="comments-chat-window" id="comments-win-${post.id}">`;
+                    
             commentsList.forEach(c => {
-commentsHtml += `<div class="feed-comment-item"><b>${c.user}:</b> ${c.comment}</div>`;
+                const isMyComment = (c.senderId === myCurrentId || c.user === myCurrentName);
+                commentsHtml += `<div class="feed-comment-item ${isMyComment ? 'my-comm' : ''}">
+                    <b>${c.user}:</b> ${c.comment}
+                </div>`;
             });
-            commentsHtml += `
-                <div class="feed-comment-input-block">
-                    <input type="text" placeholder="Напишите комментарий..." id="feed-comm-input-${post.id}">
-                    <button class="btn" style="width:auto; padding:10px 15px; margin:0;" onclick="sendFeedComment('${post.id}')">-></button>
+            
+            commentsHtml += `</div>
+                    <div class="feed-comment-input-block">
+                        <input type="text" placeholder="Написать в ветку..." id="feed-comm-input-${post.id}" onkeydown="if(event.key==='Enter') sendFeedComment('${post.id}')">
+                        <button class="btn" style="width:45px; padding:10px 0; margin:0;" onclick="sendFeedComment('${post.id}')">></button>
+                    </div>
                 </div>
             </div>`;
 
             card.innerHTML = `
                 <div class="feed-card-header">
                     <div class="ava-wrapper"><div class="chat-ava" style="${avaStyle}"></div></div>
-                    <div class="feed-card-user">${post.receiver || 'Пользователь'} <span style="font-size:12px; font-weight:normal; color:gray;">(ID: ${post.sender})</span></div>
+<div class="feed-card-user">${post.receiver || 'Пользователь'} <span style="font-size:12px; font-weight:normal; color:gray;">(ID: ${post.sender})</span></div>
                     <div class="feed-card-time">${timeFormatted} ${deleteBtnHtml}</div>
                 </div>
                 ${mediaElement}
@@ -815,11 +945,46 @@ commentsHtml += `<div class="feed-comment-item"><b>${c.user}:</b> ${c.comment}</
                 ${commentsHtml}
             `;
             container.appendChild(card);
+            
+            if(isVisible) {
+                const chatWin = document.getElementById(`comments-win-${post.id}`);
+                if(chatWin) chatWin.scrollTop = chatWin.scrollHeight;
+            }
         });
+        
+        document.getElementById('main-container').scrollTop = currentScroll;
+    }
+
+    async function sendFeedComment(postId) {
+        const input = document.getElementById(`feed-comm-input-${postId}`);
+        const txt = input.value.trim();
+        if (!txt) return;
+
+        input.disabled = true;
+
+        const { data: post } = await supabaseClient.from('messages').select('feed_comments').eq('id', postId).single();
+        if (post) {
+            let currentComments = post.feed_comments || [];
+            currentComments.push({ senderId: myCurrentId, user: myCurrentName, comment: txt });
+            
+            const { error: updateError } = await supabaseClient.from('messages')
+                .update({ feed_comments: currentComments })
+                .eq('id', postId);
+                
+            if(!updateError) {
+                input.value = '';
+                commentsVisibilityState[postId] = true;
+                loadFeed();
+            } else {
+                alert("Ошибка отправки комментария: " + updateError.message);
+            }
+        }
+        input.disabled = false;
+        input.focus();
     }
 
     async function deleteFeedPost(postId) {
-        if (confirm("Удалить ваш пост из общей ленты?")) {
+        if (confirm("Удалить ваш post из общей ленты?")) {
             await supabaseClient.from('messages').delete().eq('id', postId);
             loadFeed();
         }
@@ -831,21 +996,6 @@ commentsHtml += `<div class="feed-comment-item"><b>${c.user}:</b> ${c.comment}</
             let currentReactions = post.reactions || {};
             currentReactions[emoji] = (currentReactions[emoji] || 0) + 1;
             await supabaseClient.from('messages').update({ reactions: currentReactions }).eq('id', postId);
-            loadFeed();
-        }
-    }
-
-    async function sendFeedComment(postId) {
-        const input = document.getElementById(`feed-comm-input-${postId}`);
-        const txt = input.value.trim();
-        if (!txt) return;
-
-        const { data: post } = await supabaseClient.from('messages').select('feed_comments').eq('id', postId).single();
-        if (post) {
-            let currentComments = post.feed_comments || [];
-            currentComments.push({ user: myCurrentName, comment: txt });
-            await supabaseClient.from('messages').update({ feed_comments: currentComments }).eq('id', postId);
-            input.value = '';
             loadFeed();
         }
     }
@@ -970,7 +1120,7 @@ log.innerText = "Неверный пароль!";
                 
                 if (isOnline) {
                     chatDot.classList.add('online');
-                    if (u.typing_to === myCurrentId) {
+                    if (u.typing_to === myCurrentId && !isContactBlocked(u.id)) {
                         bottomTyping.style.display = 'flex';
                         chatTxt.innerText = "печатает...";
                         chatTxt.style.color = "var(--blue)";
@@ -990,7 +1140,7 @@ bottomTyping.style.display = 'none';
     }
 
     async function handleTyping() {
-        if (!activeChatPeerId) return;
+        if (!activeChatPeerId || isContactBlocked(activeChatPeerId)) return;
         await supabaseClient.from('users').update({ typing_to: activeChatPeerId }).eq('id', myCurrentId);
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(async () => {
@@ -1003,6 +1153,11 @@ bottomTyping.style.display = 'none';
         const log = document.getElementById('search-log');
         const btn = document.getElementById('search-btn');
         if(!tid || tid === myCurrentId) return;
+
+        if (isContactBlocked(tid)) {
+            log.style.color = "red"; log.innerText = "Пользователь заблокирован вами.";
+            return;
+        }
 
         btn.disabled = true;
         btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
@@ -1027,7 +1182,7 @@ bottomTyping.style.display = 'none';
     }
 
     function showPushNotification(senderId, title, text, ava) {
-        if (activeChatPeerId === senderId) return;
+        if (activeChatPeerId === senderId || isContactBlocked(senderId)) return;
 
         playNotificationSound();
         const push = document.getElementById('push-notif');
@@ -1059,15 +1214,17 @@ bottomTyping.style.display = 'none';
                 if (payload.eventType === 'DELETE' || payload.eventType === 'UPDATE') {
                     if (activeChatPeerId) loadChatHistory(activeChatPeerId);
                     checkExistingRequests();
-                    // Live-апдейт реакций и комментов в ленте
                     if (!document.getElementById('tab-feed').classList.contains('hidden')) {
                         loadFeed();
                     }
                     return;
                 }
                 const row = payload.new;
+// Фильтр блокировки: если отправитель в черном списке, игнорируем любые его действия
+                if (row.sender && isContactBlocked(row.sender)) return;
+
                 if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
-if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
+                if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
                 
                 if (row.type === 'chat') {
                     if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
@@ -1101,7 +1258,11 @@ if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sende
         }
         
         list.innerHTML = '';
-        data.forEach(req => showIncomingRequestUI(req.sender, req.text, req.media));
+        data.forEach(req => {
+            if (!isContactBlocked(req.sender)) {
+                showIncomingRequestUI(req.sender, req.text, req.media);
+            }
+        });
     }
 
     function showIncomingRequestUI(id, name, ava) {
@@ -1134,12 +1295,12 @@ if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sende
         saveContact(id, name, ava);
         const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
         await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: id, text: myCurrentName, media: myAva, type: 'accept' }]);
-        await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
+await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
         document.getElementById('req-item-' + id).remove();
         
         const list = document.getElementById('req-list');
         const badge = document.getElementById('badge');
-if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>'; } else { badge.innerText = list.children.length; }
+        if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>'; } else { badge.innerText = list.children.length; }
 
         openChat(id, name, ava);
         nav('chat', document.querySelectorAll('.nav-item')[4]);
@@ -1163,6 +1324,12 @@ if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = 
     async function send() {
         const input = document.getElementById('m-input');
         if(!input.value.trim() || !activeChatPeerId) return;
+
+        if (isContactBlocked(activeChatPeerId)) {
+            alert("Вы заблокировали этого пользователя. Разблокируйте его в контактах, чтобы написать.");
+            return;
+        }
+
         const txt = input.value.trim();
         input.value = "";
 
@@ -1215,7 +1382,7 @@ if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = 
                         const ed = document.createElement('span'); ed.className = 'edited-label'; ed.innerText = ' (изм.)'; d.appendChild(ed);
                     }
                 }
-                win.appendChild(d);
+win.appendChild(d);
             });
         }
         win.scrollTop = win.scrollHeight;
@@ -1231,7 +1398,8 @@ if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = 
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('msg-menu').classList.remove('open');
     }
-function triggerEdit() {
+
+    function triggerEdit() {
         closeMsgMenu(); isEditingMode = true;
         const input = document.getElementById('m-input');
         input.value = selectedMsgText; input.focus();
@@ -1246,15 +1414,20 @@ function triggerEdit() {
         }
     }
 
-    document.getElementById('media-input').onchange = function(e) {
+    document.getElementById('media-input').onchange = async function(e) {
         const file = e.target.files[0];
         if(!file) return;
-        const reader = new FileReader();
-        reader.onload = async function() { 
-            await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: activeChatPeerId, text: "", media: reader.result, type: 'chat' }]);
+
+        if (isContactBlocked(activeChatPeerId)) {
+            alert("Вы не можете отправлять файлы заблокированному контакту.");
+            return;
+        }
+        
+        const compressed = await compressImage(file);
+        if(compressed) {
+            await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: activeChatPeerId, text: "", media: compressed, type: 'chat' }]);
             loadChatHistory(activeChatPeerId);
-        };
-        reader.readAsDataURL(file);
+        }
     };
 
     document.getElementById('ava-input').onchange = function(e) {
@@ -1300,21 +1473,45 @@ function triggerEdit() {
         }
         
         for (let id in contacts) {
+            const isBlocked = isContactBlocked(id);
+
             const div = document.createElement('div');
             div.className = 'contact-item';
-            div.onclick = () => { openChat(id, contacts[id].name, contacts[id].ava); };
+            div.style.flexDirection = 'column';
+            div.style.alignItems = 'stretch';
             
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
+            
             div.innerHTML = `
-                <div class="ava-wrapper">
-                    <div class="chat-ava" style="${bgStyle}"></div>
-                    <div id="dot-${id}" class="status-dot"></div>
+                <div style="display:flex; align-items:center; gap:12px; width:100%;" onclick="openChat('${id}', '${contacts[id].name}', '${contacts[id].ava}')">
+<div class="ava-wrapper">
+                        <div class="chat-ava" style="${bgStyle}"></div>
+                        <div id="dot-${id}" class="status-dot"></div>
+                    </div>
+                    <div>
+                        <b style="color: #000;">${contacts[id].name}</b><br><span style="font-size:12px; color:gray;">ID: ${id}</span>
+                    </div>
+                    ${isBlocked ? '<span class="blocked-badge">🚫 Блок</span>' : ''}
                 </div>
-                <div>
-                    <b style="color: #000;">${contacts[id].name}</b><br><span style="font-size:12px; color:gray;">ID: ${id}</span>
+                <div class="contact-actions-row">
+                    <button class="action-mini-btn btn-mini-del" onclick="event.stopPropagation(); removeContact('${id}')">❌ Удалить</button>
+                    <button class="action-mini-btn btn-mini-block" onclick="event.stopPropagation(); blockContact('${id}')">${isBlocked ? '🔓 Разблок' : '🚫 Блок'}</button>
                 </div>
             `;
             
+            // Фикс для кнопки разблокировки
+            if(isBlocked) {
+                const blockBtn = div.querySelector('.btn-mini-block');
+                blockBtn.onclick = (event) => {
+                    event.stopPropagation();
+                    let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
+                    delete blocks[id];
+                    localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
+                    alert("Пользователь разблокирован!");
+                    renderSavedContacts();
+                };
+            }
+
             listProfile.appendChild(div.cloneNode(true));
             listChat.appendChild(div);
         }
@@ -1325,7 +1522,8 @@ function triggerEdit() {
         document.getElementById('chat-with').innerText = name;
         const pAva = document.getElementById('peer-ava');
         if(ava) pAva.style.backgroundImage = `url(${ava})`; else pAva.style.backgroundImage = 'none';
-document.getElementById('chat-empty').classList.add('hidden');
+        
+        document.getElementById('chat-empty').classList.add('hidden');
         document.getElementById('chat-ui').classList.remove('hidden');
         
         checkContactsOnline();
@@ -1376,7 +1574,7 @@ document.getElementById('chat-empty').classList.add('hidden');
     window.onload = () => {
         const savedId = localStorage.getItem('ol_id');
         const savedName = localStorage.getItem('ol_name');
-        const savedPass = localStorage.getItem('ol_pass');
+const savedPass = localStorage.getItem('ol_pass');
         if(savedId && savedPass) {
             document.getElementById('myId').value = savedId;
             document.getElementById('myName').value = savedName || "";
