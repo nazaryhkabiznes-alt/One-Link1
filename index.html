@@ -18,6 +18,7 @@
             --red: #ff3b30;
             --red-grad: linear-gradient(135deg, #ff3b30 0%, #ff4f43 100%);
             --panel-color: #ffffff;
+            --input-bg: rgba(0, 0, 0, 0.05);
         }
         
         body { 
@@ -100,6 +101,7 @@
         .btn-green:active { box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2); }
         .btn-red { background: var(--red-grad); box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3); }
         .btn-red:active { box-shadow: 0 2px 5px rgba(255, 59, 48, 0.2); }
+        .btn-delete { background: var(--red-grad); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; font-weight: bold;}
         
         #tab-chat { 
             position: fixed; inset: 55px 0 65px 0; 
@@ -125,11 +127,11 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; font-size: 18px; color: var(--blue); font-weight: bold; transition: background 0.2s;
         }
-        .chat-back-btn:active { background: rgba(0, 119, 255, 0.2); }
+.chat-back-btn:active { background: rgba(0, 119, 255, 0.2); }
 
         #chat-win { 
-            flex: 1; overflow-y: auto;
-padding: 20px 15px; display: flex; flex-direction: column; gap: 10px; 
+            flex: 1; overflow-y: auto; 
+            padding: 20px 15px; display: flex; flex-direction: column; gap: 10px; 
         }
 
         .crypto-badge {
@@ -167,6 +169,20 @@ padding: 20px 15px; display: flex; flex-direction: column; gap: 10px;
             border-top: 1px solid var(--border-color); box-sizing: border-box; position: relative;
         }
 
+        .emoji-picker-panel {
+            display: flex; gap: 6px; background: var(--input-bg); padding: 6px 10px; border-radius: 20px; margin-top: 8px; width: fit-content;
+        }
+        .emoji-picker-btn { background: none; border: none; font-size: 18px; cursor: pointer; transition: transform 0.1s; padding: 2px; }
+        .emoji-picker-btn:hover { transform: scale(1.25); }
+
+        .feed-reactions-list { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .feed-reaction-badge { background: var(--input-bg); padding: 4px 10px; border-radius: 14px; font-size: 13px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+
+        .feed-comments-section { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 10px; margin-top: 12px; }
+        .feed-comment-item { background: rgba(0,0,0,0.03); padding: 8px 12px; border-radius: 10px; margin-bottom: 6px; font-size: 13.5px; line-height: 1.4; }
+        .feed-comment-input-block { display: flex; gap: 8px; margin-top: 10px; }
+        .feed-comment-input-block input { flex: 1; margin: 0; padding: 10px 14px; font-size: 14px; border-radius: 10px; background: rgba(0,0,0,0.04); }
+
         .emoji-picker {
             position: absolute; bottom: 65px; left: 15px; background-color: #ffffff;
             border: 1px solid rgba(0,0,0,0.1); border-radius: 16px; padding: 12px;
@@ -178,14 +194,14 @@ padding: 20px 15px; display: flex; flex-direction: column; gap: 10px;
 
         .modal {
             display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.85);
-            justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(10px);
+justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(10px);
         }
         .modal-content {
             background-color: #ffffff; padding: 24px; border-radius: 28px; text-align: center;
             max-width: 340px; width: 85%; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
         .modal-content img, .modal-content video {
-            max-width: 100%; max-height: 260px; border-radius: 16px; margin-bottom: 18px; object-fit: cover;
+            max-width: 100%; max-height: 260px; border-radius: 16px; margin-bottom: 18px; object-fit: contain; background: #000;
         }
         .modal-buttons { display: flex; flex-direction: column; gap: 10px; }
         .modal-btn { padding: 14px; border: none; border-radius: 14px; cursor: pointer; font-size: 16px; font-weight: bold; transition: all 0.2s; }
@@ -193,11 +209,10 @@ padding: 20px 15px; display: flex; flex-direction: column; gap: 10px;
         .modal-btn.delete { background-color: var(--red-grad); color: white; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
         .modal-btn.cancel { background-color: #f0f2f5; color: #4a5568; }
 
-        /* Стилизация всплывающего окна Настроек */
         .settings-modal {
             display: none; position: fixed; inset: 0; background: rgba(10, 17, 40, 0.6); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-justify-content: center; align-items: center; z-index: 3500;
+            justify-content: center; align-items: center; z-index: 3500;
         }
         .settings-card {
             background: white; width: 85%; max-width: 340px; padding: 25px; border-radius: 28px;
@@ -211,23 +226,29 @@ justify-content: center; align-items: center; z-index: 3500;
         }
         .settings-btn.logout { color: var(--red); background-color: rgba(255,59,48,0.06); }
 
-        .stories-container {
-            display: flex; gap: 12px; padding: 15px; background: rgba(255,255,255,0.6);
-            border-radius: 20px; overflow-x: auto; border: 1px solid rgba(255,255,255,0.4); margin-bottom: 15px;
-        }
-        .story-circle {
-            width: 58px; height: 58px; border-radius: 50%; border: 2.5px solid var(--blue);
-            padding: 2px; cursor: pointer; display: flex; justify-content: center; align-items: center;
-            background-color: #000; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,119,255,0.15);
-        }
-        .story-circle img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .publish-story-btn {
-            width: 58px; height: 58px; border-radius: 50%; border: 2.5px dashed var(--gray);
-            display: flex; justify-content: center; align-items: center; font-size: 24px;
-            cursor: pointer; color: var(--gray); flex-shrink: 0; background: rgba(255,255,255,0.5);
-        }
+        /* Стили Ленты постов */
+        .feed-header-actions { display: flex; gap: 10px; margin-bottom: 15px; }
+        .feed-card { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left; border: 1px solid rgba(0,0,0,0.02); }
+        .feed-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .feed-card-user { font-weight: bold; font-size: 15px; color: #111; }
+        .feed-card-time { font-size: 11px; color: var(--gray); margin-left: auto; display: flex; align-items: center; gap: 8px; }
+        .feed-card-media { width: 100%; border-radius: 14px; margin-top: 8px; display: block; max-height: 350px; object-fit: contain; background: #000; cursor: pointer; }
 
-        #msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
+        /* Всплывающее уведомление сверху */
+        .push-notification {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 9999; display: flex; align-items: center; gap: 12px;
+            border: 1px solid rgba(0,119,255,0.15); transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .push-notification.show { top: 15px; }
+        .push-info { flex: 1; overflow: hidden; }
+        .push-title { font-weight: bold; font-size: 14px; margin-bottom: 2px; color: var(--blue); }
+        .push-text { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
         #msg-menu.open { bottom: 0; }
         .menu-btn { width: 100%; padding: 14px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
 
@@ -250,7 +271,7 @@ justify-content: center; align-items: center; z-index: 3500;
         }
 
         .dev-modal {
-position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .dev-modal.show { opacity: 1; pointer-events: auto; }
@@ -273,7 +294,7 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
         .full-loader.show { opacity: 1; pointer-events: auto; }
         
         .auth-modes { display: flex; gap: 10px; margin-bottom: 15px; }
-        .mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+.mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .mode-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
     </style>
 </head>
@@ -287,15 +308,20 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
         <div class="bubble-bg"></div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.1.5</div>
+    <div id="push-notif" class="push-notification" onclick="clickPush()">
+        <div class="ava-wrapper"><div id="push-ava" class="chat-ava"></div></div>
+        <div class="push-info">
+            <div id="push-title" class="push-title">Имя</div>
+            <div id="push-text" class="push-text">Текст сообщения...</div>
+        </div>
+    </div>
+
+    <div id="version-tag" class="app-version">v1.2.6</div>
     <div id="overlay" onclick="closeMsgMenu(); closeMediaModal(); closeSettings();"></div>
 
     <div id="settings-modal" class="settings-modal" onclick="closeSettings()">
         <div class="settings-card" onclick="event.stopPropagation()">
             <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--blue); text-align: center;">⚙️ Настройки</h3>
-            <button class="settings-btn" onclick="triggerStoryUpload(); closeSettings();">
-                <span>📸 Опубликовать историю</span> ➔
-            </button>
             <button class="settings-btn" onclick="changeAccount(); closeSettings();">
                 <span>👤 Изменить аккаунт</span> ➔
             </button>
@@ -311,7 +337,7 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
             <h3 style="margin: 0 0 15px 0; color: var(--blue);">Разработчик</h3>
             <p style="margin: 8px 0; font-size: 15px;"><b>TG:</b> <a href="https://t.me/Nazaros2009" target="_blank" style="color:var(--blue); text-decoration:none;">@Nazaros2009</a></p>
             <p style="margin: 8px 0; font-size: 15px;"><b>Company:</b> One Link LTD</p>
-<button class="btn" style="margin-top: 20px; padding: 10px;" onclick="closeDevModal()">Закрыть</button>
+            <button class="btn" style="margin-top: 20px; padding: 10px;" onclick="closeDevModal()">Закрыть</button>
         </div>
     </div>
 
@@ -340,7 +366,7 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
     <div id="msg-menu">
         <button class="menu-btn" style="background: #f0f2f5; color: black;" onclick="triggerEdit()">✏️ Редактировать</button>
         <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
-        <button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
+<button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
     </div>
 
     <div class="modal" id="media-modal">
@@ -354,6 +380,16 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
         <header onclick="openDevModal()">One Link</header>
         
         <div class="container" id="main-container">
+            
+            <div id="tab-feed" class="page hidden">
+                <div class="feed-header-actions">
+                    <button class="btn btn-green" onclick="triggerFeedUpload()">+ Добавить пост</button>
+                    <button class="btn" id="feedRefreshBtn" onclick="loadFeed()">🔄 Обновить</button>
+                </div>
+                <input type="file" id="feed-file-input" accept="image/*,video/*" style="display: none;" onchange="publishFeedPost(event)">
+                <div id="feed-posts-container"></div>
+            </div>
+
             <div id="tab-profile" class="page">
                 <div class="block" style="text-align: center; position: relative;">
                     <label for="ava-input" class="ava-label">
@@ -365,13 +401,6 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
                         <button class="settings-gear-btn" onclick="openSettings()">⚙️</button>
                     </div>
                     <p id="view-id" style="color:var(--gray); font-size:14px; margin: 5px 0 0 0;"></p>
-                </div>
-
-                <div class="block">
-                    <h3>Истории друзей (24ч)</h3>
-                    <div class="stories-container" id="profile-stories-feed">
-                        <div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>
-                    </div>
                 </div>
 
                 <div class="block">
@@ -390,7 +419,8 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
                     <p id="search-log" style="font-size:14px; margin-top:12px; min-height: 20px;"></p>
                 </div>
             </div>
-<div id="tab-msgs" class="page hidden">
+
+            <div id="tab-msgs" class="page hidden">
                 <div class="block">
                     <h3>Входящие заявки</h3>
                     <div id="req-list"><p style="color:gray; text-align:center;">Пусто</p></div>
@@ -420,7 +450,7 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
                 </div>
 
                 <div class="chat-input-panel">
-                    <div class="emoji-picker" id="emoji-picker">
+<div class="emoji-picker" id="emoji-picker">
                         <span onclick="addEmoji('😀')">😀</span>
                         <span onclick="addEmoji('😂')">😂</span>
                         <span onclick="addEmoji('🔥')">🔥</span>
@@ -445,23 +475,20 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
             </div>
             
             <div id="chat-empty" style="padding: 20px 15px; height: calc(100vh - 140px); overflow-y: auto; box-sizing: border-box;">
-                <h3 style="color:#fff; text-align:left; margin-bottom:10px; margin-top:0;">Истории (24ч)</h3>
-                <div class="stories-container" id="chat-stories-feed">
-                    <div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>
-                </div>
-                
-                <h3 style="color:#fff; text-align:left; margin-top:25px; margin-bottom:10px;">Мои Диалоги</h3>
+                <h3 style="color:#fff; text-align:left; margin-top:5px; margin-bottom:10px;">Мои Диалоги</h3>
                 <div class="block" style="text-align: left; padding: 10px;">
                     <div id="chat-contacts-list"></div>
                 </div>
             </div>
         </div>
 
-        <input type="file" id="story-file-input" accept="image/*,video/*" style="display: none;" onchange="publishStory(event)">
-
         <footer>
+            <div class="nav-item" onclick="nav('feed', this)">
+                <svg viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
+                Лента
+            </div>
             <div class="nav-item active" onclick="nav('profile', this)">
-<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 Профиль
             </div>
             <div class="nav-item" onclick="nav('search', this)">
@@ -492,10 +519,29 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
     
     let knownUsersCache = {}; 
     let localDeletedMessages = JSON.parse(localStorage.getItem('ol_deleted_msgs') || '[]');
+    let clickPushData = null;
+const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
 
     const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function playNotificationSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); 
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e) {}
+    }
 
     function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
     function closeDevModal() { document.getElementById('dev-screen').classList.remove('show'); }
@@ -538,50 +584,61 @@ position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8p
         input.focus();
     }
 
-    function openMediaModal(msg, isMyMessage) {
+    function openMediaModal(msg, isMyMessage, customSrc = null, customType = 'image') {
         const modal = document.getElementById('media-modal');
         const mediaContainer = document.getElementById('modal-media-container');
         const actionsContainer = document.getElementById('modal-actions');
         
-        mediaContainer.innerHTML = `<img src="${msg.media || msg.text}" alt="Media">`;
+        const src = customSrc || msg.media || msg.text;
+        
+        if (customSrc && customType === 'video') {
+            mediaContainer.innerHTML = `<video src="${src}" controls autoplay class="fullscreen-media" style="max-width:100%; max-height:260px;"></video>`;
+        } else {
+            mediaContainer.innerHTML = `<img src="${src}" alt="Media">`;
+        }
+        
         actionsContainer.innerHTML = '';
-const saveBtn = document.createElement('button');
+
+        const saveBtn = document.createElement('button');
         saveBtn.className = 'modal-btn save';
-        saveBtn.innerText = '💾 Сохранить фото';
+        saveBtn.innerText = '💾 Сохранить файл';
         saveBtn.onclick = () => {
             const link = document.createElement('a');
-            link.href = msg.media || msg.text;
-            link.download = 'onelink_photo_' + Date.now() + '.png';
+            link.href = src;
+            link.download = 'onelink_media_' + Date.now() + (customType === 'video' ? '.mp4' : '.png');
             link.click();
-            alert('Фото сохранено в галерею!');
-            closeMediaModal();
+            alert('Файл сохранен!');
+closeMediaModal();
         };
         actionsContainer.appendChild(saveBtn);
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'modal-btn delete';
         
-        if (!isMyMessage) {
-            deleteBtn.innerText = '🗑️ Удалить у себя';
-            deleteBtn.onclick = () => {
-                localDeletedMessages.push(msg.id);
-                localStorage.setItem('ol_deleted_msgs', JSON.stringify(localDeletedMessages));
-                closeMediaModal();
-                loadChatHistory(activeChatPeerId);
-            };
-        } else {
-            deleteBtn.innerText = '🗑️ Удалить везде';
-            deleteBtn.onclick = async () => {
-                await supabaseClient.from('messages').delete().eq('id', msg.id);
-                closeMediaModal();
-                loadChatHistory(activeChatPeerId);
-            };
+        if (msg) {
+            if (!isMyMessage) {
+                deleteBtn.innerText = '🗑️ Удалить у себя';
+                deleteBtn.onclick = () => {
+                    localDeletedMessages.push(msg.id);
+                    localStorage.setItem('ol_deleted_msgs', JSON.stringify(localDeletedMessages));
+                    closeMediaModal();
+                    loadChatHistory(activeChatPeerId);
+                };
+                actionsContainer.appendChild(deleteBtn);
+            } else {
+                deleteBtn.innerText = '🗑️ Удалить везде';
+                deleteBtn.onclick = async () => {
+                    await supabaseClient.from('messages').delete().eq('id', msg.id);
+                    closeMediaModal();
+                    if(msg.type === 'feed_post') loadFeed(); else loadChatHistory(activeChatPeerId);
+                };
+                actionsContainer.appendChild(deleteBtn);
+            }
         }
-        actionsContainer.appendChild(deleteBtn);
 
         const cancelBtn = document.createElement('button');
         cancelBtn.className = 'modal-btn cancel';
-        cancelBtn.innerText = 'Отмена';
+        cancelBtn.innerText = 'Закрыть';
         cancelBtn.onclick = closeMediaModal;
         actionsContainer.appendChild(cancelBtn);
 
@@ -592,99 +649,205 @@ const saveBtn = document.createElement('button');
     function closeMediaModal() {
         document.getElementById('media-modal').style.display = 'none';
         document.getElementById('overlay').style.display = 'none';
+        document.getElementById('modal-media-container').innerHTML = '';
     }
 
-    function triggerStoryUpload() {
-        document.getElementById('story-file-input').click();
+    /* Логика Ленты Постов */
+    function triggerFeedUpload() {
+        document.getElementById('feed-file-input').click();
     }
 
-    async function publishStory(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const isVideo = file.type.startsWith('video/');
-        
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            const fileData = e.target.result;
-            await supabaseClient.from('messages').insert([
-                { sender: myCurrentId, receiver: 'all_friends', text: myCurrentName, media: fileData, type: isVideo ? 'video_story' : 'image_story' }
-            ]);
-            alert('История успешно опубликована!');
-            loadStories();
-        };
-        reader.readAsDataURL(file);
-    }
-
-    async function loadStories() {
-        const { data } = await supabaseClient.from('messages')
-            .select('*')
-            .or('type.eq.image_story,type.eq.video_story');
-            
-        const feedProfile = document.getElementById('profile-stories-feed');
-        const feedChat = document.getElementById('chat-stories-feed');
-        
-        feedProfile.innerHTML = '<div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>';
-        feedChat.innerHTML = '<div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>';
-        
-        if (!data) return;
-
-        const now = Date.now();
-        const oneDay = 24 * 60 * 60 * 1000;
-
-        data.forEach(story => {
-            const storyTime = new Date(story.created_at).getTime();
-            if (now - storyTime > oneDay) return; 
-
-            const circle = document.createElement('div');
-            circle.className = 'story-circle';
-            circle.onclick = () => viewStory(story);
-
-            if (story.type === 'image_story') {
-                circle.innerHTML = `<img src="${story.media}">`;
-            } else {
-                circle.innerHTML = `<span style="font-size:22px; color:#fff; display:flex; align-items:center; justify-content:center; height:100%;">🎥</span>`;
+    // Оптимизация и сжатие картинок на лету перед отправкой в Supabase
+    function compressImage(file) {
+        return new Promise((resolve) => {
+            if (!file.type.startsWith('image/')) {
+                resolve(null);
+                return;
             }
-feedProfile.appendChild(circle.cloneNode(true));
-            feedChat.appendChild(circle);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const MAX_WIDTH = 800;
+                    
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height * MAX_WIDTH) / width);
+                        width = MAX_WIDTH;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    resolve(dataUrl);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
         });
     }
 
-    function viewStory(story) {
-        const modal = document.getElementById('media-modal');
-        const mediaContainer = document.getElementById('modal-media-container');
-        const actionsContainer = document.getElementById('modal-actions');
+    async function publishFeedPost(event) {
+        const file = event.target.files[0];
+        if (!file) return;
         
-        if (story.type === 'image_story') {
-            mediaContainer.innerHTML = `<img src="${story.media}"><h3>История от ${story.text}</h3>`;
+        const todayStr = new Date().toISOString().split('T')[0];
+        const { data: todayPosts } = await supabaseClient.from('messages')
+            .select('id')
+            .eq('sender', myCurrentId)
+            .eq('type', 'feed_post')
+            .gte('created_at', todayStr + 'T00:00:00.000Z');
+
+        if (todayPosts && todayPosts.length >= 5) {
+            alert('Вы исчерпали дневной лимит публикаций! (Максимум 5 постов в день)');
+            return;
+        }
+
+        const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
+        
+        if (file.type.startsWith('image/')) {
+const compressedData = await compressImage(file);
+            await supabaseClient.from('messages').insert([
+                { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: compressedData, type: 'feed_post', reactions: {}, feed_comments: [] }
+            ]);
+            alert('Пост опубликован!');
+            loadFeed();
         } else {
-            mediaContainer.innerHTML = `<video src="${story.media}" autoplay playsinline controls style="max-width:100%; border-radius:16px; max-height:260px; object-fit:cover;"></video><h3>История от ${story.text}</h3>`;
-        }
-
-        actionsContainer.innerHTML = '';
-
-        // Логика удаления только своих историй
-        if (story.sender === myCurrentId) {
-            const deleteStoryBtn = document.createElement('button');
-            deleteStoryBtn.className = 'modal-btn delete';
-            deleteStoryBtn.innerText = '🗑️ Удалить историю';
-            deleteStoryBtn.onclick = async () => {
-                if (confirm("Вы действительно хотите удалить свою историю?")) {
-                    await supabaseClient.from('messages').delete().eq('id', story.id);
-                    closeMediaModal();
-                    loadStories();
-                }
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                await supabaseClient.from('messages').insert([
+                    { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: e.target.result, type: 'feed_post', reactions: {}, feed_comments: [] }
+                ]);
+                alert('Видео-пост опубликован!');
+                loadFeed();
             };
-            actionsContainer.appendChild(deleteStoryBtn);
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function loadFeed() {
+        const btn = document.getElementById('feedRefreshBtn');
+        btn.innerText = "Синхронизация...";
+        
+        const container = document.getElementById('feed-posts-container');
+        container.innerHTML = '<p style="color:white; text-align:center; padding: 20px;">Загрузка постов...</p>';
+
+        const { data, error } = await supabaseClient.from('messages')
+            .select('*')
+            .eq('type', 'feed_post')
+            .order('created_at', { ascending: false });
+
+        btn.innerText = "🔄 Обновить";
+
+        if (error || !data || data.length === 0) {
+            container.innerHTML = '<p style="color:gray; text-align:center; padding: 20px;">Лента пуста.</p>';
+            return;
         }
 
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'modal-btn cancel';
-        closeBtn.innerText = 'Закрыть';
-        closeBtn.onclick = closeMediaModal;
-        actionsContainer.appendChild(closeBtn);
+        container.innerHTML = '';
+        data.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'feed-card';
+            
+            const timeFormatted = new Date(post.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + " " + new Date(post.created_at).toLocaleDateString();
+            
+            let avaStyle = post.text ? `background-image:url(${post.text})` : '';
+            
+            let isVideo = post.media && post.media.startsWith('data:video');
+            let mediaElement = '';
+            
+            if (post.media) {
+                if (isVideo) {
+                    mediaElement = `<video src="${post.media}" class="feed-card-media" controls playsinline onclick="openMediaModal(null, false, '${post.media}', 'video')"></video>`;
+                } else {
+                    mediaElement = `<img src="${post.media}" class="feed-card-media" loading="lazy" alt="Post" onclick="openMediaModal(null, false, '${post.media}', 'image')">`;
+                }
+            }
 
-        document.getElementById('overlay').style.display = 'block';
-        modal.style.display = 'flex';
+            const deleteBtnHtml = post.sender === myCurrentId 
+                ? `<button class="btn-delete" onclick="deleteFeedPost('${post.id}')">Удалить</button>` 
+                : '';
+
+            // Отрисовка Эмодзи-кнопок выбора
+            let emojiPickerHtml = '<div class="emoji-picker-panel">';
+            AVAILABLE_FEED_EMOJIS.forEach(emoji => {
+                emojiPickerHtml += `<button class="emoji-picker-btn" onclick="addFeedReaction('${post.id}', '${emoji}')">${emoji}</button>`;
+            });
+            emojiPickerHtml += '</div>';
+
+            // Отрисовка счетчиков реакций
+            let reactionsHtml = '<div class="feed-reactions-list">';
+            const postReactions = post.reactions || {};
+            for (let emoji in postReactions) {
+                if (postReactions[emoji] > 0) {
+                    reactionsHtml += `<span class="feed-reaction-badge" onclick="addFeedReaction('${post.id}', '${emoji}')">${emoji} ${postReactions[emoji]}</span>`;
+                }
+            }
+            reactionsHtml += '</div>';
+
+            // Отрисовка комментариев
+            let commentsHtml = '<div class="feed-comments-section">';
+            const commentsList = post.feed_comments || [];
+            commentsList.forEach(c => {
+commentsHtml += `<div class="feed-comment-item"><b>${c.user}:</b> ${c.comment}</div>`;
+            });
+            commentsHtml += `
+                <div class="feed-comment-input-block">
+                    <input type="text" placeholder="Напишите комментарий..." id="feed-comm-input-${post.id}">
+                    <button class="btn" style="width:auto; padding:10px 15px; margin:0;" onclick="sendFeedComment('${post.id}')">-></button>
+                </div>
+            </div>`;
+
+            card.innerHTML = `
+                <div class="feed-card-header">
+                    <div class="ava-wrapper"><div class="chat-ava" style="${avaStyle}"></div></div>
+                    <div class="feed-card-user">${post.receiver || 'Пользователь'} <span style="font-size:12px; font-weight:normal; color:gray;">(ID: ${post.sender})</span></div>
+                    <div class="feed-card-time">${timeFormatted} ${deleteBtnHtml}</div>
+                </div>
+                ${mediaElement}
+                ${emojiPickerHtml}
+                ${reactionsHtml}
+                ${commentsHtml}
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    async function deleteFeedPost(postId) {
+        if (confirm("Удалить ваш пост из общей ленты?")) {
+            await supabaseClient.from('messages').delete().eq('id', postId);
+            loadFeed();
+        }
+    }
+
+    async function addFeedReaction(postId, emoji) {
+        const { data: post } = await supabaseClient.from('messages').select('reactions').eq('id', postId).single();
+        if (post) {
+            let currentReactions = post.reactions || {};
+            currentReactions[emoji] = (currentReactions[emoji] || 0) + 1;
+            await supabaseClient.from('messages').update({ reactions: currentReactions }).eq('id', postId);
+            loadFeed();
+        }
+    }
+
+    async function sendFeedComment(postId) {
+        const input = document.getElementById(`feed-comm-input-${postId}`);
+        const txt = input.value.trim();
+        if (!txt) return;
+
+        const { data: post } = await supabaseClient.from('messages').select('feed_comments').eq('id', postId).single();
+        if (post) {
+            let currentComments = post.feed_comments || [];
+            currentComments.push({ user: myCurrentName, comment: txt });
+            await supabaseClient.from('messages').update({ feed_comments: currentComments }).eq('id', postId);
+            input.value = '';
+            loadFeed();
+        }
     }
 
     function changeAccount() {
@@ -723,49 +886,44 @@ feedProfile.appendChild(circle.cloneNode(true));
                     loader.classList.remove('show');
                     return;
                 }
-                if (userExist.name !== name) {
-                    log.innerText = "ID занят другим человеком!";
-                    loader.classList.remove('show');
-                    return;
-                }
                 if (userExist.password && userExist.password !== password) {
-                    log.innerText = "Неверный пароль!";
+log.innerText = "Неверный пароль!";
                     loader.classList.remove('show');
                     return;
                 }
+                localStorage.setItem('ol_name', userExist.name);
+                myCurrentName = userExist.name;
                 if (userExist.ava) { localStorage.setItem('ol_ava_' + id, userExist.ava); }
             } else {
                 if (userExist) {
-                    log.innerText = "Аккаунт уже существует!";
+                    log.innerText = "Этот ID уже занят!";
                     loader.classList.remove('show');
                     return;
                 }
-await supabaseClient.from('users').insert([
+                await supabaseClient.from('users').insert([
                     { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "" }
                 ]);
+                myCurrentName = name;
             }
 
             myCurrentId = id;
-            myCurrentName = name;
 
             localStorage.setItem('ol_id', id);
-            localStorage.setItem('ol_name', name);
             localStorage.setItem('ol_pass', password);
 
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
-            document.getElementById('view-name').innerText = name;
+            document.getElementById('view-name').innerText = myCurrentName;
             document.getElementById('view-id').innerText = "ID: " + id;
 
             updateAvaUI();
             renderSavedContacts();
             listenForIncomingData();
-            loadStories();
+            loadFeed();
             
             updateMyStatus();
             setInterval(updateMyStatus, 3000);
             setInterval(checkContactsOnline, 3000);
-            setInterval(loadStories, 60000); 
         } catch(e) {
             log.innerText = "Ошибка сети.";
         } finally {
@@ -780,7 +938,7 @@ await supabaseClient.from('users').insert([
 
     async function checkContactsOnline() {
         if (!myCurrentId) return;
-        const { data: usersData } = await supabaseClient.from('users').select('id, last_seen, typing_to');
+        const { data: usersData } = await supabaseClient.from('users').select('id, name, ava, last_seen, typing_to');
         if (!usersData) return;
 
         const bottomTyping = document.getElementById('bottom-typing-status');
@@ -796,6 +954,16 @@ await supabaseClient.from('users').insert([
                 if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
             });
 
+            let localContacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+            if (localContacts[u.id]) {
+                if (localContacts[u.id].name !== u.name || localContacts[u.id].ava !== u.ava) {
+                    localContacts[u.id].name = u.name;
+                    localContacts[u.id].ava = u.ava;
+                    localStorage.setItem('ol_contacts_' + myCurrentId, JSON.stringify(localContacts));
+                    renderSavedContacts();
+                }
+            }
+
             if (u.id === activeChatPeerId) {
                 const chatDot = document.getElementById('peer-status-dot');
                 const chatTxt = document.getElementById('chat-peer-status-text');
@@ -804,8 +972,8 @@ await supabaseClient.from('users').insert([
                     chatDot.classList.add('online');
                     if (u.typing_to === myCurrentId) {
                         bottomTyping.style.display = 'flex';
-                        chatTxt.innerText = "в сети";
-                        chatTxt.style.color = "var(--green)";
+                        chatTxt.innerText = "печатает...";
+                        chatTxt.style.color = "var(--blue)";
                     } else {
                         bottomTyping.style.display = 'none';
                         chatTxt.innerText = "в сети";
@@ -813,7 +981,7 @@ await supabaseClient.from('users').insert([
                     }
                 } else {
                     chatDot.classList.remove('online');
-                    bottomTyping.style.display = 'none';
+bottomTyping.style.display = 'none';
                     chatTxt.innerText = "был(а) недавно";
                     chatTxt.style.color = "var(--gray)";
                 }
@@ -841,7 +1009,7 @@ await supabaseClient.from('users').insert([
         log.innerText = "";
 
         try {
-const { data: targetUser } = await supabaseClient.from('users').select('*').eq('id', tid).maybeSingle();
+            const { data: targetUser } = await supabaseClient.from('users').select('*').eq('id', tid).maybeSingle();
             if (!targetUser) {
                 log.style.color = "red"; log.innerText = "Пользователь с таким ID не существует!"; return;
             }
@@ -858,22 +1026,65 @@ const { data: targetUser } = await supabaseClient.from('users').select('*').eq('
         finally { btn.disabled = false; btn.innerHTML = `<span id="search-btn-text">Отправить заявку</span>`; }
     }
 
+    function showPushNotification(senderId, title, text, ava) {
+        if (activeChatPeerId === senderId) return;
+
+        playNotificationSound();
+        const push = document.getElementById('push-notif');
+        const pAva = document.getElementById('push-ava');
+        document.getElementById('push-title').innerText = title;
+        document.getElementById('push-text').innerText = text || "📎 Фотография";
+        
+        if(ava) pAva.style.backgroundImage = `url(${ava})`; else pAva.style.backgroundImage = 'none';
+        
+        clickPushData = { id: senderId, name: title, ava: ava };
+        push.classList.add('show');
+        
+        setTimeout(() => {
+            push.classList.remove('show');
+        }, 4000);
+    }
+
+    function clickPush() {
+        if(clickPushData) {
+            openChat(clickPushData.id, clickPushData.name, clickPushData.ava);
+            nav('chat', document.querySelectorAll('.nav-item')[4]);
+            document.getElementById('push-notif').classList.remove('show');
+        }
+    }
+
     function listenForIncomingData() {
         supabaseClient.channel('public:messages')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
                 if (payload.eventType === 'DELETE' || payload.eventType === 'UPDATE') {
                     if (activeChatPeerId) loadChatHistory(activeChatPeerId);
                     checkExistingRequests();
-                    loadStories();
+                    // Live-апдейт реакций и комментов в ленте
+                    if (!document.getElementById('tab-feed').classList.contains('hidden')) {
+                        loadFeed();
+                    }
                     return;
                 }
                 const row = payload.new;
                 if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
-                if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
-                if (row.type === 'chat' && ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId))) {
-                    loadChatHistory(activeChatPeerId);
+if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
+                
+                if (row.type === 'chat') {
+                    if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
+                        loadChatHistory(activeChatPeerId);
+                    }
+                    if (row.receiver === myCurrentId && row.sender !== activeChatPeerId) {
+                        let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+                        let senderName = contacts[row.sender] ? contacts[row.sender].name : "Новое сообщение";
+                        let senderAva = contacts[row.sender] ? contacts[row.sender].ava : "";
+                        showPushNotification(row.sender, senderName, row.text, senderAva);
+                    }
                 }
-                if (row.type === 'image_story' || row.type === 'video_story') loadStories();
+                if (row.type === 'feed_post') {
+                    if (!document.getElementById('tab-feed').classList.contains('hidden')) {
+                        loadFeed();
+                    }
+                }
             }).subscribe();
 
         checkExistingRequests();
@@ -909,7 +1120,7 @@ const { data: targetUser } = await supabaseClient.from('users').select('*').eq('
             </div>
             <div style="display:flex; gap:6px;">
                 <button class="btn btn-green" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="acceptReq('${id}','${name}','${ava}')">✔</button>
-<button class="btn btn-red" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="declineReq('${id}')">✖</button>
+                <button class="btn btn-red" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="declineReq('${id}')">✖</button>
             </div>
         `;
         list.appendChild(div);
@@ -928,10 +1139,10 @@ const { data: targetUser } = await supabaseClient.from('users').select('*').eq('
         
         const list = document.getElementById('req-list');
         const badge = document.getElementById('badge');
-        if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>'; } else { badge.innerText = list.children.length; }
+if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>'; } else { badge.innerText = list.children.length; }
 
         openChat(id, name, ava);
-        nav('chat', document.querySelectorAll('.nav-item')[3]);
+        nav('chat', document.querySelectorAll('.nav-item')[4]);
     }
 
     async function declineReq(id) {
@@ -993,7 +1204,7 @@ const { data: targetUser } = await supabaseClient.from('users').select('*').eq('
                         openMediaModal(msg, direction === 'out');
                     } else if (direction === 'out') {
                         openMsgMenu(msg.id, msg.text);
-}
+                    }
                 };
 
                 if(msg.media) {
@@ -1020,8 +1231,7 @@ const { data: targetUser } = await supabaseClient.from('users').select('*').eq('
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('msg-menu').classList.remove('open');
     }
-
-    function triggerEdit() {
+function triggerEdit() {
         closeMsgMenu(); isEditingMode = true;
         const input = document.getElementById('m-input');
         input.value = selectedMsgText; input.focus();
@@ -1093,7 +1303,8 @@ const { data: targetUser } = await supabaseClient.from('users').select('*').eq('
             const div = document.createElement('div');
             div.className = 'contact-item';
             div.onclick = () => { openChat(id, contacts[id].name, contacts[id].ava); };
-let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
+            
+            let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
             div.innerHTML = `
                 <div class="ava-wrapper">
                     <div class="chat-ava" style="${bgStyle}"></div>
@@ -1114,8 +1325,7 @@ let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '
         document.getElementById('chat-with').innerText = name;
         const pAva = document.getElementById('peer-ava');
         if(ava) pAva.style.backgroundImage = `url(${ava})`; else pAva.style.backgroundImage = 'none';
-        
-        document.getElementById('chat-empty').classList.add('hidden');
+document.getElementById('chat-empty').classList.add('hidden');
         document.getElementById('chat-ui').classList.remove('hidden');
         
         checkContactsOnline();
@@ -1143,6 +1353,10 @@ let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '
             document.getElementById('tab-chat').classList.remove('slide-active');
         }
         
+        if(t === 'feed') {
+            loadFeed();
+        }
+        
         if(e) e.classList.add('active');
 
         const versionTag = document.getElementById('version-tag');
@@ -1163,9 +1377,9 @@ let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '
         const savedId = localStorage.getItem('ol_id');
         const savedName = localStorage.getItem('ol_name');
         const savedPass = localStorage.getItem('ol_pass');
-        if(savedId && savedName && savedPass) {
+        if(savedId && savedPass) {
             document.getElementById('myId').value = savedId;
-            document.getElementById('myName').value = savedName;
+            document.getElementById('myName').value = savedName || "";
             document.getElementById('myPassword').value = savedPass;
             authMode = "login";
             handleAuth();
