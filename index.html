@@ -14,7 +14,10 @@
             --header-bg: rgba(255, 255, 255, 0.88);
             --border-color: rgba(0, 0, 0, 0.08);
             --green: #4caf50;
+            --green-grad: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
             --red: #ff3b30;
+            --red-grad: linear-gradient(135deg, #ff3b30 0%, #ff4f43 100%);
+            --panel-color: #ffffff;
         }
         
         body { 
@@ -55,7 +58,7 @@
             cursor: pointer; user-select: none;
         }
 
-        .container { max-width: 500px; margin: 70px auto 100px; padding: 0 15px; box-sizing: border-box; }
+        .container { max-width: 500px; margin: 70px auto 100px; padding: 0 15px; box-sizing: border-box; height: calc(100vh - 170px); overflow-y: auto; }
         
         .block { 
             background: var(--block-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -63,13 +66,17 @@
             border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.15);
         }
 
+        .profile-header-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 5px; }
+        .settings-gear-btn { background: none; border: none; font-size: 22px; cursor: pointer; padding: 5px; transition: transform 0.3s ease; }
+        .settings-gear-btn:active { transform: rotate(45deg) scale(0.9); }
+
         .ava-label { display: block; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; aspect-ratio: 1 / 1; }
-        .ava-circle { width: 100%; height: 100%; border-radius: 50%; background: #ddd; border: 2.5px solid var(--blue); display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; box-shadow: 0 4px 12px rgba(0,119,255,0.2); aspect-ratio: 1 / 1; object-fit: cover; }
+.ava-circle { width: 100%; height: 100%; border-radius: 50%; background: #ddd; border: 2.5px solid var(--blue); display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; box-shadow: 0 4px 12px rgba(0,119,255,0.2); aspect-ratio: 1 / 1; object-fit: cover; }
         .ava-wrapper { position: relative; width: 42px; height: 42px; aspect-ratio: 1 / 1; }
         .chat-ava { width: 100%; height: 100%; border-radius: 50%; background: #ccc; background-size: cover; background-position: center; aspect-ratio: 1 / 1; object-fit: cover; }
         
         .status-dot { position: absolute; bottom: 0; right: 0; width: 11px; height: 11px; border-radius: 50%; border: 2px solid white; background: var(--gray); }
-.status-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
+        .status-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
         #auth-screen { position: fixed; inset: 0; background: rgba(10, 17, 40, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .auth-card { background: rgba(255, 255, 255, 0.9); padding: 35px 30px; border-radius: 28px; width: 85%; max-width: 320px; text-align: center; position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.5); }
@@ -88,6 +95,11 @@
         }
         .btn:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(0, 119, 255, 0.2); }
         .btn:disabled { background: #b2d6ff; box-shadow: none; cursor: not-allowed; }
+
+        .btn-green { background: var(--green-grad); box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); }
+        .btn-green:active { box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2); }
+        .btn-red { background: var(--red-grad); box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3); }
+        .btn-red:active { box-shadow: 0 2px 5px rgba(255, 59, 48, 0.2); }
         
         #tab-chat { 
             position: fixed; inset: 55px 0 65px 0; 
@@ -95,6 +107,11 @@
             background: rgba(240, 242, 245, 0.85); 
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             z-index: 5;
+            transform: translateY(100vh);
+            transition: transform 0.4s cubic-bezier(0.1, 0.76, 0.55, 0.94);
+        }
+        #tab-chat.slide-active {
+            transform: translateY(0);
         }
         #chat-ui { display: flex; flex-direction: column; height: 100%; width: 100%; }
         
@@ -112,8 +129,8 @@
         }
         .chat-call-btn:active { background: rgba(0, 119, 255, 0.2); }
 
-        #chat-win { 
-            flex: 1; overflow-y: auto; 
+        #chat-win {
+flex: 1; overflow-y: auto; 
             padding: 20px 15px; display: flex; flex-direction: column; gap: 10px; 
         }
 
@@ -123,16 +140,21 @@
             max-width: 85%; margin: 0 auto 15px auto; align-self: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
-        .bubble { max-width: 75%; padding: 11px 15px; border-radius: 20px; font-size: 15px; box-shadow: 0 1.5px 4px rgba(0,0,0,0.08); word-wrap: break-word; cursor: pointer; position: relative; transition: opacity 0.2s; }
+        .bubble { max-width: 75%; padding: 11px 15px; border-radius: 20px; font-size: 15px; box-shadow: 0 1.5px 4px rgba(0,0,0,0.08); word-wrap: break-word; cursor: pointer; position: relative; transition: opacity 0.2s; animation: popBubble 0.25s ease-out forwards; }
         .bubble:active { opacity: 0.6; }
         .bubble img { max-width: 100%; border-radius: 12px; display: block; margin-top: 5px; aspect-ratio: 1 / 1; object-fit: cover; }
-        .bubble.in { background: white; align-self: flex-start; border-bottom-left-radius: 5px; }
-        .bubble.out { background: var(--blue-grad); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(0,119,255,0.2); }
+        .bubble.in { background: white; align-self: flex-start; border-bottom-left-radius: 5px; transform-origin: left bottom; }
+        .bubble.out { background: var(--blue-grad); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(0,119,255,0.2); transform-origin: right bottom; }
+        
+        @keyframes popBubble {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
         .edited-label { font-size: 10px; opacity: 0.6; margin-left: 5px; font-style: italic; }
 
-        /* СТИЛИ ДЛЯ ИНДИКАТОРА НАБОРА ТЕКСТА ВНИЗУ ЧАТА */
         .bottom-typing-panel {
-padding: 6px 20px; 
+            padding: 6px 20px; 
             font-size: 13px; 
             color: var(--blue); 
             background: rgba(255, 255, 255, 0.95);
@@ -143,21 +165,83 @@ padding: 6px 20px;
         }
 
         .chat-input-panel {
-            background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: center;
-            border-top: 1px solid var(--border-color); box-sizing: border-box;
+            background: white; padding: 10px 15px; display: flex; gap: 8px; align-items: center;
+            border-top: 1px solid var(--border-color); box-sizing: border-box; position: relative;
         }
 
-        #msg-menu { position: fixed; bottom: -200px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
+        .emoji-picker {
+            position: absolute; bottom: 65px; left: 15px; background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.1); border-radius: 16px; padding: 12px;
+            display: none; grid-template-columns: repeat(5, 32px); gap: 6px;
+            z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .emoji-picker span { font-size: 22px; cursor: pointer; text-align: center; transition: transform 0.1s; }
+        .emoji-picker span:active { transform: scale(1.2); }
+
+        .modal {
+            display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.85);
+            justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(10px);
+        }
+        .modal-content {
+            background-color: #ffffff; padding: 24px; border-radius: 28px; text-align: center;
+            max-width: 340px; width: 85%; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .modal-content img, .modal-content video {
+            max-width: 100%; max-height: 260px; border-radius: 16px; margin-bottom: 18px; object-fit: cover;
+        }
+        .modal-buttons { display: flex; flex-direction: column; gap: 10px; }
+        .modal-btn { padding: 14px; border: none; border-radius: 14px; cursor: pointer; font-size: 16px; font-weight: bold; transition: all 0.2s; }
+        .modal-btn.save { background-color: var(--green-grad); color: white; box-shadow: 0 4px 12px rgba(76,175,80,0.3); }
+        .modal-btn.delete { background-color: var(--red-grad); color: white; box-shadow: 0 4px 12px rgba(255,59,48,0.3); }
+        .modal-btn.cancel { background-color: #f0f2f5; color: #4a5568; }
+
+        /* Стилизация всплывающего окна Настроек */
+        .settings-modal {
+            display: none; position: fixed; inset: 0; background: rgba(10, 17, 40, 0.6); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+justify-content: center; align-items: center; z-index: 3500;
+        }
+        .settings-card {
+            background: white; width: 85%; max-width: 340px; padding: 25px; border-radius: 28px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center;
+        }
+        .settings-btn {
+            width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
+            border: none; border-radius: 14px; cursor: pointer; font-weight: bold; font-size: 15px;
+            margin-bottom: 12px; text-align: left; display: flex; align-items: center; justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .settings-btn.logout { color: var(--red); background-color: rgba(255,59,48,0.06); }
+
+        .stories-container {
+            display: flex; gap: 12px; padding: 15px; background: rgba(255,255,255,0.6);
+            border-radius: 20px; overflow-x: auto; border: 1px solid rgba(255,255,255,0.4); margin-bottom: 15px;
+        }
+        .story-circle {
+            width: 58px; height: 58px; border-radius: 50%; border: 2.5px solid var(--blue);
+            padding: 2px; cursor: pointer; display: flex; justify-content: center; align-items: center;
+            background-color: #000; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,119,255,0.15);
+        }
+        .story-circle img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .publish-story-btn {
+            width: 58px; height: 58px; border-radius: 50%; border: 2.5px dashed var(--gray);
+            display: flex; justify-content: center; align-items: center; font-size: 24px;
+            cursor: pointer; color: var(--gray); flex-shrink: 0; background: rgba(255,255,255,0.5);
+        }
+
+        #msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
         #msg-menu.open { bottom: 0; }
         .menu-btn { width: 100%; padding: 14px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
 
         .contact-item { display: flex; align-items: center; gap: 12px; padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.2s; }
         .contact-item:active { background: rgba(0,0,0,0.03); }
 
-        footer { position: fixed; bottom: 0; width: 100%; background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
-        .nav-item { text-align: center; font-size: 11px; color: var(--gray); cursor: pointer; position: relative; }
+        footer { position: fixed; bottom: 0; width: 100%; background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+        .nav-item { text-align: center; font-size: 11px; color: var(--gray); cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; transition: color 0.2s; }
+        .nav-item svg { width: 22px; height: 22px; fill: currentColor; transition: fill 0.2s, transform 0.2s; }
         .nav-item.active { color: var(--blue); font-weight: bold; }
-        .badge { background: red; color: white; border-radius: 50%; padding: 2px 7px; font-size: 10px; position: absolute; top: -5px; right: -10px; display: none; }
+        .nav-item.active svg { transform: scale(1.05); }
+        .badge { background: red; color: white; border-radius: 50%; padding: 2px 7px; font-size: 10px; position: absolute; top: -2px; right: 25%; display: none; font-weight: bold; }
         .hidden { display: none !important; }
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1999; display: none; }
 
@@ -168,13 +252,12 @@ padding: 6px 20px;
         }
 
         .dev-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .dev-modal.show { opacity: 1; pointer-events: auto; }
         .dev-card { background: white; padding: 25px; border-radius: 24px; width: 80%; max-width: 280px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
 
-        /* ИСПРАВЛЕННЫЙ ИНТЕРФЕЙС ЗВОНКА */
         #call-screen {
             position: fixed; inset: 0; background: #0f172a;
             z-index: 4000; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
@@ -194,7 +277,7 @@ padding: 6px 20px;
         }
         
         .call-top-info {
-position: relative; z-index: 5; text-align: center; width: 100%; pointer-events: none;
+            position: relative; z-index: 5; text-align: center; width: 100%; pointer-events: none;
         }
         .call-crypto-info {
             background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 12px;
@@ -235,13 +318,12 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
         .call-btn.accept { background: var(--green); width: 66px; height: 66px; font-size: 24px; box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4); }
         .call-btn.hangup { background: var(--red); width: 66px; height: 66px; font-size: 24px; box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); }
 
-        /* ПРЫГАЮЩИЕ ТОЧКИ */
         .typing-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; }
         .typing-dots span {
             width: 4px; height: 4px; background-color: var(--blue); border-radius: 50%;
             animation: tgBounce 1.4s infinite ease-in-out both;
         }
-        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
         .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes tgBounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
@@ -251,6 +333,10 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
 
         .full-loader { position: absolute; inset: 0; background: white; border-radius: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .full-loader.show { opacity: 1; pointer-events: auto; }
+        
+        .auth-modes { display: flex; gap: 10px; margin-bottom: 15px; }
+        .mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .mode-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
     </style>
 </head>
 <body>
@@ -263,13 +349,30 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
         <div class="bubble-bg"></div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.1.4</div>
-    <div id="overlay" onclick="closeMsgMenu()"></div>
+    <div id="version-tag" class="app-version">v1.1.5</div>
+    <div id="overlay" onclick="closeMsgMenu(); closeMediaModal(); closeSettings();"></div>
+
+    <div id="settings-modal" class="settings-modal" onclick="closeSettings()">
+        <div class="settings-card" onclick="event.stopPropagation()">
+            <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--blue); text-align: center;">⚙️ Настройки</h3>
+            <button class="settings-btn" onclick="triggerStoryUpload(); closeSettings();">
+                <span>📸 Опубликовать историю</span> ➔
+            </button>
+            <button class="settings-btn" onclick="changeAccount(); closeSettings();">
+                <span>👤 Изменить аккаунт</span> ➔
+            </button>
+            <button class="settings-btn logout" onclick="logout(); closeSettings();">
+                <span>🚪 Выйти из аккаунта</span>
+            </button>
+            <button class="btn" style="background: #f0f2f5; color: black; box-shadow: none; margin-top: 10px;" onclick="closeSettings()">Закрыть</button>
+        </div>
+    </div>
 
     <div id="call-screen">
         <video id="remote-video" autoplay playsinline></video>
         <video id="local-video" autoplay playsinline muted class="hidden"></video>
-<div class="call-top-info">
+
+        <div class="call-top-info">
             <div class="call-crypto-info">🔒 Защищено сквозным шифрованием E2EE</div>
             <h1 id="call-peer-name" style="margin: 25px 0 5px 0; font-size: 26px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Друг</h1>
             <p id="call-status-text" style="margin: 0; color: #cbd5e1; font-size: 14px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">Подключение...</p>
@@ -287,7 +390,7 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
             </div>
             
             <div class="call-controls-row">
-                <button id="call-accept-btn" class="call-btn accept hidden" onclick="acceptIncomingCall()">📞</button>
+<button id="call-accept-btn" class="call-btn accept hidden" onclick="acceptIncomingCall()">📞</button>
                 <button id="call-decline-btn" class="call-btn hangup" onclick="clickHangup()">📞</button>
             </div>
         </div>
@@ -306,20 +409,35 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
         <div class="auth-card">
             <div id="auth-loader" class="full-loader">
                 <div class="spinner spinner-blue" style="width:40px; height:40px; border-width: 4px;"></div>
-                <b style="color: var(--blue); font-size: 15px;">Загрузка профиля...</b>
+                <b id="loader-text" style="color: var(--blue); font-size: 15px;">Проверка...</b>
             </div>
             <h1 style="color:var(--blue); margin: 0 0 15px 0; font-size: 28px; letter-spacing: -0.5px;">One Link</h1>
+            
+            <div class="auth-modes">
+                <button id="mode-login" class="mode-btn active" onclick="setAuthMode('login')">Войти</button>
+                <button id="mode-register" class="mode-btn" onclick="setAuthMode('register')">Регистрация</button>
+            </div>
+
             <input type="tel" id="myId" placeholder="ID (цифры)" inputmode="numeric">
             <input type="text" id="myName" placeholder="Имя">
-            <button class="btn" id="login-btn" onclick="start()">Войти</button>
-            <p id="auth-log" style="color: red; font-size: 12px; margin-top: 5px;"></p>
+            <input type="password" id="myPassword" placeholder="Пароль">
+            
+            <button class="btn" id="login-btn" onclick="handleAuth()">Войти</button>
+            <p id="auth-log" style="color: red; font-size: 13px; margin-top: 8px; font-weight: 500; min-height: 18px;"></p>
         </div>
     </div>
 
     <div id="msg-menu">
         <button class="menu-btn" style="background: #f0f2f5; color: black;" onclick="triggerEdit()">✏️ Редактировать</button>
-        <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить сообщение</button>
+        <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
         <button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
+    </div>
+
+    <div class="modal" id="media-modal">
+        <div class="modal-content">
+            <div id="modal-media-container"></div>
+            <div class="modal-buttons" id="modal-actions"></div>
+        </div>
     </div>
 
     <div id="app" class="hidden">
@@ -327,16 +445,25 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
         
         <div class="container" id="main-container">
             <div id="tab-profile" class="page">
-                <div class="block" style="text-align: center;">
+                <div class="block" style="text-align: center; position: relative;">
                     <label for="ava-input" class="ava-label">
                         <input type="file" id="ava-input" style="display:none" accept="image/*">
                         <div id="my-ava" class="ava-circle"><span>📷</span></div>
                     </label>
-                    <h2 id="view-name" style="margin:5px 0;"></h2>
-                    <p id="view-id" style="color:var(--gray); font-size:14px;"></p>
-<button class="btn" onclick="logout()" style="background:rgba(0,0,0,0.05); color:red; margin-top:15px; box-shadow:none;">Выйти</button>
+                    <div class="profile-header-container">
+                        <h2 id="view-name" style="margin:0;"></h2>
+                        <button class="settings-gear-btn" onclick="openSettings()">⚙️</button>
+                    </div>
+                    <p id="view-id" style="color:var(--gray); font-size:14px; margin: 5px 0 0 0;"></p>
                 </div>
+
                 <div class="block">
+                    <h3>Истории друзей (24ч)</h3>
+                    <div class="stories-container" id="profile-stories-feed">
+                        <div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>
+                    </div>
+                </div>
+<div class="block">
                     <h3>Мои контакты</h3>
                     <div id="contacts-list"></div>
                 </div>
@@ -382,23 +509,62 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
                 </div>
 
                 <div class="chat-input-panel">
-                    <label for="media-input" class="btn" style="width:45px; background: #666; font-size: 18px; padding: 12px 0; text-align:center; box-shadow:none; margin:0;">
+                    <div class="emoji-picker" id="emoji-picker">
+                        <span onclick="addEmoji('😀')">😀</span>
+                        <span onclick="addEmoji('😂')">😂</span>
+                        <span onclick="addEmoji('🔥')">🔥</span>
+                        <span onclick="addEmoji('👍')">👍</span>
+                        <span onclick="addEmoji('❤️')">❤️</span>
+                        <span onclick="addEmoji('🎉')">🎉</span>
+                        <span onclick="addEmoji('😎')">😎</span>
+                        <span onclick="addEmoji('😢')">😢</span>
+                        <span onclick="addEmoji('😡')">😡</span>
+                        <span onclick="addEmoji('😮')">😮</span>
+                    </div>
+
+                    <button class="btn" style="width:40px; background: #555; font-size: 18px; padding: 12px 0; margin:0; box-shadow:none;" onclick="toggleEmojiPicker()">😀</button>
+                    
+                    <label for="media-input" class="btn" style="width:40px; background: #666; font-size: 18px; padding: 12px 0; text-align:center; box-shadow:none; margin:0;">
                         <input type="file" id="media-input" style="display:none" accept="image/*">📎
                     </label>
+                    
                     <input type="text" id="m-input" placeholder="Сообщение..." style="margin:0; flex:1;" oninput="handleTyping()">
-                    <button class="btn" id="send-btn" style="width:55px; padding: 15px 0;" onclick="send()">></button>
+                    <button class="btn" id="send-btn" style="width:50px; padding: 15px 0;" onclick="send()">></button>
                 </div>
             </div>
-            <div id="chat-empty" style="text-align:center; padding:100px 40px; color:gray; font-size: 16px; font-weight: 500;">
-                Выберите ...
+            
+            <div id="chat-empty" style="padding: 20px 15px; height: calc(100vh - 140px); overflow-y: auto; box-sizing: border-box;">
+                <h3 style="color:#fff; text-align:left; margin-bottom:10px; margin-top:0;">Истории (24ч)</h3>
+                <div class="stories-container" id="chat-stories-feed">
+<div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>
+                </div>
+                
+                <h3 style="color:#fff; text-align:left; margin-top:25px; margin-bottom:10px;">Мои Диалоги</h3>
+                <div class="block" style="text-align: left; padding: 10px;">
+                    <div id="chat-contacts-list"></div>
+                </div>
             </div>
         </div>
 
+        <input type="file" id="story-file-input" accept="image/*,video/*" style="display: none;" onchange="publishStory(event)">
+
         <footer>
-            <div class="nav-item active" onclick="nav('profile', this)">👤<br>Профиль</div>
-            <div class="nav-item" onclick="nav('search', this)">🔍<br>Поиск</div>
-            <div class="nav-item" onclick="nav('msgs', this)">📩<br>Почта<span id="badge" class="badge">0</span></div>
-            <div class="nav-item" onclick="nav('chat', this)">💬<br>Чат</div>
+            <div class="nav-item active" onclick="nav('profile', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                Профиль
+            </div>
+            <div class="nav-item" onclick="nav('search', this)">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                Поиск
+            </div>
+            <div class="nav-item" onclick="nav('msgs', this)">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                Почта<span id="badge" class="badge">0</span>
+            </div>
+            <div class="nav-item" onclick="nav('chat', this)">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                Чат
+            </div>
         </footer>
     </div>
 
@@ -411,6 +577,7 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
     let selectedMsgText = "";
     let isEditingMode = false;
     let typingTimeout;
+    let authMode = "login";
 
     let callChannel = null;
     let currentCallSession = null;
@@ -422,9 +589,17 @@ position: relative; z-index: 5; text-align: center; width: 100%; pointer-events:
     let isVideoOn = true;
     let isFrontCamera = true;
     let knownUsersCache = {}; 
+    let localDeletedMessages = JSON.parse(localStorage.getItem('ol_deleted_msgs') || '[]');
 
     const rtcConfig = {
-iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+            { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+            { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' }
+        ],
+        iceCandidatePoolSize: 10
     };
 
     const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
@@ -433,6 +608,24 @@ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
 
     function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
     function closeDevModal() { document.getElementById('dev-screen').classList.remove('show'); }
+
+    /* УПРАВЛЕНИЕ ОКНОМ НАСТРОЕК */
+    function openSettings() {
+        document.getElementById('settings-modal').style.display = 'flex';
+        document.getElementById('overlay').style.display = 'block';
+    }
+    function closeSettings() {
+        document.getElementById('settings-modal').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    function setAuthMode(mode) {
+        authMode = mode;
+        document.getElementById('auth-log').innerText = "";
+        document.getElementById('mode-login').classList.toggle('active', mode === 'login');
+document.getElementById('mode-register').classList.toggle('active', mode === 'register');
+        document.getElementById('login-btn').innerText = mode === 'login' ? 'Войти' : 'Зарегистрироваться';
+    }
 
     function initCallSignalChannel() {
         if (!myCurrentId) return;
@@ -448,6 +641,7 @@ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
         .on('broadcast', { event: 'media_change' }, payload => { handlePeerMediaChange(payload.payload); })
         .on('broadcast', { event: 'webrtc_offer' }, async payload => {
             if (currentCallSession) {
+                if(!peerConnection) createPeerConnection();
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.payload.offer));
                 const answer = await peerConnection.createAnswer();
                 await peerConnection.setLocalDescription(answer);
@@ -474,24 +668,30 @@ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
         try {
             localStream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
-                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
+                video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" }
             });
             const localVideoTrack = document.getElementById('local-video');
             localVideoTrack.srcObject = localStream;
             localVideoTrack.classList.remove('hidden');
             return true;
         } catch (err) {
-            alert("Не удалось получить доступ к камере и микрофону.");
+            alert("Не удалось получить доступ к камере или микрофону. Проверьте разрешения в браузере.");
             return false;
         }
     }
 
     function createPeerConnection() {
-        if (peerConnection) peerConnection.close();
+        if (peerConnection) {
+            peerConnection.close();
+            peerConnection = null;
+        }
+        
         peerConnection = new RTCPeerConnection(rtcConfig);
 
         if (localStream) {
-            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+            localStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, localStream);
+            });
         }
 
         peerConnection.ontrack = event => {
@@ -499,6 +699,11 @@ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
             if (event.streams && event.streams[0]) {
                 remoteVideo.srcObject = event.streams[0];
                 document.getElementById('call-avatar-container').classList.add('hidden');
+                
+                remoteVideo.play().catch(e => {
+                    remoteVideo.muted = true; 
+                    remoteVideo.play();
+                });
             }
         };
 
@@ -510,16 +715,15 @@ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
             }
         };
     }
-
-    async function startCall() {
+async function startCall() {
         if (!activeChatPeerId) return;
-const hasAccess = await requestMediaPermissions();
+        const hasAccess = await requestMediaPermissions();
         if (!hasAccess) return;
 
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
         let currentPeer = contacts[activeChatPeerId] || { name: "Друг", ava: "" };
 
-        currentCallSession = { role: 'caller', peerId: activeChatPeerId, peerName: currentPeer.name, peerAva: currentPeer.ava };
+        currentCallSession = { role: 'caller', peerId: activeChatPeerId, peerName: currentPeer.name, peerAva: currentPeer.ava, status: 'dialing' };
 
         document.getElementById('call-peer-name').innerText = currentPeer.name;
         const callAva = document.getElementById('call-peer-ava');
@@ -533,7 +737,6 @@ const hasAccess = await requestMediaPermissions();
         
         document.getElementById('call-active-controls').classList.remove('hidden');
         document.getElementById('call-accept-btn').classList.add('hidden');
-
         document.getElementById('call-status-text').innerText = "Вызов...";
         document.getElementById('call-screen').classList.add('show');
 
@@ -559,14 +762,12 @@ const hasAccess = await requestMediaPermissions();
             return;
         }
 
-        currentCallSession = { role: 'receiver', peerId: data.callerId, peerName: data.callerName, peerAva: data.callerAva };
-
+        currentCallSession = { role: 'receiver', peerId: data.callerId, peerName: data.callerName, peerAva: data.callerAva, status: 'ringing' };
         document.getElementById('call-peer-name').innerText = data.callerName;
         const callAva = document.getElementById('call-peer-ava');
         callAva.classList.add('ringing');
         document.getElementById('call-avatar-container').classList.remove('hidden');
         if(data.callerAva) callAva.style.backgroundImage = `url(${data.callerAva})`; else callAva.style.backgroundImage = 'none';
-
         document.getElementById('call-status-text').innerText = "Входящий вызов...";
         
         document.getElementById('call-active-controls').classList.add('hidden');
@@ -581,33 +782,31 @@ const hasAccess = await requestMediaPermissions();
 
     async function acceptIncomingCall() {
         if (!currentCallSession || currentCallSession.role !== 'receiver') return;
-        
         const hasAccess = await requestMediaPermissions();
         if (!hasAccess) { clickHangup(); return; }
 
         clearTimeout(callTimeoutTimer);
         currentCallSession.status = 'connected';
-
-        document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
-        document.getElementById('call-peer-ava').classList.remove('ringing');
-document.getElementById('call-accept-btn').classList.add('hidden');
+        document.getElementById('call-status-text').innerText = "Подключение...";
+document.getElementById('call-peer-ava').classList.remove('ringing');
+        document.getElementById('call-accept-btn').classList.add('hidden');
         document.getElementById('call-active-controls').classList.remove('hidden');
 
         createPeerConnection();
-
         supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
             type: 'broadcast', event: 'accept', payload: { from: myCurrentId }
         });
+        document.getElementById('call-status-text').innerText = "В разговоре (Защищено)";
     }
 
     async function handleCallAcceptedByPeer(data) {
         if (currentCallSession && currentCallSession.role === 'caller' && currentCallSession.peerId === data.from) {
             clearTimeout(callTimeoutTimer);
             currentCallSession.status = 'connected';
-            document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
+            document.getElementById('call-status-text').innerText = "В разговоре (Защищено)";
             document.getElementById('call-peer-ava').classList.remove('ringing');
 
-            const offer = await peerConnection.createOffer();
+            const offer = await peerConnection.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: true });
             await peerConnection.setLocalDescription(offer);
             
             supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
@@ -618,9 +817,7 @@ document.getElementById('call-accept-btn').classList.add('hidden');
 
     function clickHangup() {
         if (currentCallSession) {
-            supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
-                type: 'broadcast', event: 'hangup', payload: { from: myCurrentId }
-            });
+            supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({ type: 'broadcast', event: 'hangup', payload: { from: myCurrentId } });
         }
         endCall();
     }
@@ -634,14 +831,11 @@ document.getElementById('call-accept-btn').classList.add('hidden');
 
     function endCall() {
         clearTimeout(callTimeoutTimer);
-        
         if (peerConnection) { peerConnection.close(); peerConnection = null; }
         if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
-        
         document.getElementById('remote-video').srcObject = null;
         document.getElementById('local-video').srcObject = null;
         document.getElementById('local-video').classList.add('hidden');
-
         currentCallSession = null;
         document.getElementById('call-screen').classList.remove('show');
     }
@@ -668,54 +862,242 @@ document.getElementById('call-accept-btn').classList.add('hidden');
     async function flipCallCamera() {
         if (!localStream) return;
         isFrontCamera = !isFrontCamera;
-        
-        localStream.getVideoTracks().forEach(t => t.stop());
+        const videoTracks = localStream.getVideoTracks();
+        videoTracks.forEach(t => t.stop());
         try {
             const newVideoStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: isFrontCamera ? "user" : "environment" }
+                video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: isFrontCamera ? "user" : "environment" }
             });
             const newTrack = newVideoStream.getVideoTracks()[0];
+            localStream.removeTrack(videoTracks[0]);
             localStream.addTrack(newTrack);
-            
             document.getElementById('local-video').srcObject = localStream;
-            
             if(peerConnection) {
-                const sender = peerConnection.getSenders().find(s => s.track.kind === 'video');
+const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
                 if(sender) sender.replaceTrack(newTrack);
             }
         } catch(e){}
     }
 
     function handlePeerMediaChange(data) {
-if (currentCallSession && currentCallSession.peerId === data.from && currentCallSession.status === 'connected') {
+        if (currentCallSession && currentCallSession.peerId === data.from && currentCallSession.status === 'connected') {
             if (!data.audio) document.getElementById('call-status-text').innerText = "Микрофон собеседника выключен";
-            else if (!data.video) document.getElementById('call-status-text').innerText = "Камера собеседника выключена";
-            else document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
+            else if (!data.video) {
+                document.getElementById('call-status-text').innerText = "Камера собеседника выключена";
+                document.getElementById('call-avatar-container').classList.remove('hidden');
+            } else {
+                document.getElementById('call-status-text').innerText = "В разговоре (Защищено)";
+                document.getElementById('call-avatar-container').classList.add('hidden');
+            }
         }
     }
 
-    async function start() {
+    function toggleEmojiPicker() {
+        const picker = document.getElementById('emoji-picker');
+        picker.style.display = picker.style.display === 'grid' ? 'none' : 'grid';
+    }
+    function addEmoji(emoji) {
+        const input = document.getElementById('m-input');
+        input.value += emoji;
+        document.getElementById('emoji-picker').style.display = 'none';
+        input.focus();
+    }
+
+    function openMediaModal(msg, isMyMessage) {
+        const modal = document.getElementById('media-modal');
+        const mediaContainer = document.getElementById('modal-media-container');
+        const actionsContainer = document.getElementById('modal-actions');
+        
+        mediaContainer.innerHTML = `<img src="${msg.media || msg.text}" alt="Media">`;
+        actionsContainer.innerHTML = '';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'modal-btn save';
+        saveBtn.innerText = '💾 Сохранить фото';
+        saveBtn.onclick = () => {
+            const link = document.createElement('a');
+            link.href = msg.media || msg.text;
+            link.download = 'onelink_photo_' + Date.now() + '.png';
+            link.click();
+            alert('Фото сохранено в галерею!');
+            closeMediaModal();
+        };
+        actionsContainer.appendChild(saveBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'modal-btn delete';
+        
+        if (!isMyMessage) {
+            deleteBtn.innerText = '🗑️ Удалить у себя';
+            deleteBtn.onclick = () => {
+                localDeletedMessages.push(msg.id);
+                localStorage.setItem('ol_deleted_msgs', JSON.stringify(localDeletedMessages));
+                closeMediaModal();
+                loadChatHistory(activeChatPeerId);
+            };
+        } else {
+            deleteBtn.innerText = '🗑️ Удалить везде';
+            deleteBtn.onclick = async () => {
+                await supabaseClient.from('messages').delete().eq('id', msg.id);
+                closeMediaModal();
+                loadChatHistory(activeChatPeerId);
+            };
+        }
+        actionsContainer.appendChild(deleteBtn);
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'modal-btn cancel';
+        cancelBtn.innerText = 'Отмена';
+        cancelBtn.onclick = closeMediaModal;
+        actionsContainer.appendChild(cancelBtn);
+
+        document.getElementById('overlay').style.display = 'block';
+        modal.style.display = 'flex';
+    }
+
+    function closeMediaModal() {
+        document.getElementById('media-modal').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    /* ИСПРАВЛЕННАЯ ПУБЛИКАЦИЯ ИСТОРИЙ С ВИДЕО */
+    function triggerStoryUpload() {
+        document.getElementById('story-file-input').click();
+    }
+
+    async function publishStory(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const isVideo = file.type.startsWith('video/');
+const reader = new FileReader();
+        reader.onload = async function(e) {
+            const fileData = e.target.result;
+            await supabaseClient.from('messages').insert([
+                { sender: myCurrentId, receiver: 'all_friends', text: myCurrentName, media: fileData, type: isVideo ? 'video_story' : 'image_story' }
+            ]);
+            alert('История успешно опубликована на 24 часа всем друзьям!');
+            loadStories();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    /* ИСПРАВЛЕННАЯ ЗАГРУЗКА И АВТОУДАЛЕНИЕ СТАРЫХ ИСТОРИЙ (>24 ЧАСОВ) */
+    async function loadStories() {
+        const { data } = await supabaseClient.from('messages')
+            .select('*')
+            .or('type.eq.image_story,type.eq.video_story');
+            
+        const feedProfile = document.getElementById('profile-stories-feed');
+        const feedChat = document.getElementById('chat-stories-feed');
+        
+        feedProfile.innerHTML = '<div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>';
+        feedChat.innerHTML = '<div class="publish-story-btn" onclick="triggerStoryUpload()">+</div>';
+        
+        if (!data) return;
+
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        data.forEach(story => {
+            const storyTime = new Date(story.created_at).getTime();
+            if (now - storyTime > oneDay) {
+                return; 
+            }
+
+            const circle = document.createElement('div');
+            circle.className = 'story-circle';
+            circle.onclick = () => viewStory(story);
+
+            if (story.type === 'image_story') {
+                circle.innerHTML = `<img src="${story.media}">`;
+            } else {
+                circle.innerHTML = `<span style="font-size:22px; color:#fff; display:flex; align-items:center; justify-content:center; height:100%;">🎥</span>`;
+            }
+
+            feedProfile.appendChild(circle.cloneNode(true));
+            feedChat.appendChild(circle);
+        });
+    }
+
+    function viewStory(story) {
+        const modal = document.getElementById('media-modal');
+        const mediaContainer = document.getElementById('modal-media-container');
+        const actionsContainer = document.getElementById('modal-actions');
+        
+        if (story.type === 'image_story') {
+            mediaContainer.innerHTML = `<img src="${story.media}"><h3>История от ${story.text}</h3>`;
+        } else {
+            // Исправленные атрибуты тега видео для глобальной работы
+            mediaContainer.innerHTML = `<video src="${story.media}" autoplay playsinline controls style="max-width:100%; border-radius:16px; max-height:260px; object-fit:cover;"></video><h3>История от ${story.text}</h3>`;
+        }
+
+        actionsContainer.innerHTML = '';
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'modal-btn cancel';
+        closeBtn.innerText = 'Закрыть';
+        closeBtn.onclick = closeMediaModal;
+        actionsContainer.appendChild(closeBtn);
+
+        document.getElementById('overlay').style.display = 'block';
+        modal.style.display = 'flex';
+    }
+
+    function changeAccount() {
+        let newId = prompt("Введите ID другого аккаунта для входа:");
+        if (newId) {
+            localStorage.removeItem('ol_id');
+            localStorage.removeItem('ol_name');
+            localStorage.removeItem('ol_pass');
+            location.reload();
+        }
+    }
+
+    async function handleAuth() {
         const id = document.getElementById('myId').value.trim();
         const name = document.getElementById('myName').value.trim();
+        const password = document.getElementById('myPassword').value.trim();
         const log = document.getElementById('auth-log');
         const loader = document.getElementById('auth-loader');
-        if(!id || !name) return;
+        const loaderText = document.getElementById('loader-text');
 
-        loader.classList.add('show');
+        if(!id || !name || !password) {
+            log.innerText = "Заполните все три поля!";
+return;
+        }
+
         log.innerText = "";
+        loaderText.innerText = authMode === 'login' ? "Вход в систему..." : "Создание аккаунта...";
+        loader.classList.add('show');
 
         try {
             const { data: userExist } = await supabaseClient.from('users').select('*').eq('id', id).maybeSingle();
 
-            if (userExist) {
+            if (authMode === "login") {
+                if (!userExist) {
+                    log.innerText = "Аккаунт не найден!";
+                    loader.classList.remove('show');
+                    return;
+                }
                 if (userExist.name !== name) {
-                    log.innerText = "Этот ID уже занят другим именем!";
+                    log.innerText = "ID занят другим человеком!";
+                    loader.classList.remove('show');
+                    return;
+                }
+                if (userExist.password && userExist.password !== password) {
+                    log.innerText = "Неверный пароль!";
                     loader.classList.remove('show');
                     return;
                 }
                 if (userExist.ava) { localStorage.setItem('ol_ava_' + id, userExist.ava); }
             } else {
-                await supabaseClient.from('users').insert([{ id: id, name: name, ava: "", last_seen: new Date().toISOString(), typing_to: "" }]);
+                if (userExist) {
+                    log.innerText = "Аккаунт уже существует!";
+                    loader.classList.remove('show');
+                    return;
+                }
+                await supabaseClient.from('users').insert([
+                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "" }
+                ]);
             }
 
             myCurrentId = id;
@@ -723,6 +1105,7 @@ if (currentCallSession && currentCallSession.peerId === data.from && currentCall
 
             localStorage.setItem('ol_id', id);
             localStorage.setItem('ol_name', name);
+            localStorage.setItem('ol_pass', password);
 
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
@@ -733,10 +1116,12 @@ if (currentCallSession && currentCallSession.peerId === data.from && currentCall
             renderSavedContacts();
             listenForIncomingData();
             initCallSignalChannel();
+            loadStories();
             
             updateMyStatus();
             setInterval(updateMyStatus, 3000);
             setInterval(checkContactsOnline, 3000);
+            setInterval(loadStories, 60000); 
         } catch(e) {
             log.innerText = "Ошибка сети.";
         } finally {
@@ -751,7 +1136,6 @@ if (currentCallSession && currentCallSession.peerId === data.from && currentCall
 
     async function checkContactsOnline() {
         if (!myCurrentId) return;
-
         const { data: usersData } = await supabaseClient.from('users').select('id, last_seen, typing_to');
         if (!usersData) return;
 
@@ -763,10 +1147,11 @@ if (currentCallSession && currentCallSession.peerId === data.from && currentCall
             const isOnline = u.last_seen && (new Date() - new Date(u.last_seen) < 6000);
             knownUsersCache[u.id] = isOnline; 
 
-            const dot = document.getElementById('dot-' + u.id);
-            if (dot) {
+            // Обновляем индикаторы во всех списках
+            const dots = document.querySelectorAll('#dot-' + u.id);
+            dots.forEach(dot => {
                 if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
-            }
+            });
 
             if (u.id === activeChatPeerId) {
                 const chatDot = document.getElementById('peer-status-dot');
@@ -775,12 +1160,12 @@ if (currentCallSession && currentCallSession.peerId === data.from && currentCall
                 if (isOnline) {
                     chatDot.classList.add('online');
                     if (u.typing_to === myCurrentId) {
-                        bottomTyping.style.display = 'flex'; // Показываем блок "печатает" внизу чата
+                        bottomTyping.style.display = 'flex';
                         chatTxt.innerText = "в сети";
-                        chatTxt.style.color = "var(--green)";
+chatTxt.style.color = "var(--green)";
                     } else {
                         bottomTyping.style.display = 'none';
-chatTxt.innerText = "в сети";
+                        chatTxt.innerText = "в сети";
                         chatTxt.style.color = "var(--green)";
                     }
                 } else {
@@ -809,7 +1194,7 @@ chatTxt.innerText = "в сети";
         if(!tid || tid === myCurrentId) return;
 
         btn.disabled = true;
-        btn.innerHTML = `<div class="spinner"></div> <span>Поиск друзей...</span>`;
+        btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
         log.innerText = "";
 
         try {
@@ -835,6 +1220,8 @@ chatTxt.innerText = "в сети";
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
                 if (payload.eventType === 'DELETE' || payload.eventType === 'UPDATE') {
                     if (activeChatPeerId) loadChatHistory(activeChatPeerId);
+                    checkExistingRequests();
+                    loadStories();
                     return;
                 }
                 const row = payload.new;
@@ -843,41 +1230,8 @@ chatTxt.innerText = "в сети";
                 if (row.type === 'chat' && ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId))) {
                     loadChatHistory(activeChatPeerId);
                 }
-            }).subscribe();
-
-        // ПОДПИСКА НА ИЗМЕНЕНИЯ ТАБЛИЦЫ USERS ДЛЯ ДИНАМИЧЕСКИХD СТАТУСОВ
-        supabaseClient.channel('public:users')
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
-                const updatedUser = payload.new;
-                const bottomTyping = document.getElementById('bottom-typing-status');
-
-                if (updatedUser.id === activeChatPeerId) {
-                    const chatDot = document.getElementById('peer-status-dot');
-                    const chatTxt = document.getElementById('chat-peer-status-text');
-                    const isOnline = updatedUser.last_seen && (new Date() - new Date(updatedUser.last_seen) < 6000);
-if (isOnline) {
-                        chatDot.classList.add('online');
-                        if (updatedUser.typing_to === myCurrentId) {
-                            bottomTyping.style.display = 'flex';
-                            chatTxt.innerText = "в сети";
-                            chatTxt.style.color = "var(--green)";
-                        } else {
-                            bottomTyping.style.display = 'none';
-                            chatTxt.innerText = "в сети";
-                            chatTxt.style.color = "var(--green)";
-                        }
-                    } else {
-                        chatDot.classList.remove('online');
-                        bottomTyping.style.display = 'none';
-                        chatTxt.innerText = "был(а) недавно";
-                        chatTxt.style.color = "var(--gray)";
-                    }
-                }
-                
-                const contactDot = document.getElementById('dot-' + updatedUser.id);
-                if (contactDot) {
-                    const isOnline = updatedUser.last_seen && (new Date() - new Date(updatedUser.last_seen) < 6000);
-                    if (isOnline) contactDot.classList.add('online'); else contactDot.classList.remove('online');
+                if (row.type === 'image_story' || row.type === 'video_story') {
+                    loadStories();
                 }
             }).subscribe();
 
@@ -886,7 +1240,16 @@ if (isOnline) {
 
     async function checkExistingRequests() {
         const { data } = await supabaseClient.from('messages').select('*').eq('receiver', myCurrentId).eq('type', 'request');
-        if(data) data.forEach(req => showIncomingRequestUI(req.sender, req.text, req.media));
+        const list = document.getElementById('req-list');
+        
+        if(!data || data.length === 0) {
+list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>';
+            document.getElementById('badge').style.display = 'none';
+            return;
+        }
+        
+        list.innerHTML = '';
+        data.forEach(req => showIncomingRequestUI(req.sender, req.text, req.media));
     }
 
     function showIncomingRequestUI(id, name, ava) {
@@ -896,14 +1259,17 @@ if (isOnline) {
 
         const div = document.createElement('div');
         div.id = 'req-item-' + id;
-        div.style = "display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:5px 0; border-bottom:1px solid #eee;";
+        div.style = "display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:8px 0; border-bottom:1px solid rgba(0,0,0,0.05);";
         let bgStyle = ava ? `background-image:url(${ava})` : '';
         div.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px;">
                 <div class="ava-wrapper"><div class="chat-ava" style="${bgStyle}"></div></div>
                 <span><b>${name} (ID: ${id})</b></span>
             </div>
-            <button class="btn" style="width:80px; padding:8px; margin:0; font-size:13px;" onclick="acceptReq('${id}','${name}','${ava}')">Принять</button>
+            <div style="display:flex; gap:6px;">
+                <button class="btn btn-green" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="acceptReq('${id}','${name}','${ava}')">✔</button>
+                <button class="btn btn-red" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="declineReq('${id}')">✖</button>
+            </div>
         `;
         list.appendChild(div);
 
@@ -927,6 +1293,21 @@ if (isOnline) {
         nav('chat', document.querySelectorAll('.nav-item')[3]);
     }
 
+    async function declineReq(id) {
+        await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
+        const item = document.getElementById('req-item-' + id);
+        if(item) item.remove();
+        
+        const list = document.getElementById('req-list');
+        const badge = document.getElementById('badge');
+        if(list.children.length === 0) { 
+            badge.style.display = 'none'; 
+            list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>'; 
+        } else { 
+            badge.innerText = list.children.length; 
+        }
+    }
+
     async function send() {
         const input = document.getElementById('m-input');
         if(!input.value.trim() || !activeChatPeerId) return;
@@ -934,11 +1315,12 @@ if (isOnline) {
         input.value = "";
 
         await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
-if (isEditingMode && selectedMsgId) {
+
+        if (isEditingMode && selectedMsgId) {
             await supabaseClient.from('messages').update({ text: txt, is_edited: true }).eq('id', selectedMsgId);
             isEditingMode = false; selectedMsgId = null; document.getElementById('send-btn').innerText = ">";
         } else {
-            await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: activeChatPeerId, text: txt, media: "", type: 'chat' }]);
+await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: activeChatPeerId, text: txt, media: "", type: 'chat' }]);
         }
         loadChatHistory(activeChatPeerId);
     }
@@ -959,10 +1341,19 @@ if (isEditingMode && selectedMsgId) {
         
         if(data) {
             data.forEach((msg) => {
+                if (localDeletedMessages.includes(msg.id)) return;
+
                 const direction = msg.sender === myCurrentId ? 'out' : 'in';
                 const d = document.createElement('div');
                 d.className = 'bubble ' + direction;
-                if (direction === 'out') d.onclick = () => openMsgMenu(msg.id, msg.text);
+                
+                d.onclick = () => {
+                    if (msg.media || msg.text.startsWith('data:image')) {
+                        openMediaModal(msg, direction === 'out');
+                    } else if (direction === 'out') {
+                        openMsgMenu(msg.id, msg.text);
+                    }
+                };
 
                 if(msg.media) {
                     const img = document.createElement('img'); img.src = msg.media; d.appendChild(img);
@@ -998,7 +1389,7 @@ if (isEditingMode && selectedMsgId) {
 
     async function triggerDelete() {
         closeMsgMenu();
-        if (confirm("Удалить это сообщение?")) {
+        if (confirm("Удалить это сообщение везде?")) {
             await supabaseClient.from('messages').delete().eq('id', selectedMsgId);
             loadChatHistory(activeChatPeerId);
         }
@@ -1027,9 +1418,8 @@ if (isEditingMode && selectedMsgId) {
         };
         reader.readAsDataURL(file);
     };
-
-    function updateAvaUI() {
-const ava = localStorage.getItem('ol_ava_' + myCurrentId);
+function updateAvaUI() {
+        const ava = localStorage.getItem('ol_ava_' + myCurrentId);
         const myAvaDiv = document.getElementById('my-ava');
         if(ava) { myAvaDiv.style.backgroundImage = `url(${ava})`; myAvaDiv.innerHTML = ''; }
     }
@@ -1041,17 +1431,28 @@ const ava = localStorage.getItem('ol_ava_' + myCurrentId);
         renderSavedContacts();
     }
 
+    /* ИСПРАВЛЕННЫЙ РЕНДЕР КОНТАКТОВ В ДВУХ ВКЛАДКАХ */
     function renderSavedContacts() {
-        const list = document.getElementById('contacts-list');
-        list.innerHTML = '';
+        const listProfile = document.getElementById('contacts-list');
+        const listChat = document.getElementById('chat-contacts-list');
+        
+        listProfile.innerHTML = '';
+        listChat.innerHTML = '';
+        
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+        
         if (Object.keys(contacts).length === 0) {
-            list.innerHTML = '<p style="color:gray; text-align:center; font-size:14px;">Пока нет контактов</p>'; return;
+            const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
+            listProfile.innerHTML = emptyTxt; 
+            listChat.innerHTML = emptyTxt;
+            return;
         }
+        
         for (let id in contacts) {
             const div = document.createElement('div');
             div.className = 'contact-item';
-            div.onclick = () => { openChat(id, contacts[id].name, contacts[id].ava); nav('chat', document.querySelectorAll('.nav-item')[3]); };
+            div.onclick = () => { openChat(id, contacts[id].name, contacts[id].ava); };
+            
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
             div.innerHTML = `
                 <div class="ava-wrapper">
@@ -1059,10 +1460,12 @@ const ava = localStorage.getItem('ol_ava_' + myCurrentId);
                     <div id="dot-${id}" class="status-dot"></div>
                 </div>
                 <div>
-                    <b>${contacts[id].name}</b><br><span style="font-size:12px; color:gray;">ID: ${id}</span>
+                    <b style="color: #000;">${contacts[id].name}</b><br><span style="font-size:12px; color:gray;">ID: ${id}</span>
                 </div>
             `;
-            list.appendChild(div);
+            
+            listProfile.appendChild(div.cloneNode(true));
+            listChat.appendChild(div);
         }
     }
 
@@ -1082,30 +1485,47 @@ const ava = localStorage.getItem('ol_ava_' + myCurrentId);
     function nav(t, e) {
         document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('tab-' + t).classList.remove('hidden');
+        
+        const targetTab = document.getElementById('tab-' + t);
+        targetTab.classList.remove('hidden');
+        
+        if(t === 'chat') {
+            setTimeout(() => targetTab.classList.add('slide-active'), 10);
+            // Если переходим во вкладку чата, убедимся что отображается актуальный список диалогов
+            if(activeChatPeerId === "") {
+                document.getElementById('chat-empty').classList.remove('hidden');
+                document.getElementById('chat-ui').classList.add('hidden');
+            }
+        } else {
+            document.getElementById('tab-chat').classList.remove('slide-active');
+        }
+        
         if(e) e.classList.add('active');
 
         const versionTag = document.getElementById('version-tag');
-        if (t === 'chat') {
+        if (t === 'chat' && activeChatPeerId !== "") {
             versionTag.style.opacity = '0';
             setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
         } else {
             versionTag.style.display = 'block';
-            setTimeout(() => versionTag.style.opacity = '1', 10);
+setTimeout(() => versionTag.style.opacity = '1', 10);
         }
     }
 
     function logout() { 
-        localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); location.reload(); 
+        localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); localStorage.removeItem('ol_pass'); location.reload(); 
     }
 
     window.onload = () => {
         const savedId = localStorage.getItem('ol_id');
         const savedName = localStorage.getItem('ol_name');
-        if(savedId && savedName) {
+        const savedPass = localStorage.getItem('ol_pass');
+        if(savedId && savedName && savedPass) {
             document.getElementById('myId').value = savedId;
             document.getElementById('myName').value = savedName;
-            start();
+            document.getElementById('myPassword').value = savedPass;
+            authMode = "login";
+            handleAuth();
         }
     }
 </script>
