@@ -130,8 +130,20 @@
         .bubble.out { background: var(--blue-grad); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(0,119,255,0.2); }
         .edited-label { font-size: 10px; opacity: 0.6; margin-left: 5px; font-style: italic; }
 
+        /* СТИЛИ ДЛЯ ИНДИКАТОРА НАБОРА ТЕКСТА ВНИЗУ ЧАТА */
+        .bottom-typing-panel {
+padding: 6px 20px; 
+            font-size: 13px; 
+            color: var(--blue); 
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid var(--border-color);
+            display: none;
+            align-items: center;
+            font-weight: 500;
+        }
+
         .chat-input-panel {
-background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: center;
+            background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: center;
             border-top: 1px solid var(--border-color); box-sizing: border-box;
         }
 
@@ -162,7 +174,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         .dev-modal.show { opacity: 1; pointer-events: auto; }
         .dev-card { background: white; padding: 25px; border-radius: 24px; width: 80%; max-width: 280px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
 
-        /* ИНТЕРФЕЙС ЗВОНКА С ПОЛНЫМ ВИДЕО */
+        /* ИСПРАВЛЕННЫЙ ИНТЕРФЕЙС ЗВОНКА */
         #call-screen {
             position: fixed; inset: 0; background: #0f172a;
             z-index: 4000; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
@@ -171,29 +183,27 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         }
         #call-screen.show { opacity: 1; pointer-events: auto; }
         
-        /* Стримы видео WebRTC */
         #remote-video {
             position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         }
         #local-video {
             position: absolute; top: 90px; right: 20px; width: 100px; height: 150px; 
-            object-fit: cover; border-radius: 12px; z-index: 3; border: 2px solid rgba(255,255,255,0.3);
-            background: #000; transform: scaleX(-1); /* Зеркалим свою камеру */
+            object-fit: cover; border-radius: 12px; z-index: 10; border: 2px solid rgba(255,255,255,0.3);
+            background: #000; transform: scaleX(-1);
         }
         
-        .call-ui-layer {
-            position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
-            align-items: center; justify-content: space-between; padding: 40px 20px 50px 20px;
-            box-sizing: border-box; pointer-events: none;
+        .call-top-info {
+position: relative; z-index: 5; text-align: center; width: 100%; pointer-events: none;
         }
-        .call-ui-layer * { pointer-events: auto; }
-.call-crypto-info {
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 12px;
+        .call-crypto-info {
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 12px;
             padding: 6px 14px; font-size: 11px; color: #cbd5e1; letter-spacing: 0.5px; margin-top: 10px; display: inline-block;
         }
-        
-        .call-avatar-box { position: relative; width: 130px; height: 130px; margin-top: 40px; }
+
+        .call-avatar-box { 
+            position: relative; z-index: 5; width: 130px; height: 130px; margin: 20px auto; 
+        }
         .call-avatar {
             width: 100%; height: 100%; border-radius: 50%; background-color: #475569; background-size: cover; background-position: center;
             border: 3px solid rgba(255, 255, 255, 0.2);
@@ -205,20 +215,27 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
             50% { transform: scale(1.06); box-shadow: 0 0 30px 15px rgba(0, 119, 255, 0.2); }
         }
 
-        .call-controls {
+        .call-bottom-controls-area {
+            position: relative; z-index: 20; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+
+        .call-controls-row {
             display: flex; gap: 20px; width: 100%; max-width: 280px; justify-content: center; align-items: center;
         }
         .call-btn {
             width: 56px; height: 56px; border-radius: 50%; border: none;
             display: flex; align-items: center; justify-content: center;
             font-size: 20px; cursor: pointer; color: white; transition: all 0.2s;
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative; z-index: 25;
         }
-        .call-btn:active { transform: scale(0.92); }
+        .call-btn:active { transform: scale(0.9); }
         .call-btn.off { background: var(--red); }
-        .call-btn.accept { background: var(--green); width: 66px; height: 66px; font-size: 24px; box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3); }
-        .call-btn.hangup { background: var(--red); width: 66px; height: 66px; font-size: 24px; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3); }
+        .call-btn.accept { background: var(--green); width: 66px; height: 66px; font-size: 24px; box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4); }
+        .call-btn.hangup { background: var(--red); width: 66px; height: 66px; font-size: 24px; box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); }
 
+        /* ПРЫГАЮЩИЕ ТОЧКИ */
         .typing-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; }
         .typing-dots span {
             width: 4px; height: 4px; background-color: var(--blue); border-radius: 50%;
@@ -246,35 +263,32 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         <div class="bubble-bg"></div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.1.3</div>
+    <div id="version-tag" class="app-version">v1.1.4</div>
     <div id="overlay" onclick="closeMsgMenu()"></div>
 
     <div id="call-screen">
         <video id="remote-video" autoplay playsinline></video>
         <video id="local-video" autoplay playsinline muted class="hidden"></video>
+<div class="call-top-info">
+            <div class="call-crypto-info">🔒 Защищено сквозным шифрованием E2EE</div>
+            <h1 id="call-peer-name" style="margin: 25px 0 5px 0; font-size: 26px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Друг</h1>
+            <p id="call-status-text" style="margin: 0; color: #cbd5e1; font-size: 14px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">Подключение...</p>
+        </div>
 
-        <div class="call-ui-layer">
-            <div style="text-align: center; width:100%;">
-                <div class="call-crypto-info">🔒 Защищено сквозным шифрованием E2EE</div>
-                <h1 id="call-peer-name" style="margin: 25px 0 5px 0; font-size: 26px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Друг</h1>
-<p id="call-status-text" style="margin: 0; color: #cbd5e1; font-size: 14px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">Подключение...</p>
+        <div id="call-avatar-container" class="call-avatar-box">
+            <div id="call-peer-ava" class="call-avatar ringing"></div>
+        </div>
+
+        <div class="call-bottom-controls-area">
+            <div id="call-active-controls" class="call-controls-row hidden">
+                <button id="call-toggle-audio" class="call-btn" onclick="toggleCallAudio()">🎙️</button>
+                <button id="call-flip-camera" class="call-btn" onclick="flipCallCamera()">🔄</button>
+                <button id="call-toggle-video" class="call-btn" onclick="toggleCallVideo()">📷</button>
             </div>
-
-            <div id="call-avatar-container" class="call-avatar-box">
-                <div id="call-peer-ava" class="call-avatar ringing"></div>
-            </div>
-
-            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px;">
-                <div id="call-active-controls" class="call-controls hidden">
-                    <button id="call-toggle-audio" class="call-btn" onclick="toggleCallAudio()">🎙️</button>
-                    <button id="call-flip-camera" class="call-btn" onclick="flipCallCamera()">🔄</button>
-                    <button id="call-toggle-video" class="call-btn" onclick="toggleCallVideo()">📷</button>
-                </div>
-                
-                <div class="call-controls">
-                    <button id="call-accept-btn" class="call-btn accept hidden" onclick="acceptIncomingCall()">📞</button>
-                    <button id="call-decline-btn" class="call-btn hangup" onclick="clickHangup()">📞</button>
-                </div>
+            
+            <div class="call-controls-row">
+                <button id="call-accept-btn" class="call-btn accept hidden" onclick="acceptIncomingCall()">📞</button>
+                <button id="call-decline-btn" class="call-btn hangup" onclick="clickHangup()">📞</button>
             </div>
         </div>
     </div>
@@ -320,10 +334,10 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
                     </label>
                     <h2 id="view-name" style="margin:5px 0;"></h2>
                     <p id="view-id" style="color:var(--gray); font-size:14px;"></p>
-                    <button class="btn" onclick="logout()" style="background:rgba(0,0,0,0.05); color:red; margin-top:15px; box-shadow:none;">Выйти</button>
+<button class="btn" onclick="logout()" style="background:rgba(0,0,0,0.05); color:red; margin-top:15px; box-shadow:none;">Выйти</button>
                 </div>
                 <div class="block">
-<h3>Мои контакты</h3>
+                    <h3>Мои контакты</h3>
                     <div id="contacts-list"></div>
                 </div>
             </div>
@@ -356,13 +370,17 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
                     </div>
                     <div>
                         <b style="display:block;"><span id="chat-with">Чат</span></b>
-                        <span id="chat-peer-status-text" style="font-size:12px; color: var(--gray);">был недавно</span>
+                        <span id="chat-peer-status-text" style="font-size:12px; color: var(--gray);">был(а) недавно</span>
                     </div>
                     <button class="chat-call-btn" onclick="startCall()">📞</button>
                 </div>
                 
                 <div id="chat-win"></div>
                 
+                <div id="bottom-typing-status" class="bottom-typing-panel">
+                    печатает<span class="typing-dots"><span></span><span></span><span></span></span>
+                </div>
+
                 <div class="chat-input-panel">
                     <label for="media-input" class="btn" style="width:45px; background: #666; font-size: 18px; padding: 12px 0; text-align:center; box-shadow:none; margin:0;">
                         <input type="file" id="media-input" style="display:none" accept="image/*">📎
@@ -372,7 +390,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
                 </div>
             </div>
             <div id="chat-empty" style="text-align:center; padding:100px 40px; color:gray; font-size: 16px; font-weight: 500;">
-                Выберите контакт во вкладке Профиль
+                Выберите ...
             </div>
         </div>
 
@@ -394,7 +412,6 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
     let isEditingMode = false;
     let typingTimeout;
 
-    // Переменные WebRTC звонка
     let callChannel = null;
     let currentCallSession = null;
     let callTimeoutTimer = null;
@@ -406,18 +423,17 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
     let isFrontCamera = true;
     let knownUsersCache = {}; 
 
-    // Свободные публичные STUN сервера Google (нужны для связи P2P через интернет)
     const rtcConfig = {
-        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
     };
 
     const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
+
+    function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
     function closeDevModal() { document.getElementById('dev-screen').classList.remove('show'); }
 
-    // Активация канала сигналов звонков
     function initCallSignalChannel() {
         if (!myCurrentId) return;
         
@@ -430,7 +446,6 @@ function openDevModal() { document.getElementById('dev-screen').classList.add('s
         .on('broadcast', { event: 'accept' }, payload => { handleCallAcceptedByPeer(payload.payload); })
         .on('broadcast', { event: 'hangup' }, payload => { handleCallHangupByPeer(payload.payload); })
         .on('broadcast', { event: 'media_change' }, payload => { handlePeerMediaChange(payload.payload); })
-        // Дополнительные технические сигналы WebRTC для передачи медиа-трафика
         .on('broadcast', { event: 'webrtc_offer' }, async payload => {
             if (currentCallSession) {
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.payload.offer));
@@ -454,11 +469,9 @@ function openDevModal() { document.getElementById('dev-screen').classList.add('s
         .subscribe();
     }
 
-    // Запрос камеры и микрофона (запрашивается 1 раз при старте сессии звонка)
     async function requestMediaPermissions() {
         if (localStream) return true;
         try {
-            // Запрашиваем Full HD видео и звук
             localStream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
                 video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
@@ -468,47 +481,39 @@ function openDevModal() { document.getElementById('dev-screen').classList.add('s
             localVideoTrack.classList.remove('hidden');
             return true;
         } catch (err) {
-            alert("Не удалось получить доступ к камере и микрофону. Убедитесь, что сайт открыт по HTTPS!");
+            alert("Не удалось получить доступ к камере и микрофону.");
             return false;
         }
     }
 
-    // Инициализация WebRTC соединения
     function createPeerConnection() {
         if (peerConnection) peerConnection.close();
-        
         peerConnection = new RTCPeerConnection(rtcConfig);
 
-        // Отправляем локальные медиа-дорожки другу
         if (localStream) {
             localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
         }
 
-        // Ловим медиа-поток от друга
         peerConnection.ontrack = event => {
             const remoteVideo = document.getElementById('remote-video');
             if (event.streams && event.streams[0]) {
                 remoteVideo.srcObject = event.streams[0];
-                document.getElementById('call-avatar-container').classList.add('hidden'); // прячем аву, пошло видео
+                document.getElementById('call-avatar-container').classList.add('hidden');
             }
         };
 
-        // Обмен интернет-узлами (ICE candidates)
         peerConnection.onicecandidate = event => {
             if (event.candidate && currentCallSession) {
                 supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
-type: 'broadcast', event: 'webrtc_ice', payload: { ice: event.candidate }
+                    type: 'broadcast', event: 'webrtc_ice', payload: { ice: event.candidate }
                 });
             }
         };
     }
 
-    // ИСХОДЯЩИЙ ЗВОНОК
     async function startCall() {
         if (!activeChatPeerId) return;
-
-        // Запрашиваем права один раз
-        const hasAccess = await requestMediaPermissions();
+const hasAccess = await requestMediaPermissions();
         if (!hasAccess) return;
 
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
@@ -532,16 +537,13 @@ type: 'broadcast', event: 'webrtc_ice', payload: { ice: event.candidate }
         document.getElementById('call-status-text').innerText = "Вызов...";
         document.getElementById('call-screen').classList.add('show');
 
-        // Создаем P2P объект
         createPeerConnection();
 
-        // Отправляем гудок
         supabaseClient.channel(`calls:${activeChatPeerId}`).send({
             type: 'broadcast', event: 'dial',
             payload: { callerId: myCurrentId, callerName: myCurrentName, callerAva: localStorage.getItem('ol_ava_' + myCurrentId) || "" }
         });
 
-        // Если друг не в сети — автоматическая отмена через 1 минуту
         clearTimeout(callTimeoutTimer);
         callTimeoutTimer = setTimeout(() => {
             if (currentCallSession && currentCallSession.status !== 'connected') {
@@ -551,7 +553,6 @@ type: 'broadcast', event: 'webrtc_ice', payload: { ice: event.candidate }
         }, 60000);
     }
 
-    // ВХОДЯЩИЙ ЗВОНОК
     function handleIncomingDial(data) {
         if (currentCallSession) {
             supabaseClient.channel(`calls:${data.callerId}`).send({ type: 'broadcast', event: 'hangup', payload: { from: myCurrentId } });
@@ -578,11 +579,9 @@ type: 'broadcast', event: 'webrtc_ice', payload: { ice: event.candidate }
         }, 60000);
     }
 
-    // НАЖАТИЕ ЗЕЛЕНОЙ КНОПКИ (Взять вызов)
     async function acceptIncomingCall() {
-if (!currentCallSession || currentCallSession.role !== 'receiver') return;
+        if (!currentCallSession || currentCallSession.role !== 'receiver') return;
         
-        // Запрос разрешений один раз при ответе
         const hasAccess = await requestMediaPermissions();
         if (!hasAccess) { clickHangup(); return; }
 
@@ -591,18 +590,16 @@ if (!currentCallSession || currentCallSession.role !== 'receiver') return;
 
         document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
         document.getElementById('call-peer-ava').classList.remove('ringing');
-        document.getElementById('call-accept-btn').classList.add('hidden');
+document.getElementById('call-accept-btn').classList.add('hidden');
         document.getElementById('call-active-controls').classList.remove('hidden');
 
         createPeerConnection();
 
-        // Отвечаем на вызов
         supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
             type: 'broadcast', event: 'accept', payload: { from: myCurrentId }
         });
     }
 
-    // Собеседник принял наш звонок -> Создаем медиа-оффер (WebRTC Offer)
     async function handleCallAcceptedByPeer(data) {
         if (currentCallSession && currentCallSession.role === 'caller' && currentCallSession.peerId === data.from) {
             clearTimeout(callTimeoutTimer);
@@ -610,7 +607,6 @@ if (!currentCallSession || currentCallSession.role !== 'receiver') return;
             document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
             document.getElementById('call-peer-ava').classList.remove('ringing');
 
-            // Запускаем трансляцию видео
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
             
@@ -673,10 +669,9 @@ if (!currentCallSession || currentCallSession.role !== 'receiver') return;
         if (!localStream) return;
         isFrontCamera = !isFrontCamera;
         
-        // Переключаем facingMode между селфи и основной камерой
         localStream.getVideoTracks().forEach(t => t.stop());
         try {
-const newVideoStream = await navigator.mediaDevices.getUserMedia({
+            const newVideoStream = await navigator.mediaDevices.getUserMedia({
                 video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: isFrontCamera ? "user" : "environment" }
             });
             const newTrack = newVideoStream.getVideoTracks()[0];
@@ -689,12 +684,10 @@ const newVideoStream = await navigator.mediaDevices.getUserMedia({
                 if(sender) sender.replaceTrack(newTrack);
             }
         } catch(e){}
-        
-        document.getElementById('call-flip-camera').style.transform = isFrontCamera ? 'rotate(0deg)' : 'rotate(180deg)';
     }
 
     function handlePeerMediaChange(data) {
-        if (currentCallSession && currentCallSession.peerId === data.from && currentCallSession.status === 'connected') {
+if (currentCallSession && currentCallSession.peerId === data.from && currentCallSession.status === 'connected') {
             if (!data.audio) document.getElementById('call-status-text').innerText = "Микрофон собеседника выключен";
             else if (!data.video) document.getElementById('call-status-text').innerText = "Камера собеседника выключена";
             else document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
@@ -745,7 +738,7 @@ const newVideoStream = await navigator.mediaDevices.getUserMedia({
             setInterval(updateMyStatus, 3000);
             setInterval(checkContactsOnline, 3000);
         } catch(e) {
-            log.innerText = "Ошибка сети. Попробуй еще раз.";
+            log.innerText = "Ошибка сети.";
         } finally {
             loader.classList.remove('show');
         }
@@ -762,6 +755,8 @@ const newVideoStream = await navigator.mediaDevices.getUserMedia({
         const { data: usersData } = await supabaseClient.from('users').select('id, last_seen, typing_to');
         if (!usersData) return;
 
+        const bottomTyping = document.getElementById('bottom-typing-status');
+
         usersData.forEach(u => {
             if (u.id === myCurrentId) return;
 
@@ -770,10 +765,9 @@ const newVideoStream = await navigator.mediaDevices.getUserMedia({
 
             const dot = document.getElementById('dot-' + u.id);
             if (dot) {
-if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
+                if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
             }
 
-            // ИСПРАВЛЕНО: Теперь статус в шапке чата обновляется постоянно!
             if (u.id === activeChatPeerId) {
                 const chatDot = document.getElementById('peer-status-dot');
                 const chatTxt = document.getElementById('chat-peer-status-text');
@@ -781,14 +775,17 @@ if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
                 if (isOnline) {
                     chatDot.classList.add('online');
                     if (u.typing_to === myCurrentId) {
-                        chatTxt.innerHTML = `печатает<span class="typing-dots"><span></span><span></span><span></span></span>`;
-                        chatTxt.style.color = "var(--blue)";
-                    } else {
+                        bottomTyping.style.display = 'flex'; // Показываем блок "печатает" внизу чата
                         chatTxt.innerText = "в сети";
+                        chatTxt.style.color = "var(--green)";
+                    } else {
+                        bottomTyping.style.display = 'none';
+chatTxt.innerText = "в сети";
                         chatTxt.style.color = "var(--green)";
                     }
                 } else {
                     chatDot.classList.remove('online');
+                    bottomTyping.style.display = 'none';
                     chatTxt.innerText = "был(а) недавно";
                     chatTxt.style.color = "var(--gray)";
                 }
@@ -802,7 +799,7 @@ if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(async () => {
             await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
-        }, 2000);
+        }, 1500);
     }
 
     async function sendReq() {
@@ -829,7 +826,7 @@ if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
             } else {
                 log.style.color = "red"; log.innerText = "Не удалось отправить заявку.";
             }
-        } catch(e) { log.style.color = "red"; log.innerText = "Ошибка запроса к базе."; }
+        } catch(e) { log.style.color = "red"; log.innerText = "Ошибка запроса."; }
         finally { btn.disabled = false; btn.innerHTML = `<span id="search-btn-text">Отправить заявку</span>`; }
     }
 
@@ -847,7 +844,44 @@ if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
                     loadChatHistory(activeChatPeerId);
                 }
             }).subscribe();
-checkExistingRequests();
+
+        // ПОДПИСКА НА ИЗМЕНЕНИЯ ТАБЛИЦЫ USERS ДЛЯ ДИНАМИЧЕСКИХD СТАТУСОВ
+        supabaseClient.channel('public:users')
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
+                const updatedUser = payload.new;
+                const bottomTyping = document.getElementById('bottom-typing-status');
+
+                if (updatedUser.id === activeChatPeerId) {
+                    const chatDot = document.getElementById('peer-status-dot');
+                    const chatTxt = document.getElementById('chat-peer-status-text');
+                    const isOnline = updatedUser.last_seen && (new Date() - new Date(updatedUser.last_seen) < 6000);
+if (isOnline) {
+                        chatDot.classList.add('online');
+                        if (updatedUser.typing_to === myCurrentId) {
+                            bottomTyping.style.display = 'flex';
+                            chatTxt.innerText = "в сети";
+                            chatTxt.style.color = "var(--green)";
+                        } else {
+                            bottomTyping.style.display = 'none';
+                            chatTxt.innerText = "в сети";
+                            chatTxt.style.color = "var(--green)";
+                        }
+                    } else {
+                        chatDot.classList.remove('online');
+                        bottomTyping.style.display = 'none';
+                        chatTxt.innerText = "был(а) недавно";
+                        chatTxt.style.color = "var(--gray)";
+                    }
+                }
+                
+                const contactDot = document.getElementById('dot-' + updatedUser.id);
+                if (contactDot) {
+                    const isOnline = updatedUser.last_seen && (new Date() - new Date(updatedUser.last_seen) < 6000);
+                    if (isOnline) contactDot.classList.add('online'); else contactDot.classList.remove('online');
+                }
+            }).subscribe();
+
+        checkExistingRequests();
     }
 
     async function checkExistingRequests() {
@@ -900,8 +934,7 @@ checkExistingRequests();
         input.value = "";
 
         await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
-
-        if (isEditingMode && selectedMsgId) {
+if (isEditingMode && selectedMsgId) {
             await supabaseClient.from('messages').update({ text: txt, is_edited: true }).eq('id', selectedMsgId);
             isEditingMode = false; selectedMsgId = null; document.getElementById('send-btn').innerText = ">";
         } else {
@@ -921,13 +954,13 @@ checkExistingRequests();
         
         const cryptoBadge = document.createElement('div');
         cryptoBadge.className = 'crypto-badge';
-        cryptoBadge.innerHTML = '🔒 Соединение защищено сквозным шифрованием E2EE. Ваша переписка конфиденциальна.';
+        cryptoBadge.innerHTML = '🔒 Соединение защищено сквозным шифрованием E2EE.';
         win.appendChild(cryptoBadge);
         
         if(data) {
             data.forEach((msg) => {
                 const direction = msg.sender === myCurrentId ? 'out' : 'in';
-const d = document.createElement('div');
+                const d = document.createElement('div');
                 d.className = 'bubble ' + direction;
                 if (direction === 'out') d.onclick = () => openMsgMenu(msg.id, msg.text);
 
@@ -965,7 +998,7 @@ const d = document.createElement('div');
 
     async function triggerDelete() {
         closeMsgMenu();
-        if (confirm("Удалить это сообщение для всех?")) {
+        if (confirm("Удалить это сообщение?")) {
             await supabaseClient.from('messages').delete().eq('id', selectedMsgId);
             loadChatHistory(activeChatPeerId);
         }
@@ -996,7 +1029,7 @@ const d = document.createElement('div');
     };
 
     function updateAvaUI() {
-        const ava = localStorage.getItem('ol_ava_' + myCurrentId);
+const ava = localStorage.getItem('ol_ava_' + myCurrentId);
         const myAvaDiv = document.getElementById('my-ava');
         if(ava) { myAvaDiv.style.backgroundImage = `url(${ava})`; myAvaDiv.innerHTML = ''; }
     }
@@ -1020,7 +1053,7 @@ const d = document.createElement('div');
             div.className = 'contact-item';
             div.onclick = () => { openChat(id, contacts[id].name, contacts[id].ava); nav('chat', document.querySelectorAll('.nav-item')[3]); };
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
-div.innerHTML = `
+            div.innerHTML = `
                 <div class="ava-wrapper">
                     <div class="chat-ava" style="${bgStyle}"></div>
                     <div id="dot-${id}" class="status-dot"></div>
