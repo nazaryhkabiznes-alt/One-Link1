@@ -162,17 +162,34 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         .dev-modal.show { opacity: 1; pointer-events: auto; }
         .dev-card { background: white; padding: 25px; border-radius: 24px; width: 80%; max-width: 280px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
 
-        /* ИНТЕРФЕЙС ЗВОНКА (ПОЛНОЭКРАННЫЙ) */
+        /* ИНТЕРФЕЙС ЗВОНКА С ПОЛНЫМ ВИДЕО */
         #call-screen {
-            position: fixed; inset: 0; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            position: fixed; inset: 0; background: #0f172a;
             z-index: 4000; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
             padding: 40px 20px 50px 20px; box-sizing: border-box; color: white;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         #call-screen.show { opacity: 1; pointer-events: auto; }
         
-        .call-crypto-info {
-            background: rgba(255, 255, 255, 0.08); border-radius: 12px;
+        /* Стримы видео WebRTC */
+        #remote-video {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        #local-video {
+            position: absolute; top: 90px; right: 20px; width: 100px; height: 150px; 
+            object-fit: cover; border-radius: 12px; z-index: 3; border: 2px solid rgba(255,255,255,0.3);
+            background: #000; transform: scaleX(-1); /* Зеркалим свою камеру */
+        }
+        
+        .call-ui-layer {
+            position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+            align-items: center; justify-content: space-between; padding: 40px 20px 50px 20px;
+            box-sizing: border-box; pointer-events: none;
+        }
+        .call-ui-layer * { pointer-events: auto; }
+.call-crypto-info {
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); border-radius: 12px;
             padding: 6px 14px; font-size: 11px; color: #cbd5e1; letter-spacing: 0.5px; margin-top: 10px; display: inline-block;
         }
         
@@ -185,7 +202,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         
         @keyframes pulseBg {
             0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 119, 255, 0.4); }
-50% { transform: scale(1.06); box-shadow: 0 0 30px 15px rgba(0, 119, 255, 0.2); }
+            50% { transform: scale(1.06); box-shadow: 0 0 30px 15px rgba(0, 119, 255, 0.2); }
         }
 
         .call-controls {
@@ -195,7 +212,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
             width: 56px; height: 56px; border-radius: 50%; border: none;
             display: flex; align-items: center; justify-content: center;
             font-size: 20px; cursor: pointer; color: white; transition: all 0.2s;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
         }
         .call-btn:active { transform: scale(0.92); }
         .call-btn.off { background: var(--red); }
@@ -229,40 +246,39 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         <div class="bubble-bg"></div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.1.2</div>
+    <div id="version-tag" class="app-version">v1.1.3</div>
     <div id="overlay" onclick="closeMsgMenu()"></div>
 
-    <!-- ИНТЕРФЕЙС ЗВОНКА -->
     <div id="call-screen">
-        <div style="text-align: center; width:100%;">
-            <div class="call-crypto-info">🔒 Защищено сквозным шифрованием E2EE</div>
-            <h1 id="call-peer-name" style="margin: 25px 0 5px 0; font-size: 26px; font-weight: 600;">Друг</h1>
-            <p id="call-status-text" style="margin: 0; color: #94a3b8; font-size: 14px;">Подключение...</p>
-        </div>
+        <video id="remote-video" autoplay playsinline></video>
+        <video id="local-video" autoplay playsinline muted class="hidden"></video>
 
-        <div class="call-avatar-box">
-            <div id="call-peer-ava" class="call-avatar ringing"></div>
-        </div>
-
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px;">
-            <!-- Кнопки управления контентом во время активного вызова -->
-            <div id="call-active-controls" class="call-controls hidden">
-                <button id="call-toggle-audio" class="call-btn" onclick="toggleCallAudio()">🎙️</button>
-                <button id="call-flip-camera" class="call-btn" onclick="flipCallCamera()">🔄</button>
-                <button id="call-toggle-video" class="call-btn" onclick="toggleCallVideo()">📷</button>
+        <div class="call-ui-layer">
+            <div style="text-align: center; width:100%;">
+                <div class="call-crypto-info">🔒 Защищено сквозным шифрованием E2EE</div>
+                <h1 id="call-peer-name" style="margin: 25px 0 5px 0; font-size: 26px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Друг</h1>
+<p id="call-status-text" style="margin: 0; color: #cbd5e1; font-size: 14px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">Подключение...</p>
             </div>
-            
-            <!-- Кнопки действий (Принять/Отклонить/Сбросить) -->
-            <div class="call-controls">
-                <!-- Для входящего вызова -->
-                <button id="call-accept-btn" class="call-btn accept hidden" onclick="acceptIncomingCall()">📞</button>
-                <!-- Общая кнопка сброса -->
-<button id="call-decline-btn" class="call-btn hangup" onclick="clickHangup()">📞</button>
+
+            <div id="call-avatar-container" class="call-avatar-box">
+                <div id="call-peer-ava" class="call-avatar ringing"></div>
+            </div>
+
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 30px;">
+                <div id="call-active-controls" class="call-controls hidden">
+                    <button id="call-toggle-audio" class="call-btn" onclick="toggleCallAudio()">🎙️</button>
+                    <button id="call-flip-camera" class="call-btn" onclick="flipCallCamera()">🔄</button>
+                    <button id="call-toggle-video" class="call-btn" onclick="toggleCallVideo()">📷</button>
+                </div>
+                
+                <div class="call-controls">
+                    <button id="call-accept-btn" class="call-btn accept hidden" onclick="acceptIncomingCall()">📞</button>
+                    <button id="call-decline-btn" class="call-btn hangup" onclick="clickHangup()">📞</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ОКНО РАЗРАБОТЧИКА -->
     <div id="dev-screen" class="dev-modal" onclick="closeDevModal()">
         <div class="dev-card" onclick="event.stopPropagation()">
             <h3 style="margin: 0 0 15px 0; color: var(--blue);">Разработчик</h3>
@@ -272,7 +288,6 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         </div>
     </div>
 
-    <!-- ВХОД -->
     <div id="auth-screen">
         <div class="auth-card">
             <div id="auth-loader" class="full-loader">
@@ -287,14 +302,12 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         </div>
     </div>
 
-    <!-- МЕНЮ СООБЩЕНИЯ -->
     <div id="msg-menu">
         <button class="menu-btn" style="background: #f0f2f5; color: black;" onclick="triggerEdit()">✏️ Редактировать</button>
         <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить сообщение</button>
         <button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
     </div>
 
-    <!-- ПРИЛОЖЕНИЕ -->
     <div id="app" class="hidden">
         <header onclick="openDevModal()">One Link</header>
         
@@ -310,7 +323,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
                     <button class="btn" onclick="logout()" style="background:rgba(0,0,0,0.05); color:red; margin-top:15px; box-shadow:none;">Выйти</button>
                 </div>
                 <div class="block">
-                    <h3>Мои контакты</h3>
+<h3>Мои контакты</h3>
                     <div id="contacts-list"></div>
                 </div>
             </div>
@@ -333,7 +346,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
                 </div>
             </div>
         </div>
-<!-- ПОЛНОЭКРАННЫЙ ЧАТ -->
+
         <div id="tab-chat" class="page hidden">
             <div id="chat-ui" class="hidden">
                 <div class="chat-header">
@@ -343,7 +356,7 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
                     </div>
                     <div>
                         <b style="display:block;"><span id="chat-with">Чат</span></b>
-                        <span id="chat-peer-status-text" style="font-size:12px; color: var(--gray);">была недавно</span>
+                        <span id="chat-peer-status-text" style="font-size:12px; color: var(--gray);">был недавно</span>
                     </div>
                     <button class="chat-call-btn" onclick="startCall()">📞</button>
                 </div>
@@ -381,23 +394,30 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
     let isEditingMode = false;
     let typingTimeout;
 
-    // Переменные РЕАЛЬНОГО звонка
+    // Переменные WebRTC звонка
     let callChannel = null;
-    let currentCallSession = null; // Данные текущего звонка
-    let callTimeoutTimer = null;   // Таймер сброса на 1 минуту
+    let currentCallSession = null;
+    let callTimeoutTimer = null;
+    let localStream = null;
+    let peerConnection = null;
+    
     let isAudioOn = true;
     let isVideoOn = true;
     let isFrontCamera = true;
-    let knownUsersCache = {};      // Быстрый доступ к онлайну пользователей
+    let knownUsersCache = {}; 
+
+    // Свободные публичные STUN сервера Google (нужны для связи P2P через интернет)
+    const rtcConfig = {
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    };
 
     const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
+function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
     function closeDevModal() { document.getElementById('dev-screen').classList.remove('show'); }
 
-    // Инициализация Realtime канала для звонков
+    // Активация канала сигналов звонков
     function initCallSignalChannel() {
         if (!myCurrentId) return;
         
@@ -406,233 +426,278 @@ background: white; padding: 10px 15px; display: flex; gap: 10px; align-items: ce
         });
 
         callChannel
-        .on('broadcast', { event: 'dial' }, payload => {
-            // Кто-то нам звонит
-            handleIncomingDial(payload.payload);
+        .on('broadcast', { event: 'dial' }, payload => { handleIncomingDial(payload.payload); })
+        .on('broadcast', { event: 'accept' }, payload => { handleCallAcceptedByPeer(payload.payload); })
+        .on('broadcast', { event: 'hangup' }, payload => { handleCallHangupByPeer(payload.payload); })
+        .on('broadcast', { event: 'media_change' }, payload => { handlePeerMediaChange(payload.payload); })
+        // Дополнительные технические сигналы WebRTC для передачи медиа-трафика
+        .on('broadcast', { event: 'webrtc_offer' }, async payload => {
+            if (currentCallSession) {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.payload.offer));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
+                    type: 'broadcast', event: 'webrtc_answer', payload: { answer: answer }
+                });
+            }
         })
-        .on('broadcast', { event: 'accept' }, payload => {
-            // Собеседник принял вызов
-            handleCallAcceptedByPeer(payload.payload);
+        .on('broadcast', { event: 'webrtc_answer' }, async payload => {
+            if (currentCallSession && peerConnection) {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.payload.answer));
+            }
         })
-        .on('broadcast', { event: 'hangup' }, payload => {
-            // Собеседник завершил/отклонил вызов
-            handleCallHangupByPeer(payload.payload);
-        })
-        .on('broadcast', { event: 'media_change' }, payload => {
-            // Изменение статусов микрофона/камеры
-handlePeerMediaChange(payload.payload);
+        .on('broadcast', { event: 'webrtc_ice' }, async payload => {
+            if (currentCallSession && peerConnection && payload.payload.ice) {
+                try { await peerConnection.addIceCandidate(new RTCIceCandidate(payload.payload.ice)); } catch(e){}
+            }
         })
         .subscribe();
     }
 
-    // ЛОГИКА ИСХОДЯЩЕГО ЗВОНКА (Вы звоните)
-    function startCall() {
+    // Запрос камеры и микрофона (запрашивается 1 раз при старте сессии звонка)
+    async function requestMediaPermissions() {
+        if (localStream) return true;
+        try {
+            // Запрашиваем Full HD видео и звук
+            localStream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
+            });
+            const localVideoTrack = document.getElementById('local-video');
+            localVideoTrack.srcObject = localStream;
+            localVideoTrack.classList.remove('hidden');
+            return true;
+        } catch (err) {
+            alert("Не удалось получить доступ к камере и микрофону. Убедитесь, что сайт открыт по HTTPS!");
+            return false;
+        }
+    }
+
+    // Инициализация WebRTC соединения
+    function createPeerConnection() {
+        if (peerConnection) peerConnection.close();
+        
+        peerConnection = new RTCPeerConnection(rtcConfig);
+
+        // Отправляем локальные медиа-дорожки другу
+        if (localStream) {
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+        }
+
+        // Ловим медиа-поток от друга
+        peerConnection.ontrack = event => {
+            const remoteVideo = document.getElementById('remote-video');
+            if (event.streams && event.streams[0]) {
+                remoteVideo.srcObject = event.streams[0];
+                document.getElementById('call-avatar-container').classList.add('hidden'); // прячем аву, пошло видео
+            }
+        };
+
+        // Обмен интернет-узлами (ICE candidates)
+        peerConnection.onicecandidate = event => {
+            if (event.candidate && currentCallSession) {
+                supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
+type: 'broadcast', event: 'webrtc_ice', payload: { ice: event.candidate }
+                });
+            }
+        };
+    }
+
+    // ИСХОДЯЩИЙ ЗВОНОК
+    async function startCall() {
         if (!activeChatPeerId) return;
 
-        // Проверяем онлайн ли друг по локальному кэшу статусов
-        const isPeerOnline = knownUsersCache[activeChatPeerId] || false;
+        // Запрашиваем права один раз
+        const hasAccess = await requestMediaPermissions();
+        if (!hasAccess) return;
 
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
         let currentPeer = contacts[activeChatPeerId] || { name: "Друг", ava: "" };
 
-        // Инициализируем локальную сессию
-        currentCallSession = {
-            role: 'caller',
-            peerId: activeChatPeerId,
-            peerName: currentPeer.name,
-            peerAva: currentPeer.ava
-        };
+        currentCallSession = { role: 'caller', peerId: activeChatPeerId, peerName: currentPeer.name, peerAva: currentPeer.ava };
 
-        // UI подготовка
         document.getElementById('call-peer-name').innerText = currentPeer.name;
         const callAva = document.getElementById('call-peer-ava');
         callAva.classList.add('ringing');
+        document.getElementById('call-avatar-container').classList.remove('hidden');
         if(currentPeer.ava) callAva.style.backgroundImage = `url(${currentPeer.ava})`; else callAva.style.backgroundImage = 'none';
 
         isAudioOn = true; isVideoOn = true; isFrontCamera = true;
         document.getElementById('call-toggle-audio').classList.remove('off'); document.getElementById('call-toggle-audio').innerText = "🎙️";
         document.getElementById('call-toggle-video').classList.remove('off'); document.getElementById('call-toggle-video').innerText = "📷";
         
-        // Показываем кнопки управления заранее, прячем кнопку "Принять"
         document.getElementById('call-active-controls').classList.remove('hidden');
         document.getElementById('call-accept-btn').classList.add('hidden');
-        document.getElementById('call-decline-btn').style.backgroundColor = "var(--red)";
 
         document.getElementById('call-status-text').innerText = "Вызов...";
         document.getElementById('call-screen').classList.add('show');
 
-        // Отправляем сигнал "dial" через персональный канал друга
+        // Создаем P2P объект
+        createPeerConnection();
+
+        // Отправляем гудок
         supabaseClient.channel(`calls:${activeChatPeerId}`).send({
-            type: 'broadcast',
-            event: 'dial',
+            type: 'broadcast', event: 'dial',
             payload: { callerId: myCurrentId, callerName: myCurrentName, callerAva: localStorage.getItem('ol_ava_' + myCurrentId) || "" }
         });
 
-        // Таймер отмены: если не в сети — сброс ровно через 1 минуту. Если в сети — стандартный гудок ожидания мессенджера (тоже 1 мин)
+        // Если друг не в сети — автоматическая отмена через 1 минуту
         clearTimeout(callTimeoutTimer);
         callTimeoutTimer = setTimeout(() => {
             if (currentCallSession && currentCallSession.status !== 'connected') {
                 document.getElementById('call-status-text').innerText = "Абонент недоступен";
-                setTimeout(() => { endCall(true); }, 1500);
+                setTimeout(() => { endCall(); }, 2000);
             }
-        }, 60000); // 1 минута
+        }, 60000);
     }
 
-    // ЛОГИКА ВХОДЯЩЕГО ЗВОНКА (Вам звонят)
+    // ВХОДЯЩИЙ ЗВОНОК
     function handleIncomingDial(data) {
-        // Если мы уже заняты другим звонком — автоматически шлем отбой
         if (currentCallSession) {
             supabaseClient.channel(`calls:${data.callerId}`).send({ type: 'broadcast', event: 'hangup', payload: { from: myCurrentId } });
             return;
         }
 
-        currentCallSession = {
-            role: 'receiver',
-            peerId: data.callerId,
-            peerName: data.callerName,
-            peerAva: data.callerAva
-        };
+        currentCallSession = { role: 'receiver', peerId: data.callerId, peerName: data.callerName, peerAva: data.callerAva };
 
-        // Заполняем UI данными звонящего
         document.getElementById('call-peer-name').innerText = data.callerName;
         const callAva = document.getElementById('call-peer-ava');
         callAva.classList.add('ringing');
+        document.getElementById('call-avatar-container').classList.remove('hidden');
         if(data.callerAva) callAva.style.backgroundImage = `url(${data.callerAva})`; else callAva.style.backgroundImage = 'none';
 
         document.getElementById('call-status-text').innerText = "Входящий вызов...";
         
-        // Показываем зелёную кнопку ответа и красную сброса
         document.getElementById('call-active-controls').classList.add('hidden');
         document.getElementById('call-accept-btn').classList.remove('hidden');
-document.getElementById('call-screen').classList.add('show');
+        document.getElementById('call-screen').classList.add('show');
 
-        // Входящий звонок тоже автоматически сбросится через 1 минуту, если никто не нажал кнопку
         clearTimeout(callTimeoutTimer);
         callTimeoutTimer = setTimeout(() => {
-            if (currentCallSession && currentCallSession.status !== 'connected') {
-                endCall(false);
-            }
+            if (currentCallSession && currentCallSession.status !== 'connected') { endCall(); }
         }, 60000);
     }
 
-    // НАЖАТИЕ ЗЕЛЁНОЙ КНОПКИ (Принять вызов)
-    function acceptIncomingCall() {
-        if (!currentCallSession || currentCallSession.role !== 'receiver') return;
+    // НАЖАТИЕ ЗЕЛЕНОЙ КНОПКИ (Взять вызов)
+    async function acceptIncomingCall() {
+if (!currentCallSession || currentCallSession.role !== 'receiver') return;
         
+        // Запрос разрешений один раз при ответе
+        const hasAccess = await requestMediaPermissions();
+        if (!hasAccess) { clickHangup(); return; }
+
         clearTimeout(callTimeoutTimer);
         currentCallSession.status = 'connected';
 
         document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
         document.getElementById('call-peer-ava').classList.remove('ringing');
-        
-        // Меняем конфигурацию кнопок на интерфейс разговора
         document.getElementById('call-accept-btn').classList.add('hidden');
         document.getElementById('call-active-controls').classList.remove('hidden');
 
-        // Сигнализируем звонящему, что мы подняли трубку
+        createPeerConnection();
+
+        // Отвечаем на вызов
         supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
-            type: 'broadcast',
-            event: 'accept',
-            payload: { from: myCurrentId }
+            type: 'broadcast', event: 'accept', payload: { from: myCurrentId }
         });
     }
 
-    // Собеседник ответил на наш звонок
-    function handleCallAcceptedByPeer(data) {
+    // Собеседник принял наш звонок -> Создаем медиа-оффер (WebRTC Offer)
+    async function handleCallAcceptedByPeer(data) {
         if (currentCallSession && currentCallSession.role === 'caller' && currentCallSession.peerId === data.from) {
             clearTimeout(callTimeoutTimer);
             currentCallSession.status = 'connected';
             document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
             document.getElementById('call-peer-ava').classList.remove('ringing');
+
+            // Запускаем трансляцию видео
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            
+            supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
+                type: 'broadcast', event: 'webrtc_offer', payload: { offer: offer }
+            });
         }
     }
 
-    // Пользователь сам нажимает на кнопку сброса (красную)
     function clickHangup() {
-        if (!currentCallSession) {
-            endCall(false);
-            return;
+        if (currentCallSession) {
+            supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
+                type: 'broadcast', event: 'hangup', payload: { from: myCurrentId }
+            });
         }
-        // Оповещаем вторую сторону о сбросе трубки
-        supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
-            type: 'broadcast',
-            event: 'hangup',
-            payload: { from: myCurrentId }
-        });
-        endCall(false);
+        endCall();
     }
 
-    // Удаленная сторона повесила трубку или отклонила вызов
     function handleCallHangupByPeer(data) {
         if (currentCallSession && currentCallSession.peerId === data.from) {
             document.getElementById('call-status-text').innerText = "Звонок завершен";
-            document.getElementById('call-peer-ava').classList.remove('ringing');
-            setTimeout(() => { endCall(false); }, 1200);
+            setTimeout(() => { endCall(); }, 1200);
         }
     }
 
-    // Завершение работы экрана и очистка таймеров
-    function endCall(quiet = false) {
+    function endCall() {
         clearTimeout(callTimeoutTimer);
+        
+        if (peerConnection) { peerConnection.close(); peerConnection = null; }
+        if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
+        
+        document.getElementById('remote-video').srcObject = null;
+        document.getElementById('local-video').srcObject = null;
+        document.getElementById('local-video').classList.add('hidden');
+
         currentCallSession = null;
-        if (!quiet) {
-            document.getElementById('call-screen').classList.remove('show');
-        } else {
-            document.getElementById('call-screen').classList.remove('show');
-        }
+        document.getElementById('call-screen').classList.remove('show');
     }
 
-    // Управление потоками и отправка изменений другу в реальном времени
     function toggleCallAudio() {
-        if (!currentCallSession) return;
+        if (!localStream) return;
         isAudioOn = !isAudioOn;
+        localStream.getAudioTracks().forEach(t => t.enabled = isAudioOn);
         const btn = document.getElementById('call-toggle-audio');
-        if(isAudioOn) {
-            btn.classList.remove('off'); btn.innerText = "🎙️";
-        } else {
-            btn.classList.add('off'); btn.innerText = "🔇";
-        }
-        
-        // Передаем статус микрофона
-        supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
-            type: 'broadcast', event: 'media_change', payload: { from: myCurrentId, audio: isAudioOn, video: isVideoOn }
-        });
+        btn.classList.toggle('off', !isAudioOn);
+        btn.innerText = isAudioOn ? "🎙️" : "🔇";
     }
 
     function toggleCallVideo() {
-        if (!currentCallSession) return;
+        if (!localStream) return;
         isVideoOn = !isVideoOn;
+        localStream.getVideoTracks().forEach(t => t.enabled = isVideoOn);
         const btn = document.getElementById('call-toggle-video');
-        if(isVideoOn) {
-btn.classList.remove('off'); btn.innerText = "📷";
-        } else {
-            btn.classList.add('off'); btn.innerText = "❌";
-        }
-
-        // Передаем статус видео
-        supabaseClient.channel(`calls:${currentCallSession.peerId}`).send({
-            type: 'broadcast', event: 'media_change', payload: { from: myCurrentId, audio: isAudioOn, video: isVideoOn }
-        });
+        btn.classList.toggle('off', !isVideoOn);
+        btn.innerText = isVideoOn ? "📷" : "❌";
+        document.getElementById('local-video').classList.toggle('hidden', !isVideoOn);
     }
 
-    function flipCallCamera() {
+    async function flipCallCamera() {
+        if (!localStream) return;
         isFrontCamera = !isFrontCamera;
-        const btn = document.getElementById('call-flip-camera');
-        btn.style.transform = isFrontCamera ? 'rotate(0deg)' : 'rotate(180deg)';
+        
+        // Переключаем facingMode между селфи и основной камерой
+        localStream.getVideoTracks().forEach(t => t.stop());
+        try {
+const newVideoStream = await navigator.mediaDevices.getUserMedia({
+                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: isFrontCamera ? "user" : "environment" }
+            });
+            const newTrack = newVideoStream.getVideoTracks()[0];
+            localStream.addTrack(newTrack);
+            
+            document.getElementById('local-video').srcObject = localStream;
+            
+            if(peerConnection) {
+                const sender = peerConnection.getSenders().find(s => s.track.kind === 'video');
+                if(sender) sender.replaceTrack(newTrack);
+            }
+        } catch(e){}
+        
+        document.getElementById('call-flip-camera').style.transform = isFrontCamera ? 'rotate(0deg)' : 'rotate(180deg)';
     }
 
-    // Обработка изменений медиа-параметров от собеседника
     function handlePeerMediaChange(data) {
         if (currentCallSession && currentCallSession.peerId === data.from && currentCallSession.status === 'connected') {
-            if (!data.audio && data.video) {
-                document.getElementById('call-status-text').innerText = "Микрофон собеседника выключен";
-            } else if (!data.video && data.audio) {
-                document.getElementById('call-status-text').innerText = "Камера собеседника выключена";
-            } else if (!data.audio && !data.video) {
-                document.getElementById('call-status-text').innerText = "Медиапотоки отключены";
-            } else {
-                document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
-            }
+            if (!data.audio) document.getElementById('call-status-text').innerText = "Микрофон собеседника выключен";
+            else if (!data.video) document.getElementById('call-status-text').innerText = "Камера собеседника выключена";
+            else document.getElementById('call-status-text').innerText = "Подключено (E2EE сессия)";
         }
     }
 
@@ -655,9 +720,7 @@ btn.classList.remove('off'); btn.innerText = "📷";
                     loader.classList.remove('show');
                     return;
                 }
-                if (userExist.ava) {
-                    localStorage.setItem('ol_ava_' + id, userExist.ava);
-                }
+                if (userExist.ava) { localStorage.setItem('ol_ava_' + id, userExist.ava); }
             } else {
                 await supabaseClient.from('users').insert([{ id: id, name: name, ava: "", last_seen: new Date().toISOString(), typing_to: "" }]);
             }
@@ -676,7 +739,7 @@ btn.classList.remove('off'); btn.innerText = "📷";
             updateAvaUI();
             renderSavedContacts();
             listenForIncomingData();
-            initCallSignalChannel(); // Активируем прослушку звонков
+            initCallSignalChannel();
             
             updateMyStatus();
             setInterval(updateMyStatus, 3000);
@@ -695,22 +758,22 @@ btn.classList.remove('off'); btn.innerText = "📷";
 
     async function checkContactsOnline() {
         if (!myCurrentId) return;
-        let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
 
         const { data: usersData } = await supabaseClient.from('users').select('id, last_seen, typing_to');
         if (!usersData) return;
 
         usersData.forEach(u => {
-if (u.id === myCurrentId) return;
+            if (u.id === myCurrentId) return;
 
             const isOnline = u.last_seen && (new Date() - new Date(u.last_seen) < 6000);
-            knownUsersCache[u.id] = isOnline; // Сохраняем в кэш статусов
+            knownUsersCache[u.id] = isOnline; 
 
             const dot = document.getElementById('dot-' + u.id);
             if (dot) {
-                if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
+if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
             }
 
+            // ИСПРАВЛЕНО: Теперь статус в шапке чата обновляется постоянно!
             if (u.id === activeChatPeerId) {
                 const chatDot = document.getElementById('peer-status-dot');
                 const chatTxt = document.getElementById('chat-peer-status-text');
@@ -754,33 +817,20 @@ if (u.id === myCurrentId) return;
 
         try {
             const { data: targetUser } = await supabaseClient.from('users').select('*').eq('id', tid).maybeSingle();
-            
             if (!targetUser) {
-                log.style.color = "red";
-                log.innerText = "Пользователь с таким ID не существует!";
-                return;
+                log.style.color = "red"; log.innerText = "Пользователь с таким ID не существует!"; return;
             }
-
             const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
             const { error } = await supabaseClient.from('messages').insert([
                 { sender: myCurrentId, receiver: tid, text: myCurrentName, media: myAva, type: 'request' }
             ]);
-
             if(!error) {
-                log.style.color = "green";
-                log.innerText = "Заявка успешно отправлена!";
-                document.getElementById('targetId').value = "";
+                log.style.color = "green"; log.innerText = "Заявка успешно отправлена!"; document.getElementById('targetId').value = "";
             } else {
-                log.style.color = "red";
-                log.innerText = "Не удалось отправить заявку.";
+                log.style.color = "red"; log.innerText = "Не удалось отправить заявку.";
             }
-        } catch(e) {
-            log.style.color = "red";
-            log.innerText = "Ошибка запроса к базе.";
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = `<span id="search-btn-text">Отправить заявку</span>`;
-        }
+        } catch(e) { log.style.color = "red"; log.innerText = "Ошибка запроса к базе."; }
+        finally { btn.disabled = false; btn.innerHTML = `<span id="search-btn-text">Отправить заявку</span>`; }
     }
 
     function listenForIncomingData() {
@@ -790,21 +840,14 @@ if (u.id === myCurrentId) return;
                     if (activeChatPeerId) loadChatHistory(activeChatPeerId);
                     return;
                 }
-
                 const row = payload.new;
-                if (row.receiver === myCurrentId && row.type === 'request') {
-                    showIncomingRequestUI(row.sender, row.text, row.media);
-                }
-if (row.receiver === myCurrentId && row.type === 'accept') {
-                    saveContact(row.sender, row.text, row.media);
-                }
+                if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
+                if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
                 if (row.type === 'chat' && ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId))) {
                     loadChatHistory(activeChatPeerId);
                 }
-            })
-            .subscribe();
-            
-        checkExistingRequests();
+            }).subscribe();
+checkExistingRequests();
     }
 
     async function checkExistingRequests() {
@@ -838,9 +881,7 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
     async function acceptReq(id, name, ava) {
         saveContact(id, name, ava);
         const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
-        await supabaseClient.from('messages').insert([
-            { sender: myCurrentId, receiver: id, text: myCurrentName, media: myAva, type: 'accept' }
-        ]);
+        await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: id, text: myCurrentName, media: myAva, type: 'accept' }]);
         await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
         document.getElementById('req-item-' + id).remove();
         
@@ -855,7 +896,6 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
     async function send() {
         const input = document.getElementById('m-input');
         if(!input.value.trim() || !activeChatPeerId) return;
-        
         const txt = input.value.trim();
         input.value = "";
 
@@ -863,23 +903,18 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
 
         if (isEditingMode && selectedMsgId) {
             await supabaseClient.from('messages').update({ text: txt, is_edited: true }).eq('id', selectedMsgId);
-            isEditingMode = false;
-            selectedMsgId = null;
-            document.getElementById('send-btn').innerText = ">";
+            isEditingMode = false; selectedMsgId = null; document.getElementById('send-btn').innerText = ">";
         } else {
-            await supabaseClient.from('messages').insert([
-                { sender: myCurrentId, receiver: activeChatPeerId, text: txt, media: "", type: 'chat' }
-            ]);
+            await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: activeChatPeerId, text: txt, media: "", type: 'chat' }]);
         }
         loadChatHistory(activeChatPeerId);
     }
 
     async function loadChatHistory(peerId) {
         const { data } = await supabaseClient.from('messages')
-            .select('*')
-            .eq('type', 'chat')
+            .select('*').eq('type', 'chat')
             .or(`and(sender.eq.${myCurrentId},receiver.eq.${peerId}),and(sender.eq.${peerId},receiver.eq.${myCurrentId})`)
-.order('created_at', { ascending: true });
+            .order('created_at', { ascending: true });
 
         const win = document.getElementById('chat-win');
         win.innerHTML = '';
@@ -892,22 +927,16 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
         if(data) {
             data.forEach((msg) => {
                 const direction = msg.sender === myCurrentId ? 'out' : 'in';
-                const d = document.createElement('div');
+const d = document.createElement('div');
                 d.className = 'bubble ' + direction;
-                
-                if (direction === 'out') {
-                    d.onclick = () => openMsgMenu(msg.id, msg.text);
-                }
+                if (direction === 'out') d.onclick = () => openMsgMenu(msg.id, msg.text);
 
                 if(msg.media) {
                     const img = document.createElement('img'); img.src = msg.media; d.appendChild(img);
                 } else { 
                     d.innerText = msg.text; 
                     if (msg.is_edited) {
-                        const ed = document.createElement('span');
-                        ed.className = 'edited-label';
-                        ed.innerText = ' (изм.)';
-                        d.appendChild(ed);
+                        const ed = document.createElement('span'); ed.className = 'edited-label'; ed.innerText = ' (изм.)'; d.appendChild(ed);
                     }
                 }
                 win.appendChild(d);
@@ -917,8 +946,7 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
     }
 
     function openMsgMenu(id, text) {
-        selectedMsgId = id;
-        selectedMsgText = text;
+        selectedMsgId = id; selectedMsgText = text;
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('msg-menu').classList.add('open');
     }
@@ -929,11 +957,9 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
     }
 
     function triggerEdit() {
-        closeMsgMenu();
-        isEditingMode = true;
+        closeMsgMenu(); isEditingMode = true;
         const input = document.getElementById('m-input');
-        input.value = selectedMsgText;
-        input.focus();
+        input.value = selectedMsgText; input.focus();
         document.getElementById('send-btn').innerText = "💾";
     }
 
@@ -950,9 +976,7 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
         if(!file) return;
         const reader = new FileReader();
         reader.onload = async function() { 
-            await supabaseClient.from('messages').insert([
-                { sender: myCurrentId, receiver: activeChatPeerId, text: "", media: reader.result, type: 'chat' }
-            ]);
+            await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: activeChatPeerId, text: "", media: reader.result, type: 'chat' }]);
             loadChatHistory(activeChatPeerId);
         };
         reader.readAsDataURL(file);
@@ -985,26 +1009,24 @@ if (row.receiver === myCurrentId && row.type === 'accept') {
     }
 
     function renderSavedContacts() {
-const list = document.getElementById('contacts-list');
+        const list = document.getElementById('contacts-list');
         list.innerHTML = '';
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
         if (Object.keys(contacts).length === 0) {
-            list.innerHTML = '<p style="color:gray; text-align:center; font-size:14px;">Пока нет контактов</p>';
-            return;
+            list.innerHTML = '<p style="color:gray; text-align:center; font-size:14px;">Пока нет контактов</p>'; return;
         }
         for (let id in contacts) {
             const div = document.createElement('div');
             div.className = 'contact-item';
             div.onclick = () => { openChat(id, contacts[id].name, contacts[id].ava); nav('chat', document.querySelectorAll('.nav-item')[3]); };
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
-            div.innerHTML = `
+div.innerHTML = `
                 <div class="ava-wrapper">
                     <div class="chat-ava" style="${bgStyle}"></div>
                     <div id="dot-${id}" class="status-dot"></div>
                 </div>
                 <div>
-                    <b>${contacts[id].name}</b><br>
-                    <span style="font-size:12px; color:gray;">ID: ${id}</span>
+                    <b>${contacts[id].name}</b><br><span style="font-size:12px; color:gray;">ID: ${id}</span>
                 </div>
             `;
             list.appendChild(div);
@@ -1041,9 +1063,7 @@ const list = document.getElementById('contacts-list');
     }
 
     function logout() { 
-        localStorage.removeItem('ol_id');
-        localStorage.removeItem('ol_name');
-        location.reload(); 
+        localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); location.reload(); 
     }
 
     window.onload = () => {
