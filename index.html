@@ -90,10 +90,14 @@
             background: var(--blue-grad); color: white; 
             border: none; border-radius: 14px; font-weight: bold; 
             cursor: pointer; font-size: 16px; 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
             box-shadow: 0 5px 15px rgba(0, 119, 255, 0.35);
             transition: all 0.2s ease;
+            text-decoration: none;
+            box-sizing: border-box;
         }
+        .btn svg { transition: transform 0.2s; }
+        .btn:hover svg { transform: scale(1.1); }
         .btn:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(0, 119, 255, 0.2); }
         .btn:disabled { background: #b2d6ff; box-shadow: none; cursor: not-allowed; }
 
@@ -111,6 +115,15 @@
         .btn-mini-block:active { background: rgba(0, 0, 0, 0.1); }
         .blocked-badge { background: #555; color: white; padding: 2px 6px; font-size: 10px; border-radius: 4px; margin-left: auto; }
 
+        .developer-name { display: inline-flex; align-items: center; gap: 4px; font-weight: bold; color: #0056b3; }
+        .verified-badge { fill: var(--blue); animation: pulseBadge 2s infinite ease-in-out; }
+        @keyframes pulseBadge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        .admin-box {
+background: rgba(255, 59, 48, 0.05); border: 1px dashed var(--red);
+            border-radius: 20px; padding: 15px; margin-top: 15px; text-align: left;
+        }
+
         #tab-chat { 
             position: fixed; inset: 55px 0 65px 0; 
             display: flex; flex-direction: column; 
@@ -123,7 +136,7 @@
         #tab-chat.slide-active {
             transform: translateY(0);
         }
-#chat-ui { display: flex; flex-direction: column; height: 100%; width: 100%; }
+        #chat-ui { display: flex; flex-direction: column; height: 100%; width: 100%; }
         
         .chat-header {
             background: white; padding: 10px 15px; display: flex; align-items: center; gap: 12px;
@@ -184,12 +197,13 @@
         .emoji-picker-btn:hover { transform: scale(1.25); }
 
         .feed-reactions-list { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-        .feed-reaction-badge { background: var(--input-bg); padding: 4px 10px; border-radius: 14px; font-size: 13px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+.feed-reaction-badge { background: var(--input-bg); padding: 4px 10px; border-radius: 14px; font-size: 13px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; user-select: none; transition: background 0.2s; }
+        .feed-reaction-badge.active { background: rgba(0, 119, 255, 0.15); border: 1px solid rgba(0, 119, 255, 0.3); color: var(--blue); }
 
         .feed-comments-section { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 10px; margin-top: 12px; }
-        .toggle-comments-btn { background: rgba(0, 119, 255, 0.08); color: var(--blue); border: none; width: 100%; padding: 8px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer; margin-bottom: 8px; text-align: center; transition: background 0.2s; }
+        .toggle-comments-btn { background: rgba(0, 119, 255, 0.08); color: var(--blue); border: none; width: 100%; padding: 10px; border-radius: 12px; font-weight: bold; font-size: 13px; cursor: pointer; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; }
         .toggle-comments-btn:active { background: rgba(0, 119, 255, 0.15); }
-.comments-chat-window { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; margin-bottom: 8px; padding-right: 4px; }
+        .comments-chat-window { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; margin-bottom: 8px; padding-right: 4px; }
         .feed-comment-item { background: rgba(0,0,0,0.04); padding: 8px 12px; border-radius: 14px; font-size: 13px; line-height: 1.4; max-width: 85%; align-self: flex-start; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .feed-comment-item.my-comm { background: var(--blue-grad); color: white; align-self: flex-end; }
         .feed-comment-input-block { display: flex; gap: 8px; margin-top: 4px; }
@@ -232,7 +246,7 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center;
         }
         .settings-btn {
-            width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
+width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
             border: none; border-radius: 14px; cursor: pointer; font-weight: bold; font-size: 15px;
             margin-bottom: 12px; text-align: left; display: flex; align-items: center; justify-content: space-between;
             box-sizing: border-box;
@@ -242,8 +256,8 @@
         .feed-header-actions { display: flex; gap: 10px; margin-bottom: 15px; }
         .feed-card { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left; border: 1px solid rgba(0,0,0,0.02); }
         .feed-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .feed-card-user { font-weight: bold; font-size: 15px; color: #111; }
-.feed-card-time { font-size: 11px; color: var(--gray); margin-left: auto; display: flex; align-items: center; gap: 8px; }
+        .feed-card-user { font-weight: bold; font-size: 15px; color: #111; display: flex; align-items: center; gap: 4px; }
+        .feed-card-time { font-size: 11px; color: var(--gray); margin-left: auto; display: flex; align-items: center; gap: 8px; }
         .feed-card-media { width: 100%; border-radius: 14px; margin-top: 8px; display: block; max-height: 350px; object-fit: contain; background: #000; cursor: pointer; }
 
         .push-notification {
@@ -277,7 +291,7 @@
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1999; display: none; }
 
         .app-version {
-            position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25);
+position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); color: rgba(255, 255, 255, 0.65);
             font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); z-index: 90;
         }
@@ -288,7 +302,8 @@
         }
         .dev-modal.show { opacity: 1; pointer-events: auto; }
         .dev-card { background: white; padding: 25px; border-radius: 24px; width: 80%; max-width: 280px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-.typing-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; }
+
+        .typing-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; }
         .typing-dots span {
             width: 4px; height: 4px; background-color: var(--blue); border-radius: 50%;
             animation: tgBounce 1.4s infinite ease-in-out both;
@@ -327,7 +342,7 @@
         </div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.2.7</div>
+    <div id="version-tag" class="app-version">v1.3.0</div>
     <div id="overlay" onclick="closeMsgMenu(); closeMediaModal(); closeSettings();"></div>
 
     <div id="settings-modal" class="settings-modal" onclick="closeSettings()">
@@ -339,8 +354,8 @@
             <button class="settings-btn logout" onclick="logout(); closeSettings();">
                 <span>🚪 Выйти из аккаунта</span>
             </button>
-            <button class="btn" style="background: #f0f2f5; color: black; box-shadow: none; margin-top: 10px;" onclick="closeSettings()">Закрыть</button>
-        </div>
+            <button class="btn" style="background: #f0f2f5; color: black; box-shadow: none; margin-top: 10px; width: 100%;" onclick="closeSettings()">Закрыть</button>
+</div>
     </div>
 
     <div id="dev-screen" class="dev-modal" onclick="closeDevModal()">
@@ -348,7 +363,7 @@
             <h3 style="margin: 0 0 15px 0; color: var(--blue);">Разработчик</h3>
             <p style="margin: 8px 0; font-size: 15px;"><b>TG:</b> <a href="https://t.me/Nazaros2009" target="_blank" style="color:var(--blue); text-decoration:none;">@Nazaros2009</a></p>
             <p style="margin: 8px 0; font-size: 15px;"><b>Company:</b> One Link LTD</p>
-            <button class="btn" style="margin-top: 20px; padding: 10px;" onclick="closeDevModal()">Закрыть</button>
+            <button class="btn" style="margin-top: 20px; padding: 10px; width: 100%;" onclick="closeDevModal()">Закрыть</button>
         </div>
     </div>
 
@@ -356,7 +371,7 @@
         <div class="auth-card">
             <div id="auth-loader" class="full-loader">
                 <div class="spinner spinner-blue" style="width:40px; height:40px; border-width: 4px;"></div>
-<b id="loader-text" style="color: var(--blue); font-size: 15px;">Проверка...</b>
+                <b id="loader-text" style="color: var(--blue); font-size: 15px;">Проверка...</b>
             </div>
             <h1 style="color:var(--blue); margin: 0 0 15px 0; font-size: 28px; letter-spacing: -0.5px;">One Link</h1>
             
@@ -369,7 +384,7 @@
             <input type="text" id="myName" placeholder="Имя">
             <input type="password" id="myPassword" placeholder="Пароль">
             
-            <button class="btn" id="login-btn" onclick="handleAuth()">Войти</button>
+            <button class="btn" id="login-btn" style="width:100%;" onclick="handleAuth()">Войти</button>
             <p id="auth-log" style="color: red; font-size: 13px; margin-top: 8px; font-weight: 500; min-height: 18px;"></p>
         </div>
     </div>
@@ -394,24 +409,40 @@
             
             <div id="tab-feed" class="page hidden">
                 <div class="feed-header-actions">
-                    <button class="btn btn-green" id="feedUploadBtn" onclick="triggerFeedUpload()">+ Добавить пост</button>
-                    <button class="btn" id="feedRefreshBtn" onclick="loadFeed()">🔄 Обновить</button>
+                    <button class="btn btn-green" id="feedUploadBtn" style="flex: 1;" onclick="triggerFeedUpload()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Добавить
+                    </button>
+                    <button class="btn" id="feedRefreshBtn" style="flex: 1;" onclick="loadFeed()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                        Обновить
+                    </button>
                 </div>
                 <input type="file" id="feed-file-input" accept="image/*,video/*" style="display: none;" onchange="publishFeedPost(event)">
                 <div id="feed-posts-container"></div>
             </div>
 
             <div id="tab-profile" class="page">
-                <div class="block" style="text-align: center; position: relative;">
+<div class="block" style="text-align: center; position: relative;">
                     <label for="ava-input" class="ava-label">
                         <input type="file" id="ava-input" style="display:none" accept="image/*">
                         <div id="my-ava" class="ava-circle"><span>📷</span></div>
                     </label>
                     <div class="profile-header-container">
-                        <h2 id="view-name" style="margin:0;"></h2>
+                        <h2 id="view-name" style="margin:0; display: flex; align-items: center; gap: 5px;"></h2>
                         <button class="settings-gear-btn" onclick="openSettings()">⚙️</button>
                     </div>
                     <p id="view-id" style="color:var(--gray); font-size:14px; margin: 5px 0 0 0;"></p>
+                    
+                    <div id="developer-admin-panel" class="admin-box hidden">
+                        <h4 style="margin: 0 0 10px 0; color: var(--red);">🛡️ Админ-панель Модерации</h4>
+                        <input type="tel" id="admin-ban-id" placeholder="ID нарушителя" inputmode="numeric" style="padding:10px; font-size:14px; margin:5px 0;">
+                        <input type="number" id="admin-ban-time" placeholder="Дней (пусто = навсегда)" style="padding:10px; font-size:14px; margin:5px 0;">
+                        <div style="display:flex; gap:6px; margin-top:5px;">
+                            <button class="btn btn-red" style="flex:1; padding:10px; font-size:13px;" onclick="executeSystemBan(true)">Бан</button>
+                            <button class="btn btn-green" style="flex:1; padding:10px; font-size:13px;" onclick="executeSystemBan(false)">Разбан</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="block">
@@ -424,7 +455,7 @@
                 <div class="block">
                     <h3>Поиск по ID</h3>
                     <input type="tel" id="targetId" placeholder="Введите ID друга" inputmode="numeric">
-                    <button class="btn" id="search-btn" onclick="sendReq()">
+                    <button class="btn" id="search-btn" style="width:100%;" onclick="sendReq()">
                         <span id="search-btn-text">Отправить заявку</span>
                     </button>
                     <p id="search-log" style="font-size:14px; margin-top:12px; min-height: 20px;"></p>
@@ -434,7 +465,7 @@
             <div id="tab-msgs" class="page hidden">
                 <div class="block">
                     <h3>Входящие заявки</h3>
-<div id="req-list"><p style="color:gray; text-align:center;">Пусто</p></div>
+                    <div id="req-list"><p style="color:gray; text-align:center;">Пусто</p></div>
                 </div>
             </div>
         </div>
@@ -449,8 +480,8 @@
                         <div id="peer-status-dot" class="status-dot"></div>
                     </div>
                     <div style="flex: 1;">
-                        <b style="display:block;"><span id="chat-with">Чат</span></b>
-                        <span id="chat-peer-status-text" style="font-size:12px; color: var(--gray);">был(а) недавно</span>
+                        <b style="display:block; color:#000;"><span id="chat-with">Чат</span></b>
+                        <span id="chat-peer-status-text" style="font-size:12px; color: var(--gray); font-weight:500;">загрузка статуса...</span>
                     </div>
                 </div>
                 
@@ -462,7 +493,7 @@
 
                 <div class="chat-input-panel">
                     <div class="emoji-picker" id="emoji-picker">
-                        <span onclick="addEmoji('😀')">😀</span>
+<span onclick="addEmoji('😀')">😀</span>
                         <span onclick="addEmoji('😂')">😂</span>
                         <span onclick="addEmoji('🔥')">🔥</span>
                         <span onclick="addEmoji('👍')">👍</span>
@@ -503,7 +534,7 @@
                 Профиль
             </div>
             <div class="nav-item" onclick="nav('search', this)">
-<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 Поиск
             </div>
             <div class="nav-item" onclick="nav('msgs', this)">
@@ -532,12 +563,14 @@
     let localDeletedMessages = JSON.parse(localStorage.getItem('ol_deleted_msgs') || '[]');
     let clickPushData = null;
     let commentsVisibilityState = {};
-
-    const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
+const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
 
     const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // SVG синяя галочка разработчика
+    const VERIFIED_BADGE_SVG = `<svg class="verified-badge" width="16" height="16" viewBox="0 0 24 24" fill="#0077ff" style="display:inline-block; vertical-align:middle; margin-left:3px;"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`;
 
     function playNotificationSound() {
         try {
@@ -590,7 +623,7 @@
         const picker = document.getElementById('emoji-picker');
         picker.style.display = picker.style.display === 'grid' ? 'none' : 'grid';
     }
-function addEmoji(emoji) {
+    function addEmoji(emoji) {
         const input = document.getElementById('m-input');
         input.value += emoji;
         document.getElementById('emoji-picker').style.display = 'none';
@@ -613,7 +646,7 @@ function addEmoji(emoji) {
         actionsContainer.innerHTML = '';
 
         const saveBtn = document.createElement('button');
-        saveBtn.className = 'modal-btn save';
+saveBtn.className = 'modal-btn save';
         saveBtn.innerText = '💾 Сохранить файл';
         saveBtn.onclick = () => {
             const link = document.createElement('a');
@@ -669,7 +702,6 @@ function addEmoji(emoji) {
         document.getElementById('feed-file-input').click();
     }
 
-    /* СУПЕР-ЖЕСТКОЕ СЖАТИЕ: Ограничиваем разрешение до 500px, чтобы база данных никогда не висла */
     function compressImage(file) {
         return new Promise((resolve) => {
             if (!file.type.startsWith('image/')) {
@@ -686,7 +718,7 @@ function addEmoji(emoji) {
                     
                     const MAX_WIDTH = 500; 
                     if (width > MAX_WIDTH) {
-height = Math.round((height * MAX_WIDTH) / width);
+                        height = Math.round((height * MAX_WIDTH) / width);
                         width = MAX_WIDTH;
                     }
                     
@@ -704,7 +736,6 @@ height = Math.round((height * MAX_WIDTH) / width);
         });
     }
 
-    /* Функция-обертка для предотвращения бесконечного ожидания ответа от Supabase */
     function fetchWithTimeout(promise, ms = 12000) {
         return new Promise((resolve, reject) => {
             const timer = setTimeout(() => reject(new Error("таймаут")), ms);
@@ -715,9 +746,8 @@ height = Math.round((height * MAX_WIDTH) / width);
     async function publishFeedPost(event) {
         const file = event.target.files[0];
         if (!file) return;
-
-        const uploadBtn = document.getElementById('feedUploadBtn');
-        const origText = uploadBtn.innerText;
+const uploadBtn = document.getElementById('feedUploadBtn');
+        const origContent = uploadBtn.innerHTML;
         
         uploadBtn.disabled = true;
         uploadBtn.innerText = "⏳ Публикация...";
@@ -733,7 +763,7 @@ height = Math.round((height * MAX_WIDTH) / width);
             if (todayPosts && todayPosts.length >= 5) {
                 alert('Вы исчерпали дневной лимит публикаций! (Максимум 5 постов в день)');
                 uploadBtn.disabled = false;
-                uploadBtn.innerText = origText;
+                uploadBtn.innerHTML = origContent;
                 return;
             }
 
@@ -744,11 +774,10 @@ height = Math.round((height * MAX_WIDTH) / width);
                 if (!compressedData) {
                     alert("Не удалось сжать картинку.");
                     uploadBtn.disabled = false;
-                    uploadBtn.innerText = origText;
+                    uploadBtn.innerHTML = origContent;
                     return;
                 }
                 
-                // Оборачиваем запрос в fetchWithTimeout, чтобы предотвратить бесконечное ожидание
                 await fetchWithTimeout(
                     supabaseClient.from('messages').insert([
                         { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: compressedData, type: 'feed_post', reactions: {}, feed_comments: [] }
@@ -761,7 +790,7 @@ height = Math.round((height * MAX_WIDTH) / width);
                 if (file.size > 2.5 * 1024 * 1024) {
                     alert("Видео слишком тяжелое! Выберите файл весом до 2.5 МБ, иначе база данных зависнет.");
                     uploadBtn.disabled = false;
-                    uploadBtn.innerText = origText;
+                    uploadBtn.innerHTML = origContent;
                     return;
                 }
                 
@@ -776,26 +805,25 @@ height = Math.round((height * MAX_WIDTH) / width);
                         alert('Видео-пост опубликован!');
                         loadFeed();
                     } catch(err) {
-alert("Сервер отклонил видео. Оно слишком длинное или тяжелое.");
+                        alert("Сервер отклонил видео. Оно слишком длинное или тяжелое.");
                     } finally {
                         uploadBtn.disabled = false;
-                        uploadBtn.innerText = origText;
+                        uploadBtn.innerHTML = origContent;
                     }
                 };
                 reader.readAsDataURL(file);
-                return; // Выходим, так как лоадер выключится в асинхронном блоке onload
+                return; 
             }
         } catch (err) {
             console.error(err);
-            alert("Ошибка сети или таймаут загрузки! Картинка/видео весит слишком много для текстовой ячейки Supabase.");
+            alert("Ошибка сети или таймаут загрузки!");
         } finally {
             uploadBtn.disabled = false;
-            uploadBtn.innerText = origText;
+            uploadBtn.innerHTML = origContent;
             event.target.value = ""; 
         }
     }
 
-    /* ФУНКЦИИ УДАЛЕНИЯ И БЛОКИРОВКИ КЛИЕНТОВ КЛИЕНТОМ ЛОКАЛЬНО */
     function removeContact(id) {
         if (confirm("Вы уверены, что хотите удалить этого друга? Диалог останется, но он исчезнет из контактов.")) {
             let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
@@ -808,7 +836,7 @@ alert("Сервер отклонил видео. Оно слишком длин�
 
     function blockContact(id) {
         let mins = prompt("На сколько минут заблокировать пользователя? (Введите цифру, он не сможет вам писать)", "15");
-        if (!mins || isNaN(mins)) return;
+if (!mins || isNaN(mins)) return;
 
         let until = Date.now() + (parseInt(mins) * 60 * 1000);
         let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
@@ -824,18 +852,11 @@ alert("Сервер отклонил видео. Оно слишком длин�
         let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
         if (!blocks[peerId]) return false;
         if (Date.now() > blocks[peerId]) {
-            delete blocks[peerId]; // Срок действия бана прошел
+            delete blocks[peerId]; 
             localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
             return false;
         }
         return true;
-    }
-
-    function isAmIBlockedBy(peerId) {
-        // Проверка: заблокировал ли тебя этот человек (на случай, если данные о блоках синхронизируются или хранятся локально)
-        let remoteBlocks = JSON.parse(localStorage.getItem('ol_blocks_' + peerId) || '{}');
-        if (remoteBlocks[myCurrentId] && Date.now() < remoteBlocks[myCurrentId]) return true;
-        return false;
     }
 
     function toggleCommentsChat(postId) {
@@ -845,17 +866,18 @@ alert("Сервер отклонил видео. Оно слишком длин�
         
         if (commentsVisibilityState[postId]) {
             win.classList.remove('hidden');
-            btn.innerText = "🔼 Свернуть обсуждение";
+            btn.innerHTML = `<span>🔼 Свернуть обсуждение</span>`;
             const chatWin = document.getElementById(`comments-win-${postId}`);
             if(chatWin) chatWin.scrollTop = chatWin.scrollHeight;
         } else {
             win.classList.add('hidden');
-            btn.innerText = `💬 Развернуть обсуждение (${win.getAttribute('data-count') || 0})`;
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> <span>Начать обсуждение (${win.getAttribute('data-count') || 0})</span>`;
         }
     }
 
     async function loadFeed() {
         const btn = document.getElementById('feedRefreshBtn');
+        const origContent = btn.innerHTML;
         btn.innerText = "Синхронизация...";
         
         const container = document.getElementById('feed-posts-container');
@@ -866,15 +888,15 @@ alert("Сервер отклонил видео. Оно слишком длин�
             .eq('type', 'feed_post')
             .order('created_at', { ascending: false });
 
-        btn.innerText = "🔄 Обновить";
-if (error || !data || data.length === 0) {
+        btn.innerHTML = origContent;
+
+        if (error || !data || data.length === 0) {
             container.innerHTML = '<p style="color:gray; text-align:center; padding: 20px;">Лента пуста.</p>';
             return;
         }
 
         container.innerHTML = '';
         data.forEach(post => {
-            // Если автор поста заблокирован тобой, не показываем его публикации в ленте
             if (isContactBlocked(post.sender)) return;
 
             const card = document.createElement('div');
@@ -892,17 +914,32 @@ if (error || !data || data.length === 0) {
                 ? `<button class="btn-delete" onclick="deleteFeedPost('${post.id}')">Удалить</button>` 
                 : '';
 
+            const isDev = (post.sender === '7777');
+            const nameHtml = isDev ? `${post.receiver || 'Разработчик'} ${VERIFIED_BADGE_SVG}` : (post.receiver || 'Пользователь');
+
             let emojiPickerHtml = '<div class="emoji-picker-panel">';
-            AVAILABLE_FEED_EMOJIS.forEach(emoji => {
-                emojiPickerHtml += `<button class="emoji-picker-btn" onclick="addFeedReaction('${post.id}', '${emoji}')">${emoji}</button>`;
+AVAILABLE_FEED_EMOJIS.forEach(emoji => {
+                emojiPickerHtml += `<button class="emoji-picker-btn" onclick="toggleFeedReaction('${post.id}', '${emoji}')">${emoji}</button>`;
             });
             emojiPickerHtml += '</div>';
 
             let reactionsHtml = '<div class="feed-reactions-list">';
-            const postReactions = post.reactions || {};
-            for (let emoji in postReactions) {
-                if (postReactions[emoji] > 0) {
-                    reactionsHtml += `<span class="feed-reaction-badge" onclick="addFeedReaction('${post.id}', '${emoji}')">${emoji} ${postReactions[emoji]}</span>`;
+            const rawReactions = post.reactions || {}; 
+            
+            let emojiCounts = {};
+            let mySelectedEmoji = rawReactions[myCurrentId] || null;
+
+            for (let uid in rawReactions) {
+                let emo = rawReactions[uid];
+                if(emo && typeof emo === 'string') {
+                    emojiCounts[emo] = (emojiCounts[emo] || 0) + 1;
+                }
+            }
+
+            for (let emoji in emojiCounts) {
+                if (emojiCounts[emoji] > 0) {
+                    const isMyChoice = (mySelectedEmoji === emoji);
+                    reactionsHtml += `<span class="feed-reaction-badge ${isMyChoice ? 'active' : ''}" onclick="toggleFeedReaction('${post.id}', '${emoji}')">${emoji} ${emojiCounts[emoji]}</span>`;
                 }
             }
             reactionsHtml += '</div>';
@@ -912,7 +949,7 @@ if (error || !data || data.length === 0) {
             
             let commentsHtml = `<div class="feed-comments-section">
                 <button class="toggle-comments-btn" id="comments-btn-${post.id}" onclick="toggleCommentsChat('${post.id}')">
-                    ${isVisible ? "🔼 Свернуть обсуждение" : `💬 Развернуть обсуждение (${commentsList.length})`}
+                    ${isVisible ? '<span>🔼 Свернуть обсуждение</span>' : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> <span>Начать обсуждение (${commentsList.length})</span>`}
                 </button>
                 
                 <div id="comments-area-${post.id}" class="${isVisible ? '' : 'hidden'}" data-count="${commentsList.length}">
@@ -936,7 +973,7 @@ if (error || !data || data.length === 0) {
             card.innerHTML = `
                 <div class="feed-card-header">
                     <div class="ava-wrapper"><div class="chat-ava" style="${avaStyle}"></div></div>
-<div class="feed-card-user">${post.receiver || 'Пользователь'} <span style="font-size:12px; font-weight:normal; color:gray;">(ID: ${post.sender})</span></div>
+                    <div class="feed-card-user">${nameHtml} <span style="font-size:12px; font-weight:normal; color:gray;">(ID: ${post.sender})</span></div>
                     <div class="feed-card-time">${timeFormatted} ${deleteBtnHtml}</div>
                 </div>
                 ${mediaElement}
@@ -957,7 +994,7 @@ if (error || !data || data.length === 0) {
 
     async function sendFeedComment(postId) {
         const input = document.getElementById(`feed-comm-input-${postId}`);
-        const txt = input.value.trim();
+const txt = input.value.trim();
         if (!txt) return;
 
         input.disabled = true;
@@ -990,11 +1027,17 @@ if (error || !data || data.length === 0) {
         }
     }
 
-    async function addFeedReaction(postId, emoji) {
+    async function toggleFeedReaction(postId, emoji) {
         const { data: post } = await supabaseClient.from('messages').select('reactions').eq('id', postId).single();
         if (post) {
-            let currentReactions = post.reactions || {};
-            currentReactions[emoji] = (currentReactions[emoji] || 0) + 1;
+            let currentReactions = post.reactions || {}; 
+            
+            if (currentReactions[myCurrentId] === emoji) {
+                delete currentReactions[myCurrentId];
+            } else {
+                currentReactions[myCurrentId] = emoji;
+            }
+            
             await supabaseClient.from('messages').update({ reactions: currentReactions }).eq('id', postId);
             loadFeed();
         }
@@ -1010,10 +1053,34 @@ if (error || !data || data.length === 0) {
         }
     }
 
+    async function checkUserSystemBan(id) {
+        try {
+            const { data: user } = await supabaseClient.from('users').select('is_banned, ban_until').eq('id', id).maybeSingle();
+            if (user && user.is_banned) {
+                if (user.ban_until) {
+                    const banDate = new Date(user.ban_until);
+                    if (banDate > new Date()) {
+                        const daysLeft = Math.ceil((banDate - new Date()) / (1000 * 60 * 60 * 24));
+                        alert(`Ваш профиль временно заблокирован на ${daysLeft} дней модератором системы.`);
+                        document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><h2>🛡️ Доступ заблокирован</h2><p>Вы нарушили правила. Блокировка истекает через: <b>${daysLeft} дн.</b></p></div>`;
+                        return true; 
+                    } else {
+                        await supabaseClient.from('users').update({ is_banned: false, ban_until: null }).eq('id', id);
+                    }
+                } else {
+                    alert("Ваш профиль заблокирован НАВСЕГДА администратором.");
+                    document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><h2>🚫 Вечный бан</h2><p>Ваш аккаунт заблокирован навсегда без права разблокировки.</p></div>`;
+                    return true; 
+                }
+            }
+        } catch(e) {}
+        return false;
+    }
+
     async function handleAuth() {
         const id = document.getElementById('myId').value.trim();
         const name = document.getElementById('myName').value.trim();
-        const password = document.getElementById('myPassword').value.trim();
+const password = document.getElementById('myPassword').value.trim();
         const log = document.getElementById('auth-log');
         const loader = document.getElementById('auth-loader');
         const loaderText = document.getElementById('loader-text');
@@ -1028,6 +1095,11 @@ if (error || !data || data.length === 0) {
         loader.classList.add('show');
 
         try {
+            if (authMode === "login") {
+                const isBanned = await checkUserSystemBan(id);
+                if (isBanned) return;
+            }
+
             const { data: userExist } = await supabaseClient.from('users').select('*').eq('id', id).maybeSingle();
 
             if (authMode === "login") {
@@ -1037,7 +1109,7 @@ if (error || !data || data.length === 0) {
                     return;
                 }
                 if (userExist.password && userExist.password !== password) {
-log.innerText = "Неверный пароль!";
+                    log.innerText = "Неверный пароль!";
                     loader.classList.remove('show');
                     return;
                 }
@@ -1051,7 +1123,7 @@ log.innerText = "Неверный пароль!";
                     return;
                 }
                 await supabaseClient.from('users').insert([
-                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "" }
+                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "", is_banned: false, ban_until: null }
                 ]);
                 myCurrentName = name;
             }
@@ -1063,7 +1135,15 @@ log.innerText = "Неверный пароль!";
 
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
-            document.getElementById('view-name').innerText = myCurrentName;
+            
+            const viewNameNode = document.getElementById('view-name');
+            if(id === '7777') {
+                viewNameNode.innerHTML = `${myCurrentName} ${VERIFIED_BADGE_SVG}`;
+                document.getElementById('developer-admin-panel').classList.remove('hidden');
+            } else {
+                viewNameNode.innerText = myCurrentName;
+            }
+            
             document.getElementById('view-id').innerText = "ID: " + id;
 
             updateAvaUI();
@@ -1078,6 +1158,33 @@ log.innerText = "Неверный пароль!";
             log.innerText = "Ошибка сети.";
         } finally {
             loader.classList.remove('show');
+        }
+    }
+
+    async function executeSystemBan(shouldBan) {
+        const target = document.getElementById('admin-ban-id').value.trim();
+        const days = document.getElementById('admin-ban-time').value.trim();
+        
+        if(!target) return alert("Введите ID пользователя!");
+        
+        let banIsoString = null;
+        if(shouldBan && days) {
+            let d = new Date();
+            d.setDate(d.getDate() + parseInt(days));
+            banIsoString = d.toISOString();
+        }
+        
+        const { error } = await supabaseClient.from('users').update({
+            is_banned: shouldBan,
+            ban_until: banIsoString
+        }).eq('id', target);
+        
+        if(!error) {
+            alert(shouldBan ? `Пользователь ${target} заблокирован!` : `Пользователь ${target} успешно разблокирован!`);
+document.getElementById('admin-ban-id').value = '';
+            document.getElementById('admin-ban-time').value = '';
+        } else {
+            alert("Ошибка базы данных: " + error.message);
         }
     }
 
@@ -1131,8 +1238,14 @@ log.innerText = "Неверный пароль!";
                     }
                 } else {
                     chatDot.classList.remove('online');
-bottomTyping.style.display = 'none';
-                    chatTxt.innerText = "был(а) недавно";
+                    bottomTyping.style.display = 'none';
+                    
+                    if(u.last_seen) {
+                        const t = new Date(u.last_seen);
+                        chatTxt.innerText = "был(а) в " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    } else {
+                        chatTxt.innerText = "не в сети";
+                    }
                     chatTxt.style.color = "var(--gray)";
                 }
             }
@@ -1160,7 +1273,7 @@ bottomTyping.style.display = 'none';
         }
 
         btn.disabled = true;
-        btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
+btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
         log.innerText = "";
 
         try {
@@ -1184,6 +1297,21 @@ bottomTyping.style.display = 'none';
     function showPushNotification(senderId, title, text, ava) {
         if (activeChatPeerId === senderId || isContactBlocked(senderId)) return;
 
+        // Отправка системного браузерного уведомления со звуком, если приложение свернуто
+        if (document.hidden && window.Notification && Notification.permission === "granted") {
+            try {
+                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2357/2357-84.wav'); 
+                audio.volume = 0.5;
+                audio.play();
+            } catch(e){}
+            
+            new Notification(`One Link | ${title}`, {
+                body: text || "📎 Вложение",
+                icon: ava || 'https://cdn-icons-png.flaticon.com/512/733/733585.png'
+            });
+        }
+
+        // Стандартная всплывашка внутри приложения
         playNotificationSound();
         const push = document.getElementById('push-notif');
         const pAva = document.getElementById('push-ava');
@@ -1220,14 +1348,14 @@ bottomTyping.style.display = 'none';
                     return;
                 }
                 const row = payload.new;
-// Фильтр блокировки: если отправитель в черном списке, игнорируем любые его действия
+                
                 if (row.sender && isContactBlocked(row.sender)) return;
 
                 if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
                 if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
                 
                 if (row.type === 'chat') {
-                    if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
+if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
                         loadChatHistory(activeChatPeerId);
                     }
                     if (row.receiver === myCurrentId && row.sender !== activeChatPeerId) {
@@ -1277,7 +1405,7 @@ bottomTyping.style.display = 'none';
         div.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px;">
                 <div class="ava-wrapper"><div class="chat-ava" style="${bgStyle}"></div></div>
-                <span><b>${name} (ID: ${id})</b></span>
+                <span><b style="color:#000;">${name} (ID: ${id})</b></span>
             </div>
             <div style="display:flex; gap:6px;">
                 <button class="btn btn-green" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="acceptReq('${id}','${name}','${ava}')">✔</button>
@@ -1292,7 +1420,16 @@ bottomTyping.style.display = 'none';
     }
 
     async function acceptReq(id, name, ava) {
-        saveContact(id, name, ava);
+        // Запрос актуального профиля из базы данных users, чтобы подтянуть аву, даже если друг в оффлайне!
+        const { data: targetProfile } = await supabaseClient.from('users').select('name, ava').eq('id', id).maybeSingle();
+        let finalName = name;
+        let finalAva = ava;
+        if(targetProfile) {
+            if(targetProfile.name) finalName = targetProfile.name;
+            if(targetProfile.ava) finalAva = targetProfile.ava;
+        }
+
+        saveContact(id, finalName, finalAva);
         const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
         await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: id, text: myCurrentName, media: myAva, type: 'accept' }]);
 await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
@@ -1302,7 +1439,7 @@ await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', m
         const badge = document.getElementById('badge');
         if(list.children.length === 0) { badge.style.display = 'none'; list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>'; } else { badge.innerText = list.children.length; }
 
-        openChat(id, name, ava);
+        openChat(id, finalName, finalAva);
         nav('chat', document.querySelectorAll('.nav-item')[4]);
     }
 
@@ -1456,7 +1593,7 @@ win.appendChild(d);
         renderSavedContacts();
     }
 
-    function renderSavedContacts() {
+    async function renderSavedContacts() {
         const listProfile = document.getElementById('contacts-list');
         const listChat = document.getElementById('chat-contacts-list');
         
@@ -1481,15 +1618,17 @@ win.appendChild(d);
             div.style.alignItems = 'stretch';
             
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
+            const isDev = (id === '7777');
+            const nameHtml = isDev ? `${contacts[id].name} ${VERIFIED_BADGE_SVG}` : contacts[id].name;
             
             div.innerHTML = `
-                <div style="display:flex; align-items:center; gap:12px; width:100%;" onclick="openChat('${id}', '${contacts[id].name}', '${contacts[id].ava}')">
-<div class="ava-wrapper">
+<div style="display:flex; align-items:center; gap:12px; width:100%;" onclick="openChat('${id}', '${contacts[id].name}', '${contacts[id].ava}')">
+                    <div class="ava-wrapper">
                         <div class="chat-ava" style="${bgStyle}"></div>
                         <div id="dot-${id}" class="status-dot"></div>
                     </div>
                     <div>
-                        <b style="color: #000;">${contacts[id].name}</b><br><span style="font-size:12px; color:gray;">ID: ${id}</span>
+                        <b style="color: #000; display:flex; align-items:center; gap:3px;">${nameHtml}</b><span style="font-size:12px; color:gray;">ID: ${id}</span>
                     </div>
                     ${isBlocked ? '<span class="blocked-badge">🚫 Блок</span>' : ''}
                 </div>
@@ -1499,7 +1638,6 @@ win.appendChild(d);
                 </div>
             `;
             
-            // Фикс для кнопки разблокировки
             if(isBlocked) {
                 const blockBtn = div.querySelector('.btn-mini-block');
                 blockBtn.onclick = (event) => {
@@ -1517,11 +1655,20 @@ win.appendChild(d);
         }
     }
 
-    function openChat(id, name, ava) {
+    async function openChat(id, name, ava) {
         activeChatPeerId = id;
-        document.getElementById('chat-with').innerText = name;
+        
+        const isDev = (id === '7777');
+        document.getElementById('chat-with').innerHTML = isDev ? `${name} ${VERIFIED_BADGE_SVG}` : name;
+        
+        // Подгружаем актуальную аву напрямую из БД, даже если друг оффлайн!
         const pAva = document.getElementById('peer-ava');
-        if(ava) pAva.style.backgroundImage = `url(${ava})`; else pAva.style.backgroundImage = 'none';
+        const { data: realUser } = await supabaseClient.from('users').select('ava').eq('id', id).maybeSingle();
+        let finalAva = ava;
+        if(realUser && realUser.ava) {
+            finalAva = realUser.ava;
+        }
+        if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.backgroundImage = 'none';
         
         document.getElementById('chat-empty').classList.add('hidden');
         document.getElementById('chat-ui').classList.remove('hidden');
@@ -1560,7 +1707,7 @@ win.appendChild(d);
         const versionTag = document.getElementById('version-tag');
         if (t === 'chat' && activeChatPeerId !== "") {
             versionTag.style.opacity = '0';
-            setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
+setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
         } else {
             versionTag.style.display = 'block';
             setTimeout(() => versionTag.style.opacity = '1', 10);
@@ -1572,9 +1719,13 @@ win.appendChild(d);
     }
 
     window.onload = () => {
+        if (window.Notification && Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+
         const savedId = localStorage.getItem('ol_id');
         const savedName = localStorage.getItem('ol_name');
-const savedPass = localStorage.getItem('ol_pass');
+        const savedPass = localStorage.getItem('ol_pass');
         if(savedId && savedPass) {
             document.getElementById('myId').value = savedId;
             document.getElementById('myName').value = savedName || "";
