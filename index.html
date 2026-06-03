@@ -1123,7 +1123,7 @@ const password = document.getElementById('myPassword').value.trim();
                     return;
                 }
                 await supabaseClient.from('users').insert([
-                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "", is_banned: false, ban_until: null }
+                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "", is_banned: false, ban_until: null, is_online: true }
                 ]);
                 myCurrentName = name;
             }
@@ -1151,9 +1151,16 @@ const password = document.getElementById('myPassword').value.trim();
             listenForIncomingData();
             loadFeed();
             
-            updateMyStatus();
-            setInterval(updateMyStatus, 3000);
+            updateMyStatus(true);
+            setInterval(() => updateMyStatus(true), 3000);
             setInterval(checkContactsOnline, 3000);
+
+            // Слушаем уход пользователя со страницы, чтобы сразу гасить онлайн
+            window.addEventListener('beforeunload', () => updateMyStatus(false));
+            document.addEventListener('visibilitychange', () => {
+                updateMyStatus(document.visibilityState === 'visible');
+            });
+
         } catch(e) {
             log.innerText = "Ошибка сети.";
         } finally {
@@ -1172,7 +1179,7 @@ const password = document.getElementById('myPassword').value.trim();
             let d = new Date();
             d.setDate(d.getDate() + parseInt(days));
             banIsoString = d.toISOString();
-        }
+}
         
         const { error } = await supabaseClient.from('users').update({
             is_banned: shouldBan,
@@ -1181,21 +1188,24 @@ const password = document.getElementById('myPassword').value.trim();
         
         if(!error) {
             alert(shouldBan ? `Пользователь ${target} заблокирован!` : `Пользователь ${target} успешно разблокирован!`);
-document.getElementById('admin-ban-id').value = '';
+            document.getElementById('admin-ban-id').value = '';
             document.getElementById('admin-ban-time').value = '';
         } else {
             alert("Ошибка базы данных: " + error.message);
         }
     }
 
-    async function updateMyStatus() {
+    async function updateMyStatus(onlineStatus = true) {
         if (!myCurrentId) return;
-        await supabaseClient.from('users').update({ last_seen: new Date().toISOString() }).eq('id', myCurrentId);
+        await supabaseClient.from('users').update({ 
+            last_seen: new Date().toISOString(),
+            is_online: onlineStatus
+        }).eq('id', myCurrentId);
     }
 
     async function checkContactsOnline() {
         if (!myCurrentId) return;
-        const { data: usersData } = await supabaseClient.from('users').select('id, name, ava, last_seen, typing_to');
+        const { data: usersData } = await supabaseClient.from('users').select('id, name, ava, last_seen, typing_to, is_online');
         if (!usersData) return;
 
         const bottomTyping = document.getElementById('bottom-typing-status');
@@ -1203,7 +1213,8 @@ document.getElementById('admin-ban-id').value = '';
         usersData.forEach(u => {
             if (u.id === myCurrentId) return;
 
-            const isOnline = u.last_seen && (new Date() - new Date(u.last_seen) < 6000);
+            // Контакт считается онлайн, если флаг true И запись обновлялась менее 8 секунд назад
+            const isOnline = u.is_online && u.last_seen && (new Date() - new Date(u.last_seen) < 8000);
             knownUsersCache[u.id] = isOnline; 
 
             const dots = document.querySelectorAll('#dot-' + u.id);
@@ -1257,7 +1268,7 @@ document.getElementById('admin-ban-id').value = '';
         await supabaseClient.from('users').update({ typing_to: activeChatPeerId }).eq('id', myCurrentId);
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(async () => {
-            await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
+await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
         }, 1500);
     }
 
@@ -1273,7 +1284,7 @@ document.getElementById('admin-ban-id').value = '';
         }
 
         btn.disabled = true;
-btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
+        btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
         log.innerText = "";
 
         try {
@@ -1344,7 +1355,7 @@ btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
                     checkExistingRequests();
                     if (!document.getElementById('tab-feed').classList.contains('hidden')) {
                         loadFeed();
-                    }
+}
                     return;
                 }
                 const row = payload.new;
@@ -1355,7 +1366,7 @@ btn.innerHTML = `<div class="spinner"></div> <span>Поиск...</span>`;
                 if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
                 
                 if (row.type === 'chat') {
-if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
+                    if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
                         loadChatHistory(activeChatPeerId);
                     }
                     if (row.receiver === myCurrentId && row.sender !== activeChatPeerId) {
@@ -1370,6 +1381,12 @@ if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.se
                         loadFeed();
                     }
                 }
+            }).subscribe();
+
+        // Дополнительно вешаем реалтайм-слушатель изменений в таблице users, чтобы плавно ловить смену typing_to и онлайна
+        supabaseClient.channel('public:users')
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
+                checkContactsOnline();
             }).subscribe();
 
         checkExistingRequests();
@@ -1415,12 +1432,11 @@ if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.se
         list.appendChild(div);
 
         const badge = document.getElementById('badge');
-        badge.innerText = list.children.length;
+badge.innerText = list.children.length;
         badge.style.display = 'block';
     }
 
     async function acceptReq(id, name, ava) {
-        // Запрос актуального профиля из базы данных users, чтобы подтянуть аву, даже если друг в оффлайне!
         const { data: targetProfile } = await supabaseClient.from('users').select('name, ava').eq('id', id).maybeSingle();
         let finalName = name;
         let finalAva = ava;
@@ -1432,7 +1448,7 @@ if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.se
         saveContact(id, finalName, finalAva);
         const myAva = localStorage.getItem('ol_ava_' + myCurrentId) || "";
         await supabaseClient.from('messages').insert([{ sender: myCurrentId, receiver: id, text: myCurrentName, media: myAva, type: 'accept' }]);
-await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
+        await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', myCurrentId).eq('type', 'request');
         document.getElementById('req-item-' + id).remove();
         
         const list = document.getElementById('req-list');
@@ -1502,8 +1518,7 @@ await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', m
                 const direction = msg.sender === myCurrentId ? 'out' : 'in';
                 const d = document.createElement('div');
                 d.className = 'bubble ' + direction;
-                
-                d.onclick = () => {
+d.onclick = () => {
                     if (msg.media || msg.text.startsWith('data:image')) {
                         openMediaModal(msg, direction === 'out');
                     } else if (direction === 'out') {
@@ -1519,7 +1534,7 @@ await supabaseClient.from('messages').delete().eq('sender', id).eq('receiver', m
                         const ed = document.createElement('span'); ed.className = 'edited-label'; ed.innerText = ' (изм.)'; d.appendChild(ed);
                     }
                 }
-win.appendChild(d);
+                win.appendChild(d);
             });
         }
         win.scrollTop = win.scrollHeight;
@@ -1603,7 +1618,7 @@ win.appendChild(d);
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
         
         if (Object.keys(contacts).length === 0) {
-            const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
+const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
             listProfile.innerHTML = emptyTxt; 
             listChat.innerHTML = emptyTxt;
             return;
@@ -1622,7 +1637,7 @@ win.appendChild(d);
             const nameHtml = isDev ? `${contacts[id].name} ${VERIFIED_BADGE_SVG}` : contacts[id].name;
             
             div.innerHTML = `
-<div style="display:flex; align-items:center; gap:12px; width:100%;" onclick="openChat('${id}', '${contacts[id].name}', '${contacts[id].ava}')">
+                <div style="display:flex; align-items:center; gap:12px; width:100%;" onclick="openChat('${id}', '${contacts[id].name}', '${contacts[id].ava}')">
                     <div class="ava-wrapper">
                         <div class="chat-ava" style="${bgStyle}"></div>
                         <div id="dot-${id}" class="status-dot"></div>
@@ -1661,7 +1676,6 @@ win.appendChild(d);
         const isDev = (id === '7777');
         document.getElementById('chat-with').innerHTML = isDev ? `${name} ${VERIFIED_BADGE_SVG}` : name;
         
-        // Подгружаем актуальную аву напрямую из БД, даже если друг оффлайн!
         const pAva = document.getElementById('peer-ava');
         const { data: realUser } = await supabaseClient.from('users').select('ava').eq('id', id).maybeSingle();
         let finalAva = ava;
@@ -1686,7 +1700,7 @@ win.appendChild(d);
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         
         const targetTab = document.getElementById('tab-' + t);
-        targetTab.classList.remove('hidden');
+targetTab.classList.remove('hidden');
         
         if(t === 'chat') {
             setTimeout(() => targetTab.classList.add('slide-active'), 10);
@@ -1707,7 +1721,7 @@ win.appendChild(d);
         const versionTag = document.getElementById('version-tag');
         if (t === 'chat' && activeChatPeerId !== "") {
             versionTag.style.opacity = '0';
-setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
+            setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
         } else {
             versionTag.style.display = 'block';
             setTimeout(() => versionTag.style.opacity = '1', 10);
@@ -1715,7 +1729,9 @@ setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display
     }
 
     function logout() { 
-        localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); localStorage.removeItem('ol_pass'); location.reload(); 
+        updateMyStatus(false).then(() => {
+            localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); localStorage.removeItem('ol_pass'); location.reload(); 
+        });
     }
 
     window.onload = () => {
