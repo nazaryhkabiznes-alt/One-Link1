@@ -476,7 +476,6 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
                     <button class="chat-back-btn" onclick="backToDialogs()">←</button>
                     
                     <div class="ava-wrapper">
-                        <div id="peer-ava" class="chat-ava"></div>
                         <div id="peer-status-dot" class="status-dot"></div>
                     </div>
                     <div style="flex: 1;">
@@ -493,8 +492,8 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
 
                 <div class="chat-input-panel">
                     <div class="emoji-picker" id="emoji-picker">
-<span onclick="addEmoji('😀')">😀</span>
-                        <span onclick="addEmoji('😂')">😂</span>
+                        <span onclick="addEmoji('😀')">😀</span>
+<span onclick="addEmoji('😂')">😂</span>
                         <span onclick="addEmoji('🔥')">🔥</span>
                         <span onclick="addEmoji('👍')">👍</span>
                         <span onclick="addEmoji('❤️')">❤️</span>
@@ -563,13 +562,12 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
     let localDeletedMessages = JSON.parse(localStorage.getItem('ol_deleted_msgs') || '[]');
     let clickPushData = null;
     let commentsVisibilityState = {};
-const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
 
-    const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
+    const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
+const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // SVG синяя галочка разработчика
     const VERIFIED_BADGE_SVG = `<svg class="verified-badge" width="16" height="16" viewBox="0 0 24 24" fill="#0077ff" style="display:inline-block; vertical-align:middle; margin-left:3px;"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`;
 
     function playNotificationSound() {
@@ -646,10 +644,10 @@ const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
         actionsContainer.innerHTML = '';
 
         const saveBtn = document.createElement('button');
-saveBtn.className = 'modal-btn save';
+        saveBtn.className = 'modal-btn save';
         saveBtn.innerText = '💾 Сохранить файл';
         saveBtn.onclick = () => {
-            const link = document.createElement('a');
+const link = document.createElement('a');
             link.href = src;
             link.download = 'onelink_media_' + Date.now() + (customType === 'video' ? '.mp4' : '.png');
             link.click();
@@ -746,11 +744,12 @@ saveBtn.className = 'modal-btn save';
     async function publishFeedPost(event) {
         const file = event.target.files[0];
         if (!file) return;
-const uploadBtn = document.getElementById('feedUploadBtn');
+
+        const uploadBtn = document.getElementById('feedUploadBtn');
         const origContent = uploadBtn.innerHTML;
         
         uploadBtn.disabled = true;
-        uploadBtn.innerText = "⏳ Публикация...";
+uploadBtn.innerText = "⏳ Публикация...";
 
         try {
             const todayStr = new Date().toISOString().split('T')[0];
@@ -836,11 +835,11 @@ const uploadBtn = document.getElementById('feedUploadBtn');
 
     function blockContact(id) {
         let mins = prompt("На сколько минут заблокировать пользователя? (Введите цифру, он не сможет вам писать)", "15");
-if (!mins || isNaN(mins)) return;
+        if (!mins || isNaN(mins)) return;
 
         let until = Date.now() + (parseInt(mins) * 60 * 1000);
         let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
-        blocks[id] = until;
+blocks[id] = until;
         localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
         
         alert(`Пользователь заблокирован на ${mins} мин.`);
@@ -918,10 +917,10 @@ if (!mins || isNaN(mins)) return;
             const nameHtml = isDev ? `${post.receiver || 'Разработчик'} ${VERIFIED_BADGE_SVG}` : (post.receiver || 'Пользователь');
 
             let emojiPickerHtml = '<div class="emoji-picker-panel">';
-AVAILABLE_FEED_EMOJIS.forEach(emoji => {
+            AVAILABLE_FEED_EMOJIS.forEach(emoji => {
                 emojiPickerHtml += `<button class="emoji-picker-btn" onclick="toggleFeedReaction('${post.id}', '${emoji}')">${emoji}</button>`;
             });
-            emojiPickerHtml += '</div>';
+emojiPickerHtml += '</div>';
 
             let reactionsHtml = '<div class="feed-reactions-list">';
             const rawReactions = post.reactions || {}; 
@@ -994,14 +993,14 @@ AVAILABLE_FEED_EMOJIS.forEach(emoji => {
 
     async function sendFeedComment(postId) {
         const input = document.getElementById(`feed-comm-input-${postId}`);
-const txt = input.value.trim();
+        const txt = input.value.trim();
         if (!txt) return;
 
         input.disabled = true;
 
         const { data: post } = await supabaseClient.from('messages').select('feed_comments').eq('id', postId).single();
         if (post) {
-            let currentComments = post.feed_comments || [];
+let currentComments = post.feed_comments || [];
             currentComments.push({ senderId: myCurrentId, user: myCurrentName, comment: txt });
             
             const { error: updateError } = await supabaseClient.from('messages')
@@ -1080,10 +1079,10 @@ const txt = input.value.trim();
     async function handleAuth() {
         const id = document.getElementById('myId').value.trim();
         const name = document.getElementById('myName').value.trim();
-const password = document.getElementById('myPassword').value.trim();
+        const password = document.getElementById('myPassword').value.trim();
         const log = document.getElementById('auth-log');
         const loader = document.getElementById('auth-loader');
-        const loaderText = document.getElementById('loader-text');
+const loaderText = document.getElementById('loader-text');
 
         if(!id || !name || !password) {
             log.innerText = "Заполните все три поля!";
@@ -1151,11 +1150,10 @@ const password = document.getElementById('myPassword').value.trim();
             listenForIncomingData();
             loadFeed();
             
-            updateMyStatus(true);
-            setInterval(() => updateMyStatus(true), 3000);
-            setInterval(checkContactsOnline, 3000);
+            // Запуск heartbeat пинга
+            await updateMyStatus(true);
+            setInterval(() => updateMyStatus(true), 4000);
 
-            // Слушаем уход пользователя со страницы, чтобы сразу гасить онлайн
             window.addEventListener('beforeunload', () => updateMyStatus(false));
             document.addEventListener('visibilitychange', () => {
                 updateMyStatus(document.visibilityState === 'visible');
@@ -1179,7 +1177,7 @@ const password = document.getElementById('myPassword').value.trim();
             let d = new Date();
             d.setDate(d.getDate() + parseInt(days));
             banIsoString = d.toISOString();
-}
+        }
         
         const { error } = await supabaseClient.from('users').update({
             is_banned: shouldBan,
@@ -1187,7 +1185,7 @@ const password = document.getElementById('myPassword').value.trim();
         }).eq('id', target);
         
         if(!error) {
-            alert(shouldBan ? `Пользователь ${target} заблокирован!` : `Пользователь ${target} успешно разблокирован!`);
+alert(shouldBan ? `Пользователь ${target} заблокирован!` : `Пользователь ${target} успешно разблокирован!`);
             document.getElementById('admin-ban-id').value = '';
             document.getElementById('admin-ban-time').value = '';
         } else {
@@ -1197,70 +1195,72 @@ const password = document.getElementById('myPassword').value.trim();
 
     async function updateMyStatus(onlineStatus = true) {
         if (!myCurrentId) return;
-        await supabaseClient.from('users').update({ 
-            last_seen: new Date().toISOString(),
-            is_online: onlineStatus
-        }).eq('id', myCurrentId);
+        try {
+            await supabaseClient.from('users').update({ 
+                last_seen: new Date().toISOString(),
+                is_online: onlineStatus
+            }).eq('id', myCurrentId);
+        } catch(e) { console.error("Heartbeat error", e); }
     }
 
-    async function checkContactsOnline() {
-        if (!myCurrentId) return;
-        const { data: usersData } = await supabaseClient.from('users').select('id, name, ava, last_seen, typing_to, is_online');
-        if (!usersData) return;
+    // Реалтайм обработчик входящих изменений по статусам юзеров
+    function handleUserStatusUpdate(u) {
+        if (!myCurrentId || u.id === myCurrentId) return;
 
-        const bottomTyping = document.getElementById('bottom-typing-status');
+        // Фикс часовых поясов: разница текущего UTC времени устройства и UTC времени сервера
+        const nowUtc = Date.now();
+        const lastSeenUtc = Date.parse(u.last_seen);
+        const isOnline = u.is_online && (nowUtc - lastSeenUtc < 10000);
+        
+        knownUsersCache[u.id] = isOnline; 
 
-        usersData.forEach(u => {
-            if (u.id === myCurrentId) return;
-
-            // Контакт считается онлайн, если флаг true И запись обновлялась менее 8 секунд назад
-            const isOnline = u.is_online && u.last_seen && (new Date() - new Date(u.last_seen) < 8000);
-            knownUsersCache[u.id] = isOnline; 
-
-            const dots = document.querySelectorAll('#dot-' + u.id);
-            dots.forEach(dot => {
-                if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
-            });
-
-            let localContacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
-            if (localContacts[u.id]) {
-                if (localContacts[u.id].name !== u.name || localContacts[u.id].ava !== u.ava) {
-                    localContacts[u.id].name = u.name;
-                    localContacts[u.id].ava = u.ava;
-                    localStorage.setItem('ol_contacts_' + myCurrentId, JSON.stringify(localContacts));
-                    renderSavedContacts();
-                }
-            }
-
-            if (u.id === activeChatPeerId) {
-                const chatDot = document.getElementById('peer-status-dot');
-                const chatTxt = document.getElementById('chat-peer-status-text');
-                
-                if (isOnline) {
-                    chatDot.classList.add('online');
-                    if (u.typing_to === myCurrentId && !isContactBlocked(u.id)) {
-                        bottomTyping.style.display = 'flex';
-                        chatTxt.innerText = "печатает...";
-                        chatTxt.style.color = "var(--blue)";
-                    } else {
-                        bottomTyping.style.display = 'none';
-                        chatTxt.innerText = "в сети";
-                        chatTxt.style.color = "var(--green)";
-                    }
-                } else {
-                    chatDot.classList.remove('online');
-                    bottomTyping.style.display = 'none';
-                    
-                    if(u.last_seen) {
-                        const t = new Date(u.last_seen);
-                        chatTxt.innerText = "был(а) в " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    } else {
-                        chatTxt.innerText = "не в сети";
-                    }
-                    chatTxt.style.color = "var(--gray)";
-                }
-            }
+        // Ищем все точки этого контакта и красим их
+        const dots = document.querySelectorAll('#dot-' + u.id);
+        dots.forEach(dot => {
+            if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
         });
+
+        // Синхронизируем локальный кэш контактов
+        let localContacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+        if (localContacts[u.id]) {
+            if (localContacts[u.id].name !== u.name || localContacts[u.id].ava !== u.ava) {
+                localContacts[u.id].name = u.name;
+                localContacts[u.id].ava = u.ava;
+                localStorage.setItem('ol_contacts_' + myCurrentId, JSON.stringify(localContacts));
+                renderSavedContacts();
+            }
+        }
+
+        // Если с этим пользователем сейчас открыт чат, обновляем шапку и плашку "печатает"
+        if (u.id === activeChatPeerId) {
+            const chatDot = document.getElementById('peer-status-dot');
+            const chatTxt = document.getElementById('chat-peer-status-text');
+            const bottomTyping = document.getElementById('bottom-typing-status');
+            
+            if (isOnline) {
+                chatDot.classList.add('online');
+                if (u.typing_to === myCurrentId && !isContactBlocked(u.id)) {
+                    bottomTyping.style.display = 'flex';
+                    chatTxt.innerText = "печатает...";
+                    chatTxt.style.color = "var(--blue)";
+                } else {
+                    bottomTyping.style.display = 'none';
+                    chatTxt.innerText = "в сети";
+                    chatTxt.style.color = "var(--green)";
+                }
+            } else {
+                chatDot.classList.remove('online');
+                bottomTyping.style.display = 'none';
+                
+                if(u.last_seen) {
+                    const t = new Date(u.last_seen);
+                    chatTxt.innerText = "был(а) в " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                } else {
+                    chatTxt.innerText = "не в сети";
+                }
+                chatTxt.style.color = "var(--gray)";
+            }
+        }
     }
 
     async function handleTyping() {
@@ -1268,14 +1268,14 @@ const password = document.getElementById('myPassword').value.trim();
         await supabaseClient.from('users').update({ typing_to: activeChatPeerId }).eq('id', myCurrentId);
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(async () => {
-await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
+            await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
         }, 1500);
     }
 
     async function sendReq() {
         const tid = document.getElementById('targetId').value.trim();
         const log = document.getElementById('search-log');
-        const btn = document.getElementById('search-btn');
+const btn = document.getElementById('search-btn');
         if(!tid || tid === myCurrentId) return;
 
         if (isContactBlocked(tid)) {
@@ -1308,7 +1308,6 @@ await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentI
     function showPushNotification(senderId, title, text, ava) {
         if (activeChatPeerId === senderId || isContactBlocked(senderId)) return;
 
-        // Отправка системного браузерного уведомления со звуком, если приложение свернуто
         if (document.hidden && window.Notification && Notification.permission === "granted") {
             try {
                 const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2357/2357-84.wav'); 
@@ -1322,7 +1321,6 @@ await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentI
             });
         }
 
-        // Стандартная всплывашка внутри приложения
         playNotificationSound();
         const push = document.getElementById('push-notif');
         const pAva = document.getElementById('push-ava');
@@ -1355,7 +1353,7 @@ await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentI
                     checkExistingRequests();
                     if (!document.getElementById('tab-feed').classList.contains('hidden')) {
                         loadFeed();
-}
+                    }
                     return;
                 }
                 const row = payload.new;
@@ -1363,7 +1361,7 @@ await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentI
                 if (row.sender && isContactBlocked(row.sender)) return;
 
                 if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
-                if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
+if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
                 
                 if (row.type === 'chat') {
                     if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
@@ -1383,10 +1381,10 @@ await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentI
                 }
             }).subscribe();
 
-        // Дополнительно вешаем реалтайм-слушатель изменений в таблице users, чтобы плавно ловить смену typing_to и онлайна
+        // Подписываемся на Realtime изменения таблицы users. Получаем событие -> мгновенно обновляем UI
         supabaseClient.channel('public:users')
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
-                checkContactsOnline();
+                handleUserStatusUpdate(payload.new);
             }).subscribe();
 
         checkExistingRequests();
@@ -1432,7 +1430,7 @@ await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentI
         list.appendChild(div);
 
         const badge = document.getElementById('badge');
-badge.innerText = list.children.length;
+        badge.innerText = list.children.length;
         badge.style.display = 'block';
     }
 
@@ -1441,7 +1439,7 @@ badge.innerText = list.children.length;
         let finalName = name;
         let finalAva = ava;
         if(targetProfile) {
-            if(targetProfile.name) finalName = targetProfile.name;
+if(targetProfile.name) finalName = targetProfile.name;
             if(targetProfile.ava) finalAva = targetProfile.ava;
         }
 
@@ -1518,7 +1516,8 @@ badge.innerText = list.children.length;
                 const direction = msg.sender === myCurrentId ? 'out' : 'in';
                 const d = document.createElement('div');
                 d.className = 'bubble ' + direction;
-d.onclick = () => {
+                
+                d.onclick = () => {
                     if (msg.media || msg.text.startsWith('data:image')) {
                         openMediaModal(msg, direction === 'out');
                     } else if (direction === 'out') {
@@ -1527,7 +1526,7 @@ d.onclick = () => {
                 };
 
                 if(msg.media) {
-                    const img = document.createElement('img'); img.src = msg.media; d.appendChild(img);
+const img = document.createElement('img'); img.src = msg.media; d.appendChild(img);
                 } else { 
                     d.innerText = msg.text; 
                     if (msg.is_edited) {
@@ -1618,7 +1617,7 @@ d.onclick = () => {
         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
         
         if (Object.keys(contacts).length === 0) {
-const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
+            const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
             listProfile.innerHTML = emptyTxt; 
             listChat.innerHTML = emptyTxt;
             return;
@@ -1629,7 +1628,7 @@ const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margi
 
             const div = document.createElement('div');
             div.className = 'contact-item';
-            div.style.flexDirection = 'column';
+div.style.flexDirection = 'column';
             div.style.alignItems = 'stretch';
             
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
@@ -1668,6 +1667,14 @@ const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margi
             listProfile.appendChild(div.cloneNode(true));
             listChat.appendChild(div);
         }
+        
+        // Сразу после отрисовки контактов делаем разовый запрос актуальных статусов
+        try {
+            const { data: currentUsers } = await supabaseClient.from('users').select('id, last_seen, is_online, typing_to, name, ava');
+            if (currentUsers) {
+                currentUsers.forEach(u => handleUserStatusUpdate(u));
+            }
+        } catch(e){}
     }
 
     async function openChat(id, name, ava) {
@@ -1687,20 +1694,25 @@ const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margi
         document.getElementById('chat-empty').classList.add('hidden');
         document.getElementById('chat-ui').classList.remove('hidden');
         
-        checkContactsOnline();
         loadChatHistory(id);
 
         const versionTag = document.getElementById('version-tag');
         versionTag.style.opacity = '0';
         setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
+        
+        // Проверяем статус собеседника сразу при входе в чат
+        if (realUser) {
+            const { data: uStatus } = await supabaseClient.from('users').select('*').eq('id', id).maybeSingle();
+            if(uStatus) handleUserStatusUpdate(uStatus);
+        }
     }
 
     function nav(t, e) {
         document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         
         const targetTab = document.getElementById('tab-' + t);
-targetTab.classList.remove('hidden');
+        targetTab.classList.remove('hidden');
         
         if(t === 'chat') {
             setTimeout(() => targetTab.classList.add('slide-active'), 10);
