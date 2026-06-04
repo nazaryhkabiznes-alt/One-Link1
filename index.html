@@ -21,6 +21,7 @@
             --input-bg: rgba(0, 0, 0, 0.05);
             --admin-border: rgba(255, 59, 48, 0.25);
             --admin-bg: rgba(255, 255, 255, 0.95);
+            --purple-grad: linear-gradient(135deg, #a020f0 0%, #d8bfd8 100%);
         }
         
         body { 
@@ -107,9 +108,9 @@
         .btn-green:active { box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2); }
         .btn-red { background: var(--red-grad); box-shadow: 0 4px 10px rgba(255, 59, 48, 0.3); }
         .btn-red:active { box-shadow: 0 2px 5px rgba(255, 59, 48, 0.2); }
+        .btn-purple { background: var(--purple-grad); box-shadow: 0 4px 10px rgba(160, 32, 240, 0.3); }
         .btn-delete { background: var(--red-grad); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; font-weight: bold;}
         
-        /* Улучшенные реалистичные кнопки контактов */
         .contact-actions-row { display: flex; gap: 8px; margin-top: 10px; width: 100%; }
         .action-mini-btn { 
             flex: 1; 
@@ -130,8 +131,8 @@
         .btn-mini-del:active { transform: scale(0.97); }
         
         .btn-mini-block { background: rgba(0, 0, 0, 0.06); color: #222; }
-        .btn-mini-block:hover { background: #222; color: white; }
-.btn-mini-block.unblock-state { background: rgba(76, 175, 80, 0.08); color: var(--green); }
+.btn-mini-block:hover { background: #222; color: white; }
+        .btn-mini-block.unblock-state { background: rgba(76, 175, 80, 0.08); color: var(--green); }
         .btn-mini-block.unblock-state:hover { background: var(--green); color: white; }
         .btn-mini-block:active { transform: scale(0.97); }
 
@@ -143,7 +144,6 @@
         .verified-badge { fill: var(--blue); animation: pulseBadge 2s infinite ease-in-out; }
         @keyframes pulseBadge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        /* Реалистичная профессиональная админ-панель */
         .admin-box {
             background: var(--admin-bg); 
             border: 1px solid var(--admin-border);
@@ -158,6 +158,7 @@
         .admin-box::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--red-grad);
         }
+        .admin-box.support-box::before { background: var(--blue-grad); }
         .admin-box h4 {
             margin: 0 0 12px 0; 
             font-size: 15px; 
@@ -170,6 +171,7 @@
             font-weight: 700;
         }
         .admin-box h4 svg { width: 16px; height: 16px; fill: var(--red); }
+        .admin-box.support-box h4 svg { fill: var(--blue); }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .admin-box input, .admin-box select { padding: 11px 14px; font-size: 14px; margin: 4px 0 8px 0; border-radius: 10px; background: rgba(0,0,0,0.03); }
 
@@ -210,8 +212,19 @@
             max-width: 85%; margin: 0 auto 15px auto; align-self: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
+        /* Кнопки шаблонов в чате техподдержки */
+        .support-templates-container {
+display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; padding: 0 10px;
+        }
+        .template-chip {
+            background: #fff; border: 1px solid rgba(0,119,255,0.25); color: var(--blue);
+            padding: 10px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 600;
+            cursor: pointer; text-align: left; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .template-chip:active { transform: scale(0.98); background: rgba(0,119,255,0.05); }
+
         .bubble { max-width: 75%; padding: 11px 15px; border-radius: 20px; font-size: 15px; box-shadow: 0 1.5px 4px rgba(0,0,0,0.08); word-wrap: break-word; cursor: pointer; position: relative; transition: opacity 0.2s; animation: popBubble 0.25s ease-out forwards; }
-.bubble:active { opacity: 0.6; }
+        .bubble:active { opacity: 0.6; }
         .bubble img { max-width: 100%; border-radius: 12px; display: block; margin-top: 5px; aspect-ratio: 1 / 1; object-fit: cover; }
         .bubble.in { background: white; align-self: flex-start; border-bottom-left-radius: 5px; transform-origin: left bottom; }
         .bubble.out { background: var(--blue-grad); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(0,119,255,0.2); transform-origin: right bottom; }
@@ -254,7 +267,7 @@
         .toggle-comments-btn:active { background: rgba(0, 119, 255, 0.15); }
         .comments-chat-window { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; margin-bottom: 8px; padding-right: 4px; }
         .feed-comment-item { background: rgba(0,0,0,0.04); padding: 8px 12px; border-radius: 14px; font-size: 13px; line-height: 1.4; max-width: 85%; align-self: flex-start; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .feed-comment-item.my-comm { background: var(--blue-grad); color: white; align-self: flex-end; }
+.feed-comment-item.my-comm { background: var(--blue-grad); color: white; align-self: flex-end; }
         .feed-comment-input-block { display: flex; gap: 8px; margin-top: 4px; }
         .feed-comment-input-block input { flex: 1; margin: 0; padding: 10px 14px; font-size: 14px; border-radius: 12px; background: rgba(0,0,0,0.04); border: 1px solid transparent; }
         .feed-comment-input-block input:focus { background: white; border-color: var(--blue); }
@@ -265,7 +278,7 @@
             display: none; grid-template-columns: repeat(5, 32px); gap: 6px;
             z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
-.emoji-picker span { font-size: 22px; cursor: pointer; text-align: center; transition: transform 0.1s; }
+        .emoji-picker span { font-size: 22px; cursor: pointer; text-align: center; transition: transform 0.1s; }
         .emoji-picker span:active { transform: scale(1.2); }
 
         .modal {
@@ -301,6 +314,7 @@
             box-sizing: border-box;
         }
         .settings-btn.logout { color: var(--red); background-color: rgba(255,59,48,0.06); }
+        .settings-btn.support-trigger { color: var(--blue); background-color: rgba(0,119,255,0.06); }
 
         .feed-header-actions { display: flex; gap: 10px; margin-bottom: 15px; }
         .feed-card { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left; border: 1px solid rgba(0,0,0,0.02); }
@@ -308,8 +322,7 @@
         .feed-card-user { font-weight: bold; font-size: 15px; color: #111; display: flex; align-items: center; gap: 4px; }
         .feed-card-time { font-size: 11px; color: var(--gray); margin-left: auto; display: flex; align-items: center; gap: 8px; }
         .feed-card-media { width: 100%; border-radius: 14px; margin-top: 8px; display: block; max-height: 350px; object-fit: contain; background: #000; cursor: pointer; }
-
-        .push-notification {
+.push-notification {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -322,7 +335,8 @@
         .push-info { flex: 1; overflow: hidden; }
         .push-title { font-weight: bold; font-size: 14px; margin-bottom: 2px; color: var(--blue); }
         .push-text { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
+
+        #msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
         #msg-menu.open { bottom: 0; }
         .menu-btn { width: 100%; padding: 14px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
 
@@ -357,7 +371,7 @@
             animation: tgBounce 1.4s infinite ease-in-out both;
         }
         .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
         @keyframes tgBounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
         .spinner { width: 20px; height: 20px; border: 2.5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; }
@@ -368,7 +382,7 @@
         .full-loader.show { opacity: 1; pointer-events: auto; }
         
         .auth-modes { display: flex; gap: 10px; margin-bottom: 15px; }
-.mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .mode-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
     </style>
 </head>
@@ -396,6 +410,9 @@
     <div id="settings-modal" class="settings-modal" onclick="closeSettings()">
         <div class="settings-card" onclick="event.stopPropagation()">
             <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--blue); text-align: center;">⚙️ Настройки</h3>
+            <button class="settings-btn support-trigger" onclick="openSupportFromSettings(); closeSettings();">
+                <span>🛠️ Написать в техподдержку</span> ➔
+            </button>
             <button class="settings-btn" onclick="changeAccount(); closeSettings();">
                 <span>👤 Изменить аккаунт</span> ➔
             </button>
@@ -421,7 +438,7 @@
                 <div class="spinner spinner-blue" style="width:40px; height:40px; border-width: 4px;"></div>
                 <b id="loader-text" style="color: var(--blue); font-size: 15px;">Проверка...</b>
             </div>
-            <h1 style="color:var(--blue); margin: 0 0 15px 0; font-size: 28px; letter-spacing: -0.5px;">One Link</h1>
+<h1 style="color:var(--blue); margin: 0 0 15px 0; font-size: 28px; letter-spacing: -0.5px;">One Link</h1>
             
             <div class="auth-modes">
                 <button id="mode-login" class="mode-btn active" onclick="setAuthMode('login')">Войти</button>
@@ -439,7 +456,7 @@
 
     <div id="msg-menu">
         <button class="menu-btn" style="background: #f0f2f5; color: black;" onclick="triggerEdit()">✏️ Редактировать</button>
-<button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
+        <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
         <button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
     </div>
 
@@ -485,9 +502,8 @@
                     <div id="developer-admin-panel" class="admin-box hidden">
                         <h4>
                             <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/></svg>
-                            Центр Модерации Системы
+Центр Модерации Системы
                         </h4>
-                        
                         <div class="admin-grid">
                             <div>
                                 <label style="font-size:11px; font-weight:700; color:var(--gray);">ID ПОЛЬЗОВАТЕЛЯ</label>
@@ -501,20 +517,34 @@
                                     <option value="3">3 дня</option>
                                     <option value="7">7 дней</option>
                                     <option value="30">30 дней</option>
-</select>
+                                </select>
                             </div>
                         </div>
-
                         <div style="margin-top: 2px;">
                             <label style="font-size:11px; font-weight:700; color:var(--gray);">ПРИЧИНА ПОДАЧИ БЛОКИРОВКИ</label>
                             <input type="text" id="admin-ban-reason" placeholder="Нарушение правил общения, спам, мошенничество...">
                         </div>
-
                         <div style="display:flex; gap:8px; margin-top:8px;">
                             <button class="btn btn-red" style="flex:1; padding:12px; font-size:14px; border-radius:12px;" onclick="executeSystemBan(true)">Применить Бан</button>
                             <button class="btn btn-green" style="flex:1; padding:12px; font-size:14px; border-radius:12px;" onclick="executeSystemBan(false)">Снять ограничения</button>
                         </div>
                     </div>
+
+                    <div id="support-agent-panel" class="admin-box support-box hidden">
+                        <h4>
+                            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                            Панель Техподдержки (ID 999)
+                        </h4>
+                        <div>
+                            <label style="font-size:11px; font-weight:700; color:var(--gray);">ID ЗАБАНЕННОГО ПОЛЬЗОВАТЕЛЯ</label>
+                            <input type="tel" id="support-target-id" placeholder="Введите ID для разбана" inputmode="numeric">
+                        </div>
+                        <div style="display:flex; gap:8px; margin-top:8px;">
+                            <button class="btn btn-green" style="flex:1; padding:12px; font-size:14px; border-radius:12px;" onclick="executeSupportAction(true)">✅ Разбанить</button>
+                            <button class="btn" style="flex:1; padding:12px; font-size:14px; border-radius:12px; background:#e0e0e0; color:black; box-shadow:none;" onclick="executeSupportAction(false)">❌ Отклонить помощь</button>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="block">
@@ -533,8 +563,7 @@
                     <p id="search-log" style="font-size:14px; margin-top:12px; min-height: 20px;"></p>
                 </div>
             </div>
-
-            <div id="tab-msgs" class="page hidden">
+<div id="tab-msgs" class="page hidden">
                 <div class="block">
                     <h3>Входящие заявки</h3>
                     <div id="req-list"><p style="color:gray; text-align:center;">Пусто</p></div>
@@ -559,6 +588,12 @@
                 
                 <div id="chat-win"></div>
                 
+                <div id="support-templates-box" class="support-templates-container hidden">
+                    <button class="template-chip" onclick="sendSupportTemplate('⚠️ Почему меня заблокировали?')">⚠️ Почему меня заблокировали?</button>
+                    <button class="template-chip" onclick="sendSupportTemplate('🔄 Как мне вернуть свой аккаунт?')">🔄 Как мне вернуть свой аккаунт?</button>
+                    <button class="template-chip" onclick="sendSupportTemplate('🆘 У меня возникла другая техническая проблема')">🆘 Другая техническая проблема</button>
+                </div>
+
                 <div id="bottom-typing-status" class="bottom-typing-panel">
                     печатает<span class="typing-dots"><span></span><span></span><span></span></span>
                 </div>
@@ -576,7 +611,8 @@
                         <span onclick="addEmoji('😡')">😡</span>
                         <span onclick="addEmoji('😮')">😮</span>
                     </div>
-<button class="btn" style="width:40px; background: #555; font-size: 18px; padding: 12px 0; margin:0; box-shadow:none;" onclick="toggleEmojiPicker()">😀</button>
+
+                    <button class="btn" style="width:40px; background: #555; font-size: 18px; padding: 12px 0; margin:0; box-shadow:none;" onclick="toggleEmojiPicker()">😀</button>
                     
                     <label for="media-input" class="btn" style="width:40px; background: #666; font-size: 18px; padding: 12px 0; text-align:center; box-shadow:none; margin:0;">
                         <input type="file" id="media-input" style="display:none" accept="image/*">📎
@@ -593,7 +629,7 @@
                     <div id="chat-contacts-list"></div>
                 </div>
             </div>
-        </div>
+</div>
 
         <footer>
             <div class="nav-item" onclick="nav('feed', this)">
@@ -642,10 +678,11 @@
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const VERIFIED_BADGE_SVG = `<svg class="verified-badge" width="16" height="16" viewBox="0 0 24 24" fill="#0077ff" style="display:inline-block; vertical-align:middle; margin-left:3px;"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`;
+    const SUPPORT_BADGE_SVG = `<svg class="verified-badge" width="16" height="16" viewBox="0 0 24 24" fill="#a020f0" style="display:inline-block; vertical-align:middle; margin-left:3px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.5 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>`;
 
     function playNotificationSound() {
         try {
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
@@ -661,7 +698,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
     function openDevModal() { document.getElementById('dev-screen').classList.add('show'); }
-    function closeDevModal() { document.getElementById('dev-screen').classList.remove('show'); }
+function closeDevModal() { document.getElementById('dev-screen').classList.remove('show'); }
 
     function openSettings() {
         document.getElementById('settings-modal').style.display = 'flex';
@@ -684,10 +721,15 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         activeChatPeerId = "";
         document.getElementById('chat-ui').classList.add('hidden');
         document.getElementById('chat-empty').classList.remove('hidden');
+        document.getElementById('support-templates-box').classList.add('hidden');
         
-        const versionTag = document.getElementById('version-tag');
-        versionTag.style.display = 'block';
-        setTimeout(() => versionTag.style.opacity = '1', 10);
+        if (document.getElementById('app').classList.contains('hidden')) {
+            location.reload(); 
+        } else {
+            const versionTag = document.getElementById('version-tag');
+            versionTag.style.display = 'block';
+            setTimeout(() => versionTag.style.opacity = '1', 10);
+        }
     }
 
     function toggleEmojiPicker() {
@@ -735,7 +777,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (msg) {
             if (!isMyMessage) {
                 deleteBtn.innerText = '🗑️ Удалить у себя';
-deleteBtn.onclick = () => {
+                deleteBtn.onclick = () => {
                     localDeletedMessages.push(msg.id);
                     localStorage.setItem('ol_deleted_msgs', JSON.stringify(localDeletedMessages));
                     closeMediaModal();
@@ -746,7 +788,7 @@ deleteBtn.onclick = () => {
                 deleteBtn.innerText = '🗑️ Удалить везде';
                 deleteBtn.onclick = async () => {
                     await supabaseClient.from('messages').delete().eq('id', msg.id);
-                    closeMediaModal();
+closeMediaModal();
                     if(msg.type === 'feed_post') loadFeed(); else loadChatHistory(activeChatPeerId);
                 };
                 actionsContainer.appendChild(deleteBtn);
@@ -765,7 +807,7 @@ deleteBtn.onclick = () => {
 
     function closeMediaModal() {
         document.getElementById('media-modal').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('overlay').style.none = 'none';
         document.getElementById('modal-media-container').innerHTML = '';
     }
 
@@ -835,7 +877,7 @@ deleteBtn.onclick = () => {
             if (todayPosts && todayPosts.length >= 5) {
                 alert('Вы исчерпали дневной лимит публикаций! (Максимум 5 постов в день)');
                 uploadBtn.disabled = false;
-uploadBtn.innerHTML = origContent;
+                uploadBtn.innerHTML = origContent;
                 return;
             }
 
@@ -851,7 +893,7 @@ uploadBtn.innerHTML = origContent;
                 }
                 
                 await fetchWithTimeout(
-                    supabaseClient.from('messages').insert([
+supabaseClient.from('messages').insert([
                         { sender: myCurrentId, receiver: myCurrentName, text: myAva, media: compressedData, type: 'feed_post', reactions: {}, feed_comments: [] }
                     ])
                 );
@@ -924,8 +966,8 @@ uploadBtn.innerHTML = origContent;
         let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
         if (!blocks[peerId]) return false;
         if (Date.now() > blocks[peerId]) {
-            delete blocks[peerId];
-localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
+            delete blocks[peerId]; 
+            localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
             return false;
         }
         return true;
@@ -940,7 +982,7 @@ localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
             win.classList.remove('hidden');
             btn.innerHTML = `<span>🔼 Свернуть обсуждение</span>`;
             const chatWin = document.getElementById(`comments-win-${postId}`);
-            if(chatWin) chatWin.scrollTop = chatWin.scrollHeight;
+if(chatWin) chatWin.scrollTop = chatWin.scrollHeight;
         } else {
             win.classList.add('hidden');
             btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> <span>Начать обсуждение (${win.getAttribute('data-count') || 0})</span>`;
@@ -949,11 +991,13 @@ localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
 
     async function loadFeed() {
         const btn = document.getElementById('feedRefreshBtn');
+        if(!btn) return;
         const origContent = btn.innerHTML;
         btn.innerText = "Синхронизация...";
         
         const container = document.getElementById('feed-posts-container');
-        const currentScroll = document.getElementById('main-container').scrollTop;
+        const mainCont = document.getElementById('main-container');
+        const currentScroll = mainCont ? mainCont.scrollTop : 0;
 
         const { data, error } = await supabaseClient.from('messages')
             .select('*')
@@ -987,7 +1031,10 @@ localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
                 : '';
 
             const isDev = (post.sender === '7777');
-            const nameHtml = isDev ? `${post.receiver || 'Разработчик'} ${VERIFIED_BADGE_SVG}` : (post.receiver || 'Пользователь');
+            const isSupport = (post.sender === '999');
+            let nameHtml = post.receiver || 'Пользователь';
+            if(isDev) nameHtml = `${post.receiver || 'Разработчик'} ${VERIFIED_BADGE_SVG}`;
+            else if(isSupport) nameHtml = `${post.receiver || 'Поддержка'} ${SUPPORT_BADGE_SVG}`;
 
             let emojiPickerHtml = '<div class="emoji-picker-panel">';
             AVAILABLE_FEED_EMOJIS.forEach(emoji => {
@@ -1007,13 +1054,14 @@ localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
                     emojiCounts[emo] = (emojiCounts[emo] || 0) + 1;
                 }
             }
-for (let emoji in emojiCounts) {
+
+            for (let emoji in emojiCounts) {
                 if (emojiCounts[emoji] > 0) {
                     const isMyChoice = (mySelectedEmoji === emoji);
                     reactionsHtml += `<span class="feed-reaction-badge ${isMyChoice ? 'active' : ''}" onclick="toggleFeedReaction('${post.id}', '${emoji}')">${emoji} ${emojiCounts[emoji]}</span>`;
                 }
             }
-            reactionsHtml += '</div>';
+reactionsHtml += '</div>';
 
             const commentsList = post.feed_comments || [];
             const isVisible = !!commentsVisibilityState[post.id];
@@ -1060,7 +1108,7 @@ for (let emoji in emojiCounts) {
             }
         });
         
-        document.getElementById('main-container').scrollTop = currentScroll;
+        if(mainCont) mainCont.scrollTop = currentScroll;
     }
 
     async function sendFeedComment(postId) {
@@ -1084,7 +1132,7 @@ for (let emoji in emojiCounts) {
                 commentsVisibilityState[postId] = true;
                 loadFeed();
             } else {
-alert("Ошибка отправки комментария: " + updateError.message);
+                alert("Ошибка отправки комментария: " + updateError.message);
             }
         }
         input.disabled = false;
@@ -1097,8 +1145,7 @@ alert("Ошибка отправки комментария: " + updateError.mes
             loadFeed();
         }
     }
-
-    async function toggleFeedReaction(postId, emoji) {
+async function toggleFeedReaction(postId, emoji) {
         const { data: post } = await supabaseClient.from('messages').select('reactions').eq('id', postId).single();
         if (post) {
             let currentReactions = post.reactions || {}; 
@@ -1124,29 +1171,97 @@ alert("Ошибка отправки комментария: " + updateError.mes
         }
     }
 
+    // РАБОТА С БАНАМИ И ТЕХПОДДЕРЖКОЙ ИЗ ОКНА БЛОКИРОВКИ
     async function checkUserSystemBan(id) {
         try {
             const { data: user } = await supabaseClient.from('users').select('is_banned, ban_until, ban_reason').eq('id', id).maybeSingle();
             if (user && user.is_banned) {
                 let reasonStr = user.ban_reason ? `Причина: ${user.ban_reason}` : "Причина: Нарушение внутренних правил мессенджера.";
-                
-                if (user.ban_until) {
+                let isPermanent = !user.ban_until;
+                let daysLeft = 0;
+
+                if (!isPermanent) {
                     const banDate = new Date(user.ban_until);
                     if (banDate > new Date()) {
-                        const daysLeft = Math.ceil((banDate - new Date()) / (1000 * 60 * 60 * 24));
-                        document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><div style="background:rgba(255,255,255,0.05); padding:30px; border-radius:24px; border:1px solid rgba(255,59,48,0.3); max-width:400px; box-shadow:0 15px 40px rgba(0,0,0,0.5);"><h2 style="color:#ff3b30; margin-top:0;">🛡️ Доступ временно ограничен</h2><p style="font-size:15px; opacity:0.9;">Ваш аккаунт был временно заблокирован модератором.</p><div style="background:rgba(255,59,48,0.1); color:#ff6b62; padding:12px; border-radius:12px; font-weight:600; margin:15px 0; font-size:14px; border-left:4px solid #ff3b30; text-align:left;">${reasonStr}</div><p>Осталось до разблокировки: <b style="color:#4caf50; font-size:17px;">${daysLeft} дн.</b></p></div></div>`;
-                        return true; 
+                        daysLeft = Math.ceil((banDate - new Date()) / (1000 * 60 * 60 * 24));
                     } else {
                         await supabaseClient.from('users').update({ is_banned: false, ban_until: null, ban_reason: null }).eq('id', id);
+                        return false; 
                     }
-                } else {
-                    document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><div style="background:rgba(255,255,255,0.05); padding:30px; border-radius:24px; border:1px solid rgba(255,59,48,0.4); max-width:400px; box-shadow:0 15px 40px rgba(0,0,0,0.5);"><h2 style="color:#ff3b30; margin-top:0;">🚫 Вечная блокировка (Бан)</h2><p style="font-size:15px; opacity:0.9;">Доступ к мессенджеру One Link заблокирован окончательно.</p><div style="background:rgba(255,59,48,0.1); color:#ff6b62; padding:12px; border-radius:12px; font-weight:600; margin:15px 0; font-size:14px; border-left:4px solid #ff3b30; text-align:left;">${reasonStr}</div><p style="color:gray; font-size:13px; margin-bottom:0;">Обжалованию через
-техническую поддержку не подлежит.</p></div></div>`;
-                    return true; 
                 }
+
+                renderBanScreen(id, reasonStr, isPermanent, daysLeft);
+                return true; 
             }
-        } catch(e) {}
+        } catch(e) { console.error(e); }
         return false;
+    }
+
+    function renderBanScreen(id, reasonStr, isPermanent, daysLeft) {
+        myCurrentId = id; 
+        myCurrentName = localStorage.getItem('ol_name') || "Заблокированный пользователь";
+
+        let termHtml = isPermanent 
+            ? `<h2 style="color:#ff3b30; margin-top:0;">🚫 Вечная блокировка (Бан)</h2><p style="font-size:15px; opacity:0.9;">Доступ к мессенджеру заблокирован окончательно.</p>`
+            : `<h2 style="color:#ff3b30; margin-top:0;">🛡️ Доступ временно ограничен</h2><p style="font-size:15px; opacity:0.9;">Ваш аккаунт был временно заблокирован модератором.</p><p>Осталось до разблокировки: <b style="color:#4caf50; font-size:17px;">${daysLeft} дн.</b></p>`;
+
+        document.body.innerHTML = `
+            <div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;">
+                <div style="background:rgba(255,255,255,0.05); padding:30px; border-radius:24px; border:1px solid rgba(255,59,48,0.3); max-width:400px; width:100%; box-shadow:0 15px 40px rgba(0,0,0,0.5);">
+                    ${termHtml}
+                    <div style="background:rgba(255,59,48,0.1); color:#ff6b62; padding:12px; border-radius:12px; font-weight:600; margin:15px 0; font-size:14px; border-left:4px solid #ff3b30; text-align:left;">
+                        ${reasonStr}
+                    </div>
+                    <button class="btn btn-purple" style="width:100%; padding:14px; margin-top:10px;" onclick="openSupportFromBanScreen()">🛠️ Обратиться в техподдержку</button>
+                    <button class="btn" style="width:100%; padding:10px; margin-top:8px; background:rgba(255,255,255,0.1); box-shadow:none; color:#fff;" onclick="location.reload()">🔄 Войти в другой аккаунт</button>
+                </div>
+</div>
+        `;
+    }
+
+    function openSupportFromBanScreen() {
+        document.body.innerHTML = `
+            <div class="bubbles-container"><div class="bubble-bg"></div><div class="bubble-bg"></div></div>
+            <div id="tab-chat" class="page slide-active" style="inset: 0px 0px 0px 0px !important;">
+                <div id="chat-ui">
+                    <div class="chat-header">
+                        <button class="chat-back-btn" onclick="location.reload()">←</button>
+                        <div class="ava-wrapper"><div class="chat-ava" style="background-color:#a020f0;"></div></div>
+                        <div style="flex: 1;">
+                            <b style="display:block; color:#000;">Техническая Поддержка One Link</b>
+                            <span style="font-size:12px; color: var(--purple-grad); font-weight:600;">Агент ID: 999</span>
+                        </div>
+                    </div>
+                    <div id="chat-win"></div>
+                    <div id="support-templates-box" class="support-templates-container">
+                        <button class="template-chip" onclick="sendSupportTemplate('⚠️ Почему меня заблокировали?')">⚠️ Почему меня заблокировали?</button>
+                        <button class="template-chip" onclick="sendSupportTemplate('🔄 Как мне вернуть свой аккаунт?')">🔄 Как мне вернуть свой аккаунт?</button>
+                        <button class="template-chip" onclick="sendSupportTemplate('🆘 У меня возникла другая техническая проблема')">🆘 Другая техническая проблема</button>
+                    </div>
+                    <div class="chat-input-panel">
+                        <input type="text" id="m-input" placeholder="Напишите обращение..." style="margin:0; flex:1;">
+                        <button class="btn btn-purple" id="send-btn" style="width:50px; padding: 15px 0; box-shadow:none;" onclick="send()">></button>
+                    </div>
+                </div>
+            </div>
+        `;
+        activeChatPeerId = "999";
+        loadChatHistory("999");
+        
+        setInterval(() => {
+            loadChatHistory("999");
+        }, 3000);
+    }
+
+    function openSupportFromSettings() {
+        nav('chat', document.querySelectorAll('.nav-item')[4]);
+        openChat('999', 'Техподдержка', '');
+        document.getElementById('support-templates-box').classList.remove('hidden');
+    }
+
+    async function sendSupportTemplate(text) {
+        document.getElementById('m-input').value = text;
+        await send();
     }
 
     async function handleAuth() {
@@ -1167,7 +1282,7 @@ alert("Ошибка отправки комментария: " + updateError.mes
         loader.classList.add('show');
 
         try {
-            if (authMode === "login") {
+            if (authMode === "login" && id !== "999" && id !== "7777") {
                 const isBanned = await checkUserSystemBan(id);
                 if (isBanned) return;
             }
@@ -1183,7 +1298,7 @@ alert("Ошибка отправки комментария: " + updateError.mes
                 if (userExist.password && userExist.password !== password) {
                     log.innerText = "Неверный пароль!";
                     loader.classList.remove('show');
-                    return;
+return;
                 }
                 localStorage.setItem('ol_name', userExist.name);
                 myCurrentName = userExist.name;
@@ -1212,6 +1327,9 @@ alert("Ошибка отправки комментария: " + updateError.mes
             if(id === '7777') {
                 viewNameNode.innerHTML = `${myCurrentName} ${VERIFIED_BADGE_SVG}`;
                 document.getElementById('developer-admin-panel').classList.remove('hidden');
+            } else if(id === '999') {
+                viewNameNode.innerHTML = `${myCurrentName} ${SUPPORT_BADGE_SVG}`;
+                document.getElementById('support-agent-panel').classList.remove('hidden');
             } else {
                 viewNameNode.innerText = myCurrentName;
             }
@@ -1227,13 +1345,15 @@ alert("Ошибка отправки комментария: " + updateError.mes
             setInterval(updateMyStatus, 3000);
             setInterval(checkContactsOnline, 3000);
         } catch(e) {
+            console.error(e);
             log.innerText = "Ошибка сети.";
         } finally {
-            loader.classList.remove('show');
+            if(document.getElementById('auth-loader')) {
+                loader.classList.remove('show');
+            }
         }
     }
 
-    // РЕАЛИСТИЧНЫЙ ИСПОЛНИТЕЛЬ БАНА С ПРИЧИНОЙ
     async function executeSystemBan(shouldBan) {
         const target = document.getElementById('admin-ban-id').value.trim();
         const days = document.getElementById('admin-ban-time').value.trim();
@@ -1242,7 +1362,7 @@ alert("Ошибка отправки комментария: " + updateError.mes
         if(!target) return alert("Введите ID целевого пользователя!");
         
         let banIsoString = null;
-if(shouldBan && days) {
+        if(shouldBan && days) {
             let d = new Date();
             d.setDate(d.getDate() + parseInt(days));
             banIsoString = d.toISOString();
@@ -1266,6 +1386,27 @@ if(shouldBan && days) {
             document.getElementById('admin-ban-reason').value = '';
         } else {
             alert("Критическая ошибка базы данных: " + error.message);
+        }
+    }
+
+    // ДЕЙСТВИЯ ТЕХПОДДЕРЖКИ (ID 999)
+    async function executeSupportAction(shouldUnban) {
+        const targetId = document.getElementById('support-target-id').value.trim();
+        if(!targetId) return alert("Введите ID пользователя!");
+
+        if (shouldUnban) {
+const { error } = await supabaseClient.from('users').update({ is_banned: false, ban_until: null, ban_reason: null }).eq('id', targetId);
+            if(!error) {
+                alert(`Пользователь ${targetId} успешно разбанен агентом поддержки.`);
+                await supabaseClient.from('messages').insert([{ sender: '999', receiver: targetId, text: '🎉 Здравствуйте! Ваше обращение рассмотрено. Ваш аккаунт полностью разблокирован. Приятного общения!', type: 'chat' }]);
+                document.getElementById('support-target-id').value = '';
+            } else {
+                alert("Ошибка изменения статуса: " + error.message);
+            }
+        } else {
+            alert("Помощь отклонена.");
+            await supabaseClient.from('messages').insert([{ sender: '999', receiver: targetId, text: '❌ Извините, ваше обращение было отклонено техподдержкой. Просим вас соблюдать правила сообщества.', type: 'chat' }]);
+            document.getElementById('support-target-id').value = '';
         }
     }
 
@@ -1307,27 +1448,25 @@ if(shouldBan && days) {
                 const chatTxt = document.getElementById('chat-peer-status-text');
                 
                 if (isOnline) {
-                    chatDot.classList.add('online');
+                    if(chatDot) chatDot.classList.add('online');
                     if (u.typing_to === myCurrentId && !isContactBlocked(u.id)) {
-                        bottomTyping.style.display = 'flex';
-                        chatTxt.innerText = "печатает...";
-                        chatTxt.style.color = "var(--blue)";
+                        if(bottomTyping) bottomTyping.style.display = 'flex';
+                        if(chatTxt) { chatTxt.innerText = "печатает..."; chatTxt.style.color = "var(--blue)"; }
                     } else {
-                        bottomTyping.style.display = 'none';
-                        chatTxt.innerText = "в сети";
-                        chatTxt.style.color = "var(--green)";
+                        if(bottomTyping) bottomTyping.style.display = 'none';
+                        if(chatTxt) { chatTxt.innerText = "в сети"; chatTxt.style.color = "var(--green)"; }
                     }
                 } else {
-                    chatDot.classList.remove('online');
-                    bottomTyping.style.display = 'none';
+                    if(chatDot) chatDot.classList.remove('online');
+                    if(bottomTyping) bottomTyping.style.display = 'none';
                     
                     if(u.last_seen) {
                         const t = new Date(u.last_seen);
-                        chatTxt.innerText = "был(а) в " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        if(chatTxt) chatTxt.innerText = "был(а) in " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     } else {
-                        chatTxt.innerText = "не в сети";
+                        if(chatTxt) chatTxt.innerText = "не в сети";
                     }
-                    chatTxt.style.color = "var(--gray)";
+                    if(chatTxt) chatTxt.style.color = "var(--gray)";
                 }
             }
         });
@@ -1393,6 +1532,7 @@ if (!activeChatPeerId || isContactBlocked(activeChatPeerId)) return;
 
         playNotificationSound();
         const push = document.getElementById('push-notif');
+        if(!push) return;
         const pAva = document.getElementById('push-ava');
         document.getElementById('push-title').innerText = title;
         document.getElementById('push-text').innerText = text || "📎 Фотография";
@@ -1420,15 +1560,16 @@ if (!activeChatPeerId || isContactBlocked(activeChatPeerId)) return;
             .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
                 if (payload.eventType === 'DELETE' || payload.eventType === 'UPDATE') {
                     if (activeChatPeerId) loadChatHistory(activeChatPeerId);
-                    checkExistingRequests();
-if (!document.getElementById('tab-feed').classList.contains('hidden')) {
+if(document.getElementById('req-list')) checkExistingRequests();
+                    const feedTab = document.getElementById('tab-feed');
+                    if (feedTab && !feedTab.classList.contains('hidden')) {
                         loadFeed();
                     }
                     return;
                 }
                 const row = payload.new;
                 
-                if (row.sender && isContactBlocked(row.sender)) return;
+                if (row.sender && isContactBlocked(row.sender) && row.sender !== '999') return;
 
                 if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
                 if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
@@ -1439,24 +1580,26 @@ if (!document.getElementById('tab-feed').classList.contains('hidden')) {
                     }
                     if (row.receiver === myCurrentId && row.sender !== activeChatPeerId) {
                         let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
-                        let senderName = contacts[row.sender] ? contacts[row.sender].name : "Новое сообщение";
+                        let senderName = contacts[row.sender] ? contacts[row.sender].name : (row.sender === '999' ? "Техподдержка" : "Новое сообщение");
                         let senderAva = contacts[row.sender] ? contacts[row.sender].ava : "";
                         showPushNotification(row.sender, senderName, row.text, senderAva);
                     }
                 }
                 if (row.type === 'feed_post') {
-                    if (!document.getElementById('tab-feed').classList.contains('hidden')) {
+                    const feedTab = document.getElementById('tab-feed');
+                    if (feedTab && !feedTab.classList.contains('hidden')) {
                         loadFeed();
                     }
                 }
             }).subscribe();
 
-        checkExistingRequests();
+        if(document.getElementById('req-list')) checkExistingRequests();
     }
 
     async function checkExistingRequests() {
         const { data } = await supabaseClient.from('messages').select('*').eq('receiver', myCurrentId).eq('type', 'request');
         const list = document.getElementById('req-list');
+        if(!list) return;
         
         if(!data || data.length === 0) {
             list.innerHTML = '<p style="color:gray; text-align:center;">Пусто</p>';
@@ -1474,6 +1617,7 @@ if (!document.getElementById('tab-feed').classList.contains('hidden')) {
 
     function showIncomingRequestUI(id, name, ava) {
         const list = document.getElementById('req-list');
+        if(!list) return;
         if(list.querySelector('p')) list.innerHTML = '';
         if(document.getElementById('req-item-' + id)) return;
 
@@ -1490,7 +1634,7 @@ if (!document.getElementById('tab-feed').classList.contains('hidden')) {
                 <button class="btn btn-green" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="acceptReq('${id}','${name}','${ava}')">✔</button>
                 <button class="btn btn-red" style="width:40px; height:36px; padding:0; margin:0; font-size:15px; border-radius:10px;" onclick="declineReq('${id}')">✖</button>
             </div>
-        `;
+`;
         list.appendChild(div);
 
         const badge = document.getElementById('badge');
@@ -1499,7 +1643,7 @@ if (!document.getElementById('tab-feed').classList.contains('hidden')) {
     }
 
     async function acceptReq(id, name, ava) {
-const { data: targetProfile } = await supabaseClient.from('users').select('name, ava').eq('id', id).maybeSingle();
+        const { data: targetProfile } = await supabaseClient.from('users').select('name, ava').eq('id', id).maybeSingle();
         let finalName = name;
         let finalAva = ava;
         if(targetProfile) {
@@ -1540,7 +1684,7 @@ const { data: targetProfile } = await supabaseClient.from('users').select('name,
         const input = document.getElementById('m-input');
         if(!input.value.trim() || !activeChatPeerId) return;
 
-        if (isContactBlocked(activeChatPeerId)) {
+        if (isContactBlocked(activeChatPeerId) && activeChatPeerId !== '999') {
             alert("Вы заблокировали этого пользователя. Разблокируйте его в контактах, чтобы написать.");
             return;
         }
@@ -1548,7 +1692,9 @@ const { data: targetProfile } = await supabaseClient.from('users').select('name,
         const txt = input.value.trim();
         input.value = "";
 
-        await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
+        if(myCurrentId) {
+            await supabaseClient.from('users').update({ typing_to: "" }).eq('id', myCurrentId);
+        }
 
         if (isEditingMode && selectedMsgId) {
             await supabaseClient.from('messages').update({ text: txt, is_edited: true }).eq('id', selectedMsgId);
@@ -1566,6 +1712,7 @@ const { data: targetProfile } = await supabaseClient.from('users').select('name,
             .order('created_at', { ascending: true });
 
         const win = document.getElementById('chat-win');
+        if(!win) return;
         win.innerHTML = '';
         
         const cryptoBadge = document.createElement('div');
@@ -1576,14 +1723,13 @@ const { data: targetProfile } = await supabaseClient.from('users').select('name,
         if(data) {
             data.forEach((msg) => {
                 if (localDeletedMessages.includes(msg.id)) return;
-
-                const direction = msg.sender === myCurrentId ? 'out' : 'in';
+const direction = msg.sender === myCurrentId ? 'out' : 'in';
                 const d = document.createElement('div');
                 d.className = 'bubble ' + direction;
                 
                 d.onclick = () => {
                     if (msg.media || msg.text.startsWith('data:image')) {
-openMediaModal(msg, direction === 'out');
+                        openMediaModal(msg, direction === 'out');
                     } else if (direction === 'out') {
                         openMsgMenu(msg.id, msg.text);
                     }
@@ -1661,7 +1807,7 @@ openMediaModal(msg, direction === 'out');
     function updateAvaUI() {
         const ava = localStorage.getItem('ol_ava_' + myCurrentId);
         const myAvaDiv = document.getElementById('my-ava');
-        if(ava) { myAvaDiv.style.backgroundImage = `url(${ava})`; myAvaDiv.innerHTML = ''; }
+        if(ava && myAvaDiv) { myAvaDiv.style.backgroundImage = `url(${ava})`; myAvaDiv.innerHTML = ''; }
     }
 
     function saveContact(id, name, ava) {
@@ -1674,17 +1820,17 @@ openMediaModal(msg, direction === 'out');
     async function renderSavedContacts() {
         const listProfile = document.getElementById('contacts-list');
         const listChat = document.getElementById('chat-contacts-list');
+        if(!listProfile || !listChat) return;
         
         listProfile.innerHTML = '';
         listChat.innerHTML = '';
-        
-        let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+let contacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
         
         if (Object.keys(contacts).length === 0) {
             const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
             listProfile.innerHTML = emptyTxt; 
             listChat.innerHTML = emptyTxt;
-return;
+            return;
         }
         
         for (let id in contacts) {
@@ -1697,9 +1843,11 @@ return;
             
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
             const isDev = (id === '7777');
-            const nameHtml = isDev ? `${contacts[id].name} ${VERIFIED_BADGE_SVG}` : contacts[id].name;
+            const isSupport = (id === '999');
+            let nameHtml = contacts[id].name;
+            if(isDev) nameHtml = `${contacts[id].name} ${VERIFIED_BADGE_SVG}`;
+            else if(isSupport) nameHtml = `${contacts[id].name} ${SUPPORT_BADGE_SVG}`;
             
-            // СТРОГИЕ СОВРЕМЕННЫЕ SVG ИКОНКИ ДЛЯ КНОПОК УПРАВЛЕНИЯ
             const trashIconSvg = `<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
             const blockIconSvg = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.5 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9l11.21 11.21C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>`;
             const unblockIconSvg = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
@@ -1749,17 +1897,26 @@ return;
 
     async function openChat(id, name, ava) {
         activeChatPeerId = id;
+const isDev = (id === '7777');
+        const isSupport = (id === '999');
         
-        const isDev = (id === '7777');
-        document.getElementById('chat-with').innerHTML = isDev ? `${name} ${VERIFIED_BADGE_SVG}` : name;
+        if (isDev) document.getElementById('chat-with').innerHTML = `${name} ${VERIFIED_BADGE_SVG}`;
+        else if (isSupport) document.getElementById('chat-with').innerHTML = `${name} ${SUPPORT_BADGE_SVG}`;
+        else document.getElementById('chat-with').innerText = name;
         
+        if (isSupport) {
+            document.getElementById('support-templates-box').classList.remove('hidden');
+        } else {
+            document.getElementById('support-templates-box').classList.add('hidden');
+        }
+
         const pAva = document.getElementById('peer-ava');
         const { data: realUser } = await supabaseClient.from('users').select('ava').eq('id', id).maybeSingle();
         let finalAva = ava;
         if(realUser && realUser.ava) {
             finalAva = realUser.ava;
         }
-if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.backgroundImage = 'none';
+        if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.backgroundImage = 'none';
         
         document.getElementById('chat-empty').classList.add('hidden');
         document.getElementById('chat-ui').classList.remove('hidden');
@@ -1768,8 +1925,10 @@ if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.ba
         loadChatHistory(id);
 
         const versionTag = document.getElementById('version-tag');
-        versionTag.style.opacity = '0';
-        setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
+        if(versionTag) {
+            versionTag.style.opacity = '0';
+            setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
+        }
     }
 
     function nav(t, e) {
@@ -1777,6 +1936,7 @@ if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.ba
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         
         const targetTab = document.getElementById('tab-' + t);
+        if(!targetTab) return;
         targetTab.classList.remove('hidden');
         
         if(t === 'chat') {
@@ -1786,7 +1946,8 @@ if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.ba
                 document.getElementById('chat-ui').classList.add('hidden');
             }
         } else {
-            document.getElementById('tab-chat').classList.remove('slide-active');
+            const chatTab = document.getElementById('tab-chat');
+            if(chatTab) chatTab.classList.remove('slide-active');
         }
         
         if(t === 'feed') {
@@ -1796,12 +1957,14 @@ if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.ba
         if(e) e.classList.add('active');
 
         const versionTag = document.getElementById('version-tag');
-        if (t === 'chat' && activeChatPeerId !== "") {
-            versionTag.style.opacity = '0';
-            setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
-        } else {
-            versionTag.style.display = 'block';
-            setTimeout(() => versionTag.style.opacity = '1', 10);
+        if(versionTag) {
+            if (t === 'chat' && activeChatPeerId !== "") {
+                versionTag.style.opacity = '0';
+                setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
+            } else {
+                versionTag.style.display = 'block';
+                setTimeout(() => versionTag.style.opacity = '1', 10);
+            }
         }
     }
 
