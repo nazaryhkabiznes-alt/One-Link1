@@ -19,6 +19,8 @@
             --red-grad: linear-gradient(135deg, #ff3b30 0%, #ff4f43 100%);
             --panel-color: #ffffff;
             --input-bg: rgba(0, 0, 0, 0.05);
+            --admin-border: rgba(255, 59, 48, 0.25);
+            --admin-bg: rgba(255, 255, 255, 0.95);
         }
         
         body { 
@@ -82,8 +84,8 @@
         #auth-screen { position: fixed; inset: 0; background: rgba(10, 17, 40, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .auth-card { background: rgba(255, 255, 255, 0.9); padding: 35px 30px; border-radius: 28px; width: 85%; max-width: 320px; text-align: center; position: relative; box-shadow: 0 15px 45px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.5); }
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; outline: none; box-sizing: border-box; background: rgba(255,255,255,0.7); font-size: 16px; transition: all 0.2s; }
-        input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(0,119,255,0.15); }
+        input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; outline: none; box-sizing: border-box; background: rgba(255,255,255,0.7); font-size: 16px; transition: all 0.2s; font-family: inherit; }
+        input:focus, select:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(0,119,255,0.15); }
         
         .btn { 
             width: 100%; padding: 15px; 
@@ -96,7 +98,7 @@
             text-decoration: none;
             box-sizing: border-box;
         }
-        .btn svg { transition: transform 0.2s; }
+        .btn svg { transition: transform 0.2s; fill: currentColor; }
         .btn:hover svg { transform: scale(1.1); }
         .btn:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(0, 119, 255, 0.2); }
         .btn:disabled { background: #b2d6ff; box-shadow: none; cursor: not-allowed; }
@@ -107,22 +109,69 @@
         .btn-red:active { box-shadow: 0 2px 5px rgba(255, 59, 48, 0.2); }
         .btn-delete { background: var(--red-grad); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; font-weight: bold;}
         
-        .contact-actions-row { display: flex; gap: 4px; margin-top: 5px; }
-        .action-mini-btn { flex: 1; padding: 6px; font-size: 11px; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; transition: background 0.2s; }
-        .btn-mini-del { background: rgba(255, 59, 48, 0.1); color: var(--red); }
-        .btn-mini-del:active { background: rgba(255, 59, 48, 0.2); }
-        .btn-mini-block { background: rgba(0, 0, 0, 0.05); color: #333; }
-        .btn-mini-block:active { background: rgba(0, 0, 0, 0.1); }
-        .blocked-badge { background: #555; color: white; padding: 2px 6px; font-size: 10px; border-radius: 4px; margin-left: auto; }
+        /* Улучшенные реалистичные кнопки контактов */
+        .contact-actions-row { display: flex; gap: 8px; margin-top: 10px; width: 100%; }
+        .action-mini-btn { 
+            flex: 1; 
+            padding: 10px 12px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            border-radius: 12px; 
+            border: none; 
+            cursor: pointer; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 6px; 
+            transition: all 0.2s ease; 
+        }
+        .btn-mini-del { background: rgba(255, 59, 48, 0.08); color: var(--red); }
+        .btn-mini-del:hover { background: var(--red); color: white; }
+        .btn-mini-del:active { transform: scale(0.97); }
+        
+        .btn-mini-block { background: rgba(0, 0, 0, 0.06); color: #222; }
+        .btn-mini-block:hover { background: #222; color: white; }
+.btn-mini-block.unblock-state { background: rgba(76, 175, 80, 0.08); color: var(--green); }
+        .btn-mini-block.unblock-state:hover { background: var(--green); color: white; }
+        .btn-mini-block:active { transform: scale(0.97); }
+
+        .action-mini-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .blocked-badge { background: #222; color: white; padding: 3px 8px; font-size: 11px; font-weight: 600; border-radius: 6px; margin-left: auto; letter-spacing: 0.3px; }
 
         .developer-name { display: inline-flex; align-items: center; gap: 4px; font-weight: bold; color: #0056b3; }
         .verified-badge { fill: var(--blue); animation: pulseBadge 2s infinite ease-in-out; }
         @keyframes pulseBadge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
+        /* Реалистичная профессиональная админ-панель */
         .admin-box {
-background: rgba(255, 59, 48, 0.05); border: 1px dashed var(--red);
-            border-radius: 20px; padding: 15px; margin-top: 15px; text-align: left;
+            background: var(--admin-bg); 
+            border: 1px solid var(--admin-border);
+            border-radius: 20px; 
+            padding: 18px; 
+            margin-top: 18px; 
+            text-align: left;
+            box-shadow: 0 10px 25px rgba(255, 59, 48, 0.12);
+            position: relative;
+            overflow: hidden;
         }
+        .admin-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--red-grad);
+        }
+        .admin-box h4 {
+            margin: 0 0 12px 0; 
+            font-size: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            color: #111; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+            font-weight: 700;
+        }
+        .admin-box h4 svg { width: 16px; height: 16px; fill: var(--red); }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .admin-box input, .admin-box select { padding: 11px 14px; font-size: 14px; margin: 4px 0 8px 0; border-radius: 10px; background: rgba(0,0,0,0.03); }
 
         #tab-chat { 
             position: fixed; inset: 55px 0 65px 0; 
@@ -162,7 +211,7 @@ background: rgba(255, 59, 48, 0.05); border: 1px dashed var(--red);
         }
 
         .bubble { max-width: 75%; padding: 11px 15px; border-radius: 20px; font-size: 15px; box-shadow: 0 1.5px 4px rgba(0,0,0,0.08); word-wrap: break-word; cursor: pointer; position: relative; transition: opacity 0.2s; animation: popBubble 0.25s ease-out forwards; }
-        .bubble:active { opacity: 0.6; }
+.bubble:active { opacity: 0.6; }
         .bubble img { max-width: 100%; border-radius: 12px; display: block; margin-top: 5px; aspect-ratio: 1 / 1; object-fit: cover; }
         .bubble.in { background: white; align-self: flex-start; border-bottom-left-radius: 5px; transform-origin: left bottom; }
         .bubble.out { background: var(--blue-grad); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 3px 10px rgba(0,119,255,0.2); transform-origin: right bottom; }
@@ -197,7 +246,7 @@ background: rgba(255, 59, 48, 0.05); border: 1px dashed var(--red);
         .emoji-picker-btn:hover { transform: scale(1.25); }
 
         .feed-reactions-list { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-.feed-reaction-badge { background: var(--input-bg); padding: 4px 10px; border-radius: 14px; font-size: 13px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; user-select: none; transition: background 0.2s; }
+        .feed-reaction-badge { background: var(--input-bg); padding: 4px 10px; border-radius: 14px; font-size: 13px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; user-select: none; transition: background 0.2s; }
         .feed-reaction-badge.active { background: rgba(0, 119, 255, 0.15); border: 1px solid rgba(0, 119, 255, 0.3); color: var(--blue); }
 
         .feed-comments-section { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 10px; margin-top: 12px; }
@@ -216,7 +265,7 @@ background: rgba(255, 59, 48, 0.05); border: 1px dashed var(--red);
             display: none; grid-template-columns: repeat(5, 32px); gap: 6px;
             z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
-        .emoji-picker span { font-size: 22px; cursor: pointer; text-align: center; transition: transform 0.1s; }
+.emoji-picker span { font-size: 22px; cursor: pointer; text-align: center; transition: transform 0.1s; }
         .emoji-picker span:active { transform: scale(1.2); }
 
         .modal {
@@ -246,7 +295,7 @@ background: rgba(255, 59, 48, 0.05); border: 1px dashed var(--red);
             box-shadow: 0 15px 40px rgba(0,0,0,0.25); text-align: center;
         }
         .settings-btn {
-width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
+            width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
             border: none; border-radius: 14px; cursor: pointer; font-weight: bold; font-size: 15px;
             margin-bottom: 12px; text-align: left; display: flex; align-items: center; justify-content: space-between;
             box-sizing: border-box;
@@ -273,13 +322,12 @@ width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
         .push-info { flex: 1; overflow: hidden; }
         .push-title { font-weight: bold; font-size: 14px; margin-bottom: 2px; color: var(--blue); }
         .push-text { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        #msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
+#msg-menu { position: fixed; bottom: -250px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.15); padding: 20px; z-index: 2000; transition: bottom 0.3s ease; display: flex; flex-direction: column; gap: 10px; }
         #msg-menu.open { bottom: 0; }
         .menu-btn { width: 100%; padding: 14px; text-align: center; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
 
         .contact-item { display: flex; align-items: center; gap: 12px; padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.2s; position: relative; }
-        .contact-item:active { background: rgba(0,0,0,0.03); }
+        .contact-item:active { background: rgba(0,0,0,0.01); }
 
         footer { position: fixed; bottom: 0; width: 100%; background: var(--header-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
         .nav-item { text-align: center; font-size: 11px; color: var(--gray); cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; transition: color 0.2s; }
@@ -291,7 +339,7 @@ width: 100%; padding: 14px; background-color: rgba(0,0,0,0.04); color: #000;
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1999; display: none; }
 
         .app-version {
-position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25);
+            position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); color: rgba(255, 255, 255, 0.65);
             font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); z-index: 90;
         }
@@ -320,7 +368,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
         .full-loader.show { opacity: 1; pointer-events: auto; }
         
         .auth-modes { display: flex; gap: 10px; margin-bottom: 15px; }
-        .mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+.mode-btn { flex: 1; padding: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5); border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.2s; }
         .mode-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
     </style>
 </head>
@@ -342,7 +390,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
         </div>
     </div>
 
-    <div id="version-tag" class="app-version">v1.3.0</div>
+    <div id="version-tag" class="app-version">v1.4.0</div>
     <div id="overlay" onclick="closeMsgMenu(); closeMediaModal(); closeSettings();"></div>
 
     <div id="settings-modal" class="settings-modal" onclick="closeSettings()">
@@ -355,7 +403,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
                 <span>🚪 Выйти из аккаунта</span>
             </button>
             <button class="btn" style="background: #f0f2f5; color: black; box-shadow: none; margin-top: 10px; width: 100%;" onclick="closeSettings()">Закрыть</button>
-</div>
+        </div>
     </div>
 
     <div id="dev-screen" class="dev-modal" onclick="closeDevModal()">
@@ -391,7 +439,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
 
     <div id="msg-menu">
         <button class="menu-btn" style="background: #f0f2f5; color: black;" onclick="triggerEdit()">✏️ Редактировать</button>
-        <button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
+<button class="menu-btn" style="background: var(--red); color: white;" onclick="triggerDelete()">🗑️ Удалить везде</button>
         <button class="menu-btn" style="background: transparent; color: var(--gray);" onclick="closeMsgMenu()">Отмена</button>
     </div>
 
@@ -423,7 +471,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
             </div>
 
             <div id="tab-profile" class="page">
-<div class="block" style="text-align: center; position: relative;">
+                <div class="block" style="text-align: center; position: relative;">
                     <label for="ava-input" class="ava-label">
                         <input type="file" id="ava-input" style="display:none" accept="image/*">
                         <div id="my-ava" class="ava-circle"><span>📷</span></div>
@@ -435,12 +483,36 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
                     <p id="view-id" style="color:var(--gray); font-size:14px; margin: 5px 0 0 0;"></p>
                     
                     <div id="developer-admin-panel" class="admin-box hidden">
-                        <h4 style="margin: 0 0 10px 0; color: var(--red);">🛡️ Админ-панель Модерации</h4>
-                        <input type="tel" id="admin-ban-id" placeholder="ID нарушителя" inputmode="numeric" style="padding:10px; font-size:14px; margin:5px 0;">
-                        <input type="number" id="admin-ban-time" placeholder="Дней (пусто = навсегда)" style="padding:10px; font-size:14px; margin:5px 0;">
-                        <div style="display:flex; gap:6px; margin-top:5px;">
-                            <button class="btn btn-red" style="flex:1; padding:10px; font-size:13px;" onclick="executeSystemBan(true)">Бан</button>
-                            <button class="btn btn-green" style="flex:1; padding:10px; font-size:13px;" onclick="executeSystemBan(false)">Разбан</button>
+                        <h4>
+                            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/></svg>
+                            Центр Модерации Системы
+                        </h4>
+                        
+                        <div class="admin-grid">
+                            <div>
+                                <label style="font-size:11px; font-weight:700; color:var(--gray);">ID ПОЛЬЗОВАТЕЛЯ</label>
+                                <input type="tel" id="admin-ban-id" placeholder="Например: 1024" inputmode="numeric">
+                            </div>
+                            <div>
+                                <label style="font-size:11px; font-weight:700; color:var(--gray);">СРОК БЛОКИРОВКИ</label>
+                                <select id="admin-ban-time">
+                                    <option value="">Навсегда (Перманент)</option>
+                                    <option value="1">1 день</option>
+                                    <option value="3">3 дня</option>
+                                    <option value="7">7 дней</option>
+                                    <option value="30">30 дней</option>
+</select>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2px;">
+                            <label style="font-size:11px; font-weight:700; color:var(--gray);">ПРИЧИНА ПОДАЧИ БЛОКИРОВКИ</label>
+                            <input type="text" id="admin-ban-reason" placeholder="Нарушение правил общения, спам, мошенничество...">
+                        </div>
+
+                        <div style="display:flex; gap:8px; margin-top:8px;">
+                            <button class="btn btn-red" style="flex:1; padding:12px; font-size:14px; border-radius:12px;" onclick="executeSystemBan(true)">Применить Бан</button>
+                            <button class="btn btn-green" style="flex:1; padding:12px; font-size:14px; border-radius:12px;" onclick="executeSystemBan(false)">Снять ограничения</button>
                         </div>
                     </div>
                 </div>
@@ -476,6 +548,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
                     <button class="chat-back-btn" onclick="backToDialogs()">←</button>
                     
                     <div class="ava-wrapper">
+                        <div id="peer-ava" class="chat-ava"></div>
                         <div id="peer-status-dot" class="status-dot"></div>
                     </div>
                     <div style="flex: 1;">
@@ -493,7 +566,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
                 <div class="chat-input-panel">
                     <div class="emoji-picker" id="emoji-picker">
                         <span onclick="addEmoji('😀')">😀</span>
-<span onclick="addEmoji('😂')">😂</span>
+                        <span onclick="addEmoji('😂')">😂</span>
                         <span onclick="addEmoji('🔥')">🔥</span>
                         <span onclick="addEmoji('👍')">👍</span>
                         <span onclick="addEmoji('❤️')">❤️</span>
@@ -503,8 +576,7 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
                         <span onclick="addEmoji('😡')">😡</span>
                         <span onclick="addEmoji('😮')">😮</span>
                     </div>
-
-                    <button class="btn" style="width:40px; background: #555; font-size: 18px; padding: 12px 0; margin:0; box-shadow:none;" onclick="toggleEmojiPicker()">😀</button>
+<button class="btn" style="width:40px; background: #555; font-size: 18px; padding: 12px 0; margin:0; box-shadow:none;" onclick="toggleEmojiPicker()">😀</button>
                     
                     <label for="media-input" class="btn" style="width:40px; background: #666; font-size: 18px; padding: 12px 0; text-align:center; box-shadow:none; margin:0;">
                         <input type="file" id="media-input" style="display:none" accept="image/*">📎
@@ -564,7 +636,8 @@ position: fixed; bottom: 75px; right: 15px; background: rgba(255, 255, 255, 0.25
     let commentsVisibilityState = {};
 
     const AVAILABLE_FEED_EMOJIS = ['❤️', '😂', '🔥', '👍', '😮'];
-const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
+
+    const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co'; 
     const SUPABASE_KEY = 'sb_publishable_chgxXn9EJftOoLP8prUz2A_Kl6xllql';
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -572,7 +645,7 @@ const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co';
 
     function playNotificationSound() {
         try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
@@ -647,7 +720,7 @@ const SUPABASE_URL = 'https://abmxxexfgiocrhzbkczs.supabase.co';
         saveBtn.className = 'modal-btn save';
         saveBtn.innerText = '💾 Сохранить файл';
         saveBtn.onclick = () => {
-const link = document.createElement('a');
+            const link = document.createElement('a');
             link.href = src;
             link.download = 'onelink_media_' + Date.now() + (customType === 'video' ? '.mp4' : '.png');
             link.click();
@@ -662,7 +735,7 @@ const link = document.createElement('a');
         if (msg) {
             if (!isMyMessage) {
                 deleteBtn.innerText = '🗑️ Удалить у себя';
-                deleteBtn.onclick = () => {
+deleteBtn.onclick = () => {
                     localDeletedMessages.push(msg.id);
                     localStorage.setItem('ol_deleted_msgs', JSON.stringify(localDeletedMessages));
                     closeMediaModal();
@@ -749,7 +822,7 @@ const link = document.createElement('a');
         const origContent = uploadBtn.innerHTML;
         
         uploadBtn.disabled = true;
-uploadBtn.innerText = "⏳ Публикация...";
+        uploadBtn.innerText = "⏳ Публикация...";
 
         try {
             const todayStr = new Date().toISOString().split('T')[0];
@@ -762,7 +835,7 @@ uploadBtn.innerText = "⏳ Публикация...";
             if (todayPosts && todayPosts.length >= 5) {
                 alert('Вы исчерпали дневной лимит публикаций! (Максимум 5 постов в день)');
                 uploadBtn.disabled = false;
-                uploadBtn.innerHTML = origContent;
+uploadBtn.innerHTML = origContent;
                 return;
             }
 
@@ -839,7 +912,7 @@ uploadBtn.innerText = "⏳ Публикация...";
 
         let until = Date.now() + (parseInt(mins) * 60 * 1000);
         let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
-blocks[id] = until;
+        blocks[id] = until;
         localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
         
         alert(`Пользователь заблокирован на ${mins} мин.`);
@@ -851,8 +924,8 @@ blocks[id] = until;
         let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
         if (!blocks[peerId]) return false;
         if (Date.now() > blocks[peerId]) {
-            delete blocks[peerId]; 
-            localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
+            delete blocks[peerId];
+localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
             return false;
         }
         return true;
@@ -920,7 +993,7 @@ blocks[id] = until;
             AVAILABLE_FEED_EMOJIS.forEach(emoji => {
                 emojiPickerHtml += `<button class="emoji-picker-btn" onclick="toggleFeedReaction('${post.id}', '${emoji}')">${emoji}</button>`;
             });
-emojiPickerHtml += '</div>';
+            emojiPickerHtml += '</div>';
 
             let reactionsHtml = '<div class="feed-reactions-list">';
             const rawReactions = post.reactions || {}; 
@@ -934,8 +1007,7 @@ emojiPickerHtml += '</div>';
                     emojiCounts[emo] = (emojiCounts[emo] || 0) + 1;
                 }
             }
-
-            for (let emoji in emojiCounts) {
+for (let emoji in emojiCounts) {
                 if (emojiCounts[emoji] > 0) {
                     const isMyChoice = (mySelectedEmoji === emoji);
                     reactionsHtml += `<span class="feed-reaction-badge ${isMyChoice ? 'active' : ''}" onclick="toggleFeedReaction('${post.id}', '${emoji}')">${emoji} ${emojiCounts[emoji]}</span>`;
@@ -1000,7 +1072,7 @@ emojiPickerHtml += '</div>';
 
         const { data: post } = await supabaseClient.from('messages').select('feed_comments').eq('id', postId).single();
         if (post) {
-let currentComments = post.feed_comments || [];
+            let currentComments = post.feed_comments || [];
             currentComments.push({ senderId: myCurrentId, user: myCurrentName, comment: txt });
             
             const { error: updateError } = await supabaseClient.from('messages')
@@ -1012,7 +1084,7 @@ let currentComments = post.feed_comments || [];
                 commentsVisibilityState[postId] = true;
                 loadFeed();
             } else {
-                alert("Ошибка отправки комментария: " + updateError.message);
+alert("Ошибка отправки комментария: " + updateError.message);
             }
         }
         input.disabled = false;
@@ -1054,21 +1126,22 @@ let currentComments = post.feed_comments || [];
 
     async function checkUserSystemBan(id) {
         try {
-            const { data: user } = await supabaseClient.from('users').select('is_banned, ban_until').eq('id', id).maybeSingle();
+            const { data: user } = await supabaseClient.from('users').select('is_banned, ban_until, ban_reason').eq('id', id).maybeSingle();
             if (user && user.is_banned) {
+                let reasonStr = user.ban_reason ? `Причина: ${user.ban_reason}` : "Причина: Нарушение внутренних правил мессенджера.";
+                
                 if (user.ban_until) {
                     const banDate = new Date(user.ban_until);
                     if (banDate > new Date()) {
                         const daysLeft = Math.ceil((banDate - new Date()) / (1000 * 60 * 60 * 24));
-                        alert(`Ваш профиль временно заблокирован на ${daysLeft} дней модератором системы.`);
-                        document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><h2>🛡️ Доступ заблокирован</h2><p>Вы нарушили правила. Блокировка истекает через: <b>${daysLeft} дн.</b></p></div>`;
+                        document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><div style="background:rgba(255,255,255,0.05); padding:30px; border-radius:24px; border:1px solid rgba(255,59,48,0.3); max-width:400px; box-shadow:0 15px 40px rgba(0,0,0,0.5);"><h2 style="color:#ff3b30; margin-top:0;">🛡️ Доступ временно ограничен</h2><p style="font-size:15px; opacity:0.9;">Ваш аккаунт был временно заблокирован модератором.</p><div style="background:rgba(255,59,48,0.1); color:#ff6b62; padding:12px; border-radius:12px; font-weight:600; margin:15px 0; font-size:14px; border-left:4px solid #ff3b30; text-align:left;">${reasonStr}</div><p>Осталось до разблокировки: <b style="color:#4caf50; font-size:17px;">${daysLeft} дн.</b></p></div></div>`;
                         return true; 
                     } else {
-                        await supabaseClient.from('users').update({ is_banned: false, ban_until: null }).eq('id', id);
+                        await supabaseClient.from('users').update({ is_banned: false, ban_until: null, ban_reason: null }).eq('id', id);
                     }
                 } else {
-                    alert("Ваш профиль заблокирован НАВСЕГДА администратором.");
-                    document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><h2>🚫 Вечный бан</h2><p>Ваш аккаунт заблокирован навсегда без права разблокировки.</p></div>`;
+                    document.body.innerHTML = `<div style="background:#0a1128; color:white; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:sans-serif; text-align:center; padding:20px;"><div style="background:rgba(255,255,255,0.05); padding:30px; border-radius:24px; border:1px solid rgba(255,59,48,0.4); max-width:400px; box-shadow:0 15px 40px rgba(0,0,0,0.5);"><h2 style="color:#ff3b30; margin-top:0;">🚫 Вечная блокировка (Бан)</h2><p style="font-size:15px; opacity:0.9;">Доступ к мессенджеру One Link заблокирован окончательно.</p><div style="background:rgba(255,59,48,0.1); color:#ff6b62; padding:12px; border-radius:12px; font-weight:600; margin:15px 0; font-size:14px; border-left:4px solid #ff3b30; text-align:left;">${reasonStr}</div><p style="color:gray; font-size:13px; margin-bottom:0;">Обжалованию через
+техническую поддержку не подлежит.</p></div></div>`;
                     return true; 
                 }
             }
@@ -1082,7 +1155,7 @@ let currentComments = post.feed_comments || [];
         const password = document.getElementById('myPassword').value.trim();
         const log = document.getElementById('auth-log');
         const loader = document.getElementById('auth-loader');
-const loaderText = document.getElementById('loader-text');
+        const loaderText = document.getElementById('loader-text');
 
         if(!id || !name || !password) {
             log.innerText = "Заполните все три поля!";
@@ -1122,7 +1195,7 @@ const loaderText = document.getElementById('loader-text');
                     return;
                 }
                 await supabaseClient.from('users').insert([
-                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "", is_banned: false, ban_until: null, is_online: true }
+                    { id: id, name: name, password: password, ava: "", last_seen: new Date().toISOString(), typing_to: "", is_banned: false, ban_until: null, ban_reason: null }
                 ]);
                 myCurrentName = name;
             }
@@ -1150,15 +1223,9 @@ const loaderText = document.getElementById('loader-text');
             listenForIncomingData();
             loadFeed();
             
-            // Запуск heartbeat пинга
-            await updateMyStatus(true);
-            setInterval(() => updateMyStatus(true), 4000);
-
-            window.addEventListener('beforeunload', () => updateMyStatus(false));
-            document.addEventListener('visibilitychange', () => {
-                updateMyStatus(document.visibilityState === 'visible');
-            });
-
+            updateMyStatus();
+            setInterval(updateMyStatus, 3000);
+            setInterval(checkContactsOnline, 3000);
         } catch(e) {
             log.innerText = "Ошибка сети.";
         } finally {
@@ -1166,105 +1233,108 @@ const loaderText = document.getElementById('loader-text');
         }
     }
 
+    // РЕАЛИСТИЧНЫЙ ИСПОЛНИТЕЛЬ БАНА С ПРИЧИНОЙ
     async function executeSystemBan(shouldBan) {
         const target = document.getElementById('admin-ban-id').value.trim();
         const days = document.getElementById('admin-ban-time').value.trim();
+        const reason = document.getElementById('admin-ban-reason').value.trim();
         
-        if(!target) return alert("Введите ID пользователя!");
+        if(!target) return alert("Введите ID целевого пользователя!");
         
         let banIsoString = null;
-        if(shouldBan && days) {
+if(shouldBan && days) {
             let d = new Date();
             d.setDate(d.getDate() + parseInt(days));
             banIsoString = d.toISOString();
         }
         
-        const { error } = await supabaseClient.from('users').update({
+        const updatePayload = {
             is_banned: shouldBan,
-            ban_until: banIsoString
-        }).eq('id', target);
+            ban_until: banIsoString,
+            ban_reason: shouldBan ? (reason || "Нарушение условий использования платформы.") : null
+        };
+        
+        const { error } = await supabaseClient.from('users').update(updatePayload).eq('id', target);
         
         if(!error) {
-alert(shouldBan ? `Пользователь ${target} заблокирован!` : `Пользователь ${target} успешно разблокирован!`);
-            document.getElementById('admin-ban-id').value = '';
-            document.getElementById('admin-ban-time').value = '';
-        } else {
-            alert("Ошибка базы данных: " + error.message);
-        }
-    }
-
-    async function updateMyStatus(onlineStatus = true) {
-        if (!myCurrentId) return;
-        try {
-            await supabaseClient.from('users').update({ 
-                last_seen: new Date().toISOString(),
-                is_online: onlineStatus
-            }).eq('id', myCurrentId);
-        } catch(e) { console.error("Heartbeat error", e); }
-    }
-
-    // Реалтайм обработчик входящих изменений по статусам юзеров
-    function handleUserStatusUpdate(u) {
-        if (!myCurrentId || u.id === myCurrentId) return;
-
-        // Фикс часовых поясов: разница текущего UTC времени устройства и UTC времени сервера
-        const nowUtc = Date.now();
-        const lastSeenUtc = Date.parse(u.last_seen);
-        const isOnline = u.is_online && (nowUtc - lastSeenUtc < 10000);
-        
-        knownUsersCache[u.id] = isOnline; 
-
-        // Ищем все точки этого контакта и красим их
-        const dots = document.querySelectorAll('#dot-' + u.id);
-        dots.forEach(dot => {
-            if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
-        });
-
-        // Синхронизируем локальный кэш контактов
-        let localContacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
-        if (localContacts[u.id]) {
-            if (localContacts[u.id].name !== u.name || localContacts[u.id].ava !== u.ava) {
-                localContacts[u.id].name = u.name;
-                localContacts[u.id].ava = u.ava;
-                localStorage.setItem('ol_contacts_' + myCurrentId, JSON.stringify(localContacts));
-                renderSavedContacts();
-            }
-        }
-
-        // Если с этим пользователем сейчас открыт чат, обновляем шапку и плашку "печатает"
-        if (u.id === activeChatPeerId) {
-            const chatDot = document.getElementById('peer-status-dot');
-            const chatTxt = document.getElementById('chat-peer-status-text');
-            const bottomTyping = document.getElementById('bottom-typing-status');
-            
-            if (isOnline) {
-                chatDot.classList.add('online');
-                if (u.typing_to === myCurrentId && !isContactBlocked(u.id)) {
-                    bottomTyping.style.display = 'flex';
-                    chatTxt.innerText = "печатает...";
-                    chatTxt.style.color = "var(--blue)";
-                } else {
-                    bottomTyping.style.display = 'none';
-                    chatTxt.innerText = "в сети";
-                    chatTxt.style.color = "var(--green)";
-                }
+            if(shouldBan) {
+                alert(`Пользователь ${target} успешно заблокирован.\nСрок: ${days ? days + ' дн.' : 'Навсегда'}\nПричина: ${updatePayload.ban_reason}`);
             } else {
-                chatDot.classList.remove('online');
-                bottomTyping.style.display = 'none';
-                
-                if(u.last_seen) {
-                    const t = new Date(u.last_seen);
-                    chatTxt.innerText = "был(а) в " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                } else {
-                    chatTxt.innerText = "не в сети";
-                }
-                chatTxt.style.color = "var(--gray)";
+                alert(`Ограничения с пользователя ${target} полностью сняты.`);
             }
+            document.getElementById('admin-ban-id').value = '';
+            document.getElementById('admin-ban-reason').value = '';
+        } else {
+            alert("Критическая ошибка базы данных: " + error.message);
         }
+    }
+
+    async function updateMyStatus() {
+        if (!myCurrentId) return;
+        await supabaseClient.from('users').update({ last_seen: new Date().toISOString() }).eq('id', myCurrentId);
+    }
+
+    async function checkContactsOnline() {
+        if (!myCurrentId) return;
+        const { data: usersData } = await supabaseClient.from('users').select('id, name, ava, last_seen, typing_to');
+        if (!usersData) return;
+
+        const bottomTyping = document.getElementById('bottom-typing-status');
+
+        usersData.forEach(u => {
+            if (u.id === myCurrentId) return;
+
+            const isOnline = u.last_seen && (new Date() - new Date(u.last_seen) < 6000);
+            knownUsersCache[u.id] = isOnline; 
+
+            const dots = document.querySelectorAll('#dot-' + u.id);
+            dots.forEach(dot => {
+                if (isOnline) dot.classList.add('online'); else dot.classList.remove('online');
+            });
+
+            let localContacts = JSON.parse(localStorage.getItem('ol_contacts_' + myCurrentId) || '{}');
+            if (localContacts[u.id]) {
+                if (localContacts[u.id].name !== u.name || localContacts[u.id].ava !== u.ava) {
+                    localContacts[u.id].name = u.name;
+                    localContacts[u.id].ava = u.ava;
+                    localStorage.setItem('ol_contacts_' + myCurrentId, JSON.stringify(localContacts));
+                    renderSavedContacts();
+                }
+            }
+
+            if (u.id === activeChatPeerId) {
+                const chatDot = document.getElementById('peer-status-dot');
+                const chatTxt = document.getElementById('chat-peer-status-text');
+                
+                if (isOnline) {
+                    chatDot.classList.add('online');
+                    if (u.typing_to === myCurrentId && !isContactBlocked(u.id)) {
+                        bottomTyping.style.display = 'flex';
+                        chatTxt.innerText = "печатает...";
+                        chatTxt.style.color = "var(--blue)";
+                    } else {
+                        bottomTyping.style.display = 'none';
+                        chatTxt.innerText = "в сети";
+                        chatTxt.style.color = "var(--green)";
+                    }
+                } else {
+                    chatDot.classList.remove('online');
+                    bottomTyping.style.display = 'none';
+                    
+                    if(u.last_seen) {
+                        const t = new Date(u.last_seen);
+                        chatTxt.innerText = "был(а) в " + t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    } else {
+                        chatTxt.innerText = "не в сети";
+                    }
+                    chatTxt.style.color = "var(--gray)";
+                }
+            }
+        });
     }
 
     async function handleTyping() {
-        if (!activeChatPeerId || isContactBlocked(activeChatPeerId)) return;
+if (!activeChatPeerId || isContactBlocked(activeChatPeerId)) return;
         await supabaseClient.from('users').update({ typing_to: activeChatPeerId }).eq('id', myCurrentId);
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(async () => {
@@ -1275,7 +1345,7 @@ alert(shouldBan ? `Пользователь ${target} заблокирован!`
     async function sendReq() {
         const tid = document.getElementById('targetId').value.trim();
         const log = document.getElementById('search-log');
-const btn = document.getElementById('search-btn');
+        const btn = document.getElementById('search-btn');
         if(!tid || tid === myCurrentId) return;
 
         if (isContactBlocked(tid)) {
@@ -1351,7 +1421,7 @@ const btn = document.getElementById('search-btn');
                 if (payload.eventType === 'DELETE' || payload.eventType === 'UPDATE') {
                     if (activeChatPeerId) loadChatHistory(activeChatPeerId);
                     checkExistingRequests();
-                    if (!document.getElementById('tab-feed').classList.contains('hidden')) {
+if (!document.getElementById('tab-feed').classList.contains('hidden')) {
                         loadFeed();
                     }
                     return;
@@ -1361,7 +1431,7 @@ const btn = document.getElementById('search-btn');
                 if (row.sender && isContactBlocked(row.sender)) return;
 
                 if (row.receiver === myCurrentId && row.type === 'request') showIncomingRequestUI(row.sender, row.text, row.media);
-if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
+                if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sender, row.text, row.media);
                 
                 if (row.type === 'chat') {
                     if ((row.sender === activeChatPeerId && row.receiver === myCurrentId) || (row.sender === myCurrentId && row.receiver === activeChatPeerId)) {
@@ -1379,12 +1449,6 @@ if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sende
                         loadFeed();
                     }
                 }
-            }).subscribe();
-
-        // Подписываемся на Realtime изменения таблицы users. Получаем событие -> мгновенно обновляем UI
-        supabaseClient.channel('public:users')
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users' }, payload => {
-                handleUserStatusUpdate(payload.new);
             }).subscribe();
 
         checkExistingRequests();
@@ -1435,11 +1499,11 @@ if (row.receiver === myCurrentId && row.type === 'accept') saveContact(row.sende
     }
 
     async function acceptReq(id, name, ava) {
-        const { data: targetProfile } = await supabaseClient.from('users').select('name, ava').eq('id', id).maybeSingle();
+const { data: targetProfile } = await supabaseClient.from('users').select('name, ava').eq('id', id).maybeSingle();
         let finalName = name;
         let finalAva = ava;
         if(targetProfile) {
-if(targetProfile.name) finalName = targetProfile.name;
+            if(targetProfile.name) finalName = targetProfile.name;
             if(targetProfile.ava) finalAva = targetProfile.ava;
         }
 
@@ -1519,14 +1583,14 @@ if(targetProfile.name) finalName = targetProfile.name;
                 
                 d.onclick = () => {
                     if (msg.media || msg.text.startsWith('data:image')) {
-                        openMediaModal(msg, direction === 'out');
+openMediaModal(msg, direction === 'out');
                     } else if (direction === 'out') {
                         openMsgMenu(msg.id, msg.text);
                     }
                 };
 
                 if(msg.media) {
-const img = document.createElement('img'); img.src = msg.media; d.appendChild(img);
+                    const img = document.createElement('img'); img.src = msg.media; d.appendChild(img);
                 } else { 
                     d.innerText = msg.text; 
                     if (msg.is_edited) {
@@ -1620,7 +1684,7 @@ const img = document.createElement('img'); img.src = msg.media; d.appendChild(im
             const emptyTxt = '<p style="color:gray; text-align:center; font-size:14px; margin: 10px 0;">Пока нет контактов</p>';
             listProfile.innerHTML = emptyTxt; 
             listChat.innerHTML = emptyTxt;
-            return;
+return;
         }
         
         for (let id in contacts) {
@@ -1628,13 +1692,18 @@ const img = document.createElement('img'); img.src = msg.media; d.appendChild(im
 
             const div = document.createElement('div');
             div.className = 'contact-item';
-div.style.flexDirection = 'column';
+            div.style.flexDirection = 'column';
             div.style.alignItems = 'stretch';
             
             let bgStyle = contacts[id].ava ? `background-image:url(${contacts[id].ava})` : '';
             const isDev = (id === '7777');
             const nameHtml = isDev ? `${contacts[id].name} ${VERIFIED_BADGE_SVG}` : contacts[id].name;
             
+            // СТРОГИЕ СОВРЕМЕННЫЕ SVG ИКОНКИ ДЛЯ КНОПОК УПРАВЛЕНИЯ
+            const trashIconSvg = `<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
+            const blockIconSvg = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.5 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9l11.21 11.21C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>`;
+            const unblockIconSvg = `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
+
             div.innerHTML = `
                 <div style="display:flex; align-items:center; gap:12px; width:100%;" onclick="openChat('${id}', '${contacts[id].name}', '${contacts[id].ava}')">
                     <div class="ava-wrapper">
@@ -1644,37 +1713,38 @@ div.style.flexDirection = 'column';
                     <div>
                         <b style="color: #000; display:flex; align-items:center; gap:3px;">${nameHtml}</b><span style="font-size:12px; color:gray;">ID: ${id}</span>
                     </div>
-                    ${isBlocked ? '<span class="blocked-badge">🚫 Блок</span>' : ''}
+                    ${isBlocked ? '<span class="blocked-badge">Блокировка</span>' : ''}
                 </div>
                 <div class="contact-actions-row">
-                    <button class="action-mini-btn btn-mini-del" onclick="event.stopPropagation(); removeContact('${id}')">❌ Удалить</button>
-                    <button class="action-mini-btn btn-mini-block" onclick="event.stopPropagation(); blockContact('${id}')">${isBlocked ? '🔓 Разблок' : '🚫 Блок'}</button>
+                    <button class="action-mini-btn btn-mini-del" onclick="event.stopPropagation(); removeContact('${id}')">
+                        ${trashIconSvg} Удалить
+                    </button>
+                    <button class="action-mini-btn btn-mini-block ${isBlocked ? 'unblock-state' : ''}" id="act-block-${id}">
+                        ${isBlocked ? unblockIconSvg + ' Разблокировать' : blockIconSvg + ' Заблокировать'}
+                    </button>
                 </div>
             `;
             
+            const blockBtn = div.querySelector('#act-block-' + id);
             if(isBlocked) {
-                const blockBtn = div.querySelector('.btn-mini-block');
                 blockBtn.onclick = (event) => {
                     event.stopPropagation();
                     let blocks = JSON.parse(localStorage.getItem('ol_blocks_' + myCurrentId) || '{}');
                     delete blocks[id];
                     localStorage.setItem('ol_blocks_' + myCurrentId, JSON.stringify(blocks));
-                    alert("Пользователь разблокирован!");
+                    alert("Пользователь успешно разблокирован.");
                     renderSavedContacts();
+                };
+            } else {
+                blockBtn.onclick = (event) => {
+                    event.stopPropagation();
+                    blockContact(id);
                 };
             }
 
             listProfile.appendChild(div.cloneNode(true));
             listChat.appendChild(div);
         }
-        
-        // Сразу после отрисовки контактов делаем разовый запрос актуальных статусов
-        try {
-            const { data: currentUsers } = await supabaseClient.from('users').select('id, last_seen, is_online, typing_to, name, ava');
-            if (currentUsers) {
-                currentUsers.forEach(u => handleUserStatusUpdate(u));
-            }
-        } catch(e){}
     }
 
     async function openChat(id, name, ava) {
@@ -1689,27 +1759,22 @@ div.style.flexDirection = 'column';
         if(realUser && realUser.ava) {
             finalAva = realUser.ava;
         }
-        if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.backgroundImage = 'none';
+if(finalAva) pAva.style.backgroundImage = `url(${finalAva})`; else pAva.style.backgroundImage = 'none';
         
         document.getElementById('chat-empty').classList.add('hidden');
         document.getElementById('chat-ui').classList.remove('hidden');
         
+        checkContactsOnline();
         loadChatHistory(id);
 
         const versionTag = document.getElementById('version-tag');
         versionTag.style.opacity = '0';
         setTimeout(() => { if(versionTag.style.opacity === '0') versionTag.style.display = 'none'; }, 200);
-        
-        // Проверяем статус собеседника сразу при входе в чат
-        if (realUser) {
-            const { data: uStatus } = await supabaseClient.from('users').select('*').eq('id', id).maybeSingle();
-            if(uStatus) handleUserStatusUpdate(uStatus);
-        }
     }
 
     function nav(t, e) {
         document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         
         const targetTab = document.getElementById('tab-' + t);
         targetTab.classList.remove('hidden');
@@ -1741,9 +1806,7 @@ document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')
     }
 
     function logout() { 
-        updateMyStatus(false).then(() => {
-            localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); localStorage.removeItem('ol_pass'); location.reload(); 
-        });
+        localStorage.removeItem('ol_id'); localStorage.removeItem('ol_name'); localStorage.removeItem('ol_pass'); location.reload(); 
     }
 
     window.onload = () => {
